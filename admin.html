@@ -3,34 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>School Admin Portal</title>
+    <title>School Admin Portal - Premium</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'] }, colors: { brand: '#4f46e5', dark: '#1e293b' } } }
-        }
-    </script>
     <style>
+        body { font-family: 'Inter', sans-serif; }
         .fade-in { animation: fadeIn 0.3s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        /* Loader */
-        .loader { border: 3px solid #f3f3f3; border-radius: 50%; border-top: 3px solid #4f46e5; width: 24px; height: 24px; animation: spin 1s linear infinite; }
+        .loader { border: 3px solid #f3f3f3; border-radius: 50%; border-top: 3px solid #4f46e5; width: 20px; height: 20px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .tab-btn.active { border-bottom: 2px solid #4f46e5; color: #4f46e5; font-weight: 600; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased h-screen overflow-hidden">
+<body class="bg-slate-50 text-slate-800 antialiased h-screen overflow-hidden flex flex-col">
 
     <!-- ========================================== -->
     <!-- 1. LOGIN SCREEN -->
     <!-- ========================================== -->
     <div id="loginScreen" class="h-full flex items-center justify-center p-4">
         <div class="bg-white max-w-md w-full rounded-2xl shadow-xl overflow-hidden fade-in">
-            <div class="bg-dark p-8 text-center">
-                <div class="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i class="fa-solid fa-graduation-cap text-3xl text-white"></i>
-                </div>
+            <div class="bg-slate-800 p-8 text-center">
+                <i class="fa-solid fa-graduation-cap text-4xl text-white mb-2"></i>
                 <h2 class="text-2xl font-bold text-white">School Portal</h2>
                 <p class="text-slate-300 text-sm mt-1">Login to manage your institution</p>
             </div>
@@ -38,21 +34,13 @@
                 <form id="loginForm" class="space-y-5">
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-1">Username</label>
-                        <div class="relative">
-                            <i class="fa-solid fa-user absolute left-3 top-3 text-slate-400"></i>
-                            <input type="text" id="loginUser" required class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand outline-none transition-all" placeholder="Enter username">
-                        </div>
+                        <input type="text" id="loginUser" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none">
                     </div>
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-1">Password</label>
-                        <div class="relative">
-                            <i class="fa-solid fa-lock absolute left-3 top-3 text-slate-400"></i>
-                            <input type="password" id="loginPass" required class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand outline-none transition-all" placeholder="Enter password">
-                        </div>
+                        <input type="password" id="loginPass" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none">
                     </div>
-                    <button type="submit" id="loginBtn" class="w-full bg-brand hover:bg-indigo-700 text-white font-bold py-3 rounded-lg transition-all flex justify-center items-center">
-                        <span>Secure Login</span>
-                    </button>
+                    <button type="submit" id="loginBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-lg flex justify-center items-center transition-all">Secure Login</button>
                     <div id="loginError" class="hidden text-red-500 text-sm text-center font-medium mt-2"></div>
                 </form>
             </div>
@@ -60,79 +48,93 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- 2. DASHBOARD SCREEN (Hidden by default) -->
+    <!-- 2. DASHBOARD SCREEN -->
     <!-- ========================================== -->
     <div id="dashboardScreen" class="hidden h-full flex flex-col">
         
-        <!-- Mobile/Desktop Header -->
-        <header class="bg-white border-b border-slate-200 sticky top-0 z-20 shadow-sm">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-                <div class="flex items-center">
-                    <div class="w-10 h-10 bg-brand text-white rounded-lg flex items-center justify-center font-bold text-xl mr-3 shadow-md">
-                        <span id="headerSchoolInitials">S</span>
-                    </div>
+        <!-- Header -->
+        <header class="bg-white border-b border-slate-200 shadow-sm z-20">
+            <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-indigo-600 text-white rounded-lg flex items-center justify-center font-bold text-xl shadow-md" id="headerSchoolInitials">S</div>
                     <div>
                         <h1 id="headerSchoolName" class="font-bold text-slate-800 text-lg leading-tight">School Name</h1>
                         <p class="text-xs text-slate-500 font-medium">Admin Dashboard</p>
                     </div>
                 </div>
-                <button onclick="logout()" class="text-slate-500 hover:text-red-500 transition-colors p-2">
-                    <i class="fa-solid fa-arrow-right-from-bracket text-xl"></i>
-                </button>
+                <button onclick="logout()" class="text-slate-400 hover:text-red-500 transition-colors p-2"><i class="fa-solid fa-power-off text-xl"></i></button>
+            </div>
+
+            <!-- Tab Navigation (Mobile friendly horizontal scroll) -->
+            <div class="max-w-7xl mx-auto px-4 flex overflow-x-auto border-t border-slate-100">
+                <button onclick="switchTab('notices')" class="tab-btn active px-4 py-3 text-sm text-slate-500 whitespace-nowrap"><i class="fa-solid fa-bullhorn mr-2"></i>Notices</button>
+                <button onclick="switchTab('gallery')" class="tab-btn px-4 py-3 text-sm text-slate-500 whitespace-nowrap"><i class="fa-solid fa-image mr-2"></i>Gallery</button>
+                <button onclick="switchTab('settings')" class="tab-btn px-4 py-3 text-sm text-slate-500 whitespace-nowrap"><i class="fa-solid fa-gear mr-2"></i>Branding Setup</button>
             </div>
         </header>
 
-        <!-- Main Content Scrollable Area -->
-        <main class="flex-1 overflow-y-auto bg-slate-50 p-4 md:p-8">
-            <div class="max-w-7xl mx-auto space-y-6">
+        <!-- Main Area -->
+        <main class="flex-1 overflow-y-auto bg-slate-50 p-4">
+            <div class="max-w-7xl mx-auto">
                 
-                <!-- Notice Board Management Module -->
-                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden fade-in">
-                    <div class="bg-slate-800 px-6 py-4 flex justify-between items-center">
-                        <h2 class="text-white font-semibold"><i class="fa-solid fa-bullhorn mr-2 text-yellow-400"></i> Notice Board Management</h2>
+                <!-- TAB 1: NOTICES (Existing) -->
+                <div id="tab-notices" class="tab-content active fade-in space-y-6">
+                    <div class="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-slate-200">
+                        <h3 class="font-bold text-slate-800 mb-4 text-sm uppercase"><i class="fa-solid fa-plus-circle mr-2 text-indigo-500"></i>Add Notice</h3>
+                        <form id="noticeForm" class="flex flex-col md:flex-row gap-4">
+                            <input type="text" id="noticeTitle" required class="flex-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 text-sm outline-none" placeholder="Notice Title">
+                            <input type="date" id="noticeDate" required class="px-3 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 text-sm outline-none w-full md:w-auto">
+                            <button type="submit" id="noticeBtn" class="bg-slate-800 text-white font-medium py-2 px-6 rounded-lg text-sm hover:bg-black">Publish</button>
+                        </form>
                     </div>
-                    
-                    <div class="p-4 md:p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-                        
-                        <!-- Add Notice Form -->
-                        <div class="md:col-span-1 bg-slate-50 p-4 rounded-xl border border-slate-100">
-                            <h3 class="font-bold text-slate-700 mb-4 text-sm uppercase tracking-wider">Publish New Notice</h3>
-                            <form id="noticeForm" class="space-y-4">
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-600 mb-1">Notice Title *</label>
-                                    <input type="text" id="noticeTitle" required class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-brand outline-none text-sm" placeholder="e.g. Holiday Tomorrow">
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-600 mb-1">Details (Optional)</label>
-                                    <textarea id="noticeDesc" rows="3" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-brand outline-none text-sm resize-none" placeholder="Provide more details..."></textarea>
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-600 mb-1">Date</label>
-                                    <input type="date" id="noticeDate" required class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-brand outline-none text-sm">
-                                </div>
-                                <button type="submit" id="noticeBtn" class="w-full bg-dark text-white font-semibold py-2.5 rounded-lg hover:bg-black transition-all text-sm">
-                                    Publish Notice
-                                </button>
-                            </form>
-                        </div>
-
-                        <!-- Notice List -->
-                        <div class="md:col-span-2">
-                            <div class="flex justify-between items-end mb-4">
-                                <h3 class="font-bold text-slate-700 text-sm uppercase tracking-wider">Active Notices</h3>
-                                <button onclick="fetchNotices()" class="text-brand text-sm font-medium hover:underline"><i class="fa-solid fa-rotate mr-1"></i>Refresh</button>
-                            </div>
-                            <div id="noticeList" class="space-y-3 max-h-[400px] overflow-y-auto pr-2">
-                                <!-- Notice Items load here -->
-                                <div class="text-center p-8 text-slate-400">Loading notices...</div>
-                            </div>
-                        </div>
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                        <div class="bg-slate-100 px-4 py-3 border-b flex justify-between"><h3 class="font-bold text-slate-700 text-sm">Active Notices</h3><button onclick="fetchNotices()" class="text-xs text-indigo-600 font-bold"><i class="fa-solid fa-rotate mr-1"></i>Refresh</button></div>
+                        <div id="noticeList" class="p-4 space-y-2 max-h-[300px] overflow-y-auto"></div>
                     </div>
                 </div>
 
-                <!-- Next Module Placeholder (Fees, Staff, etc. can be added below similarly) -->
-                <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-4 text-center">
-                    <p class="text-indigo-800 text-sm font-medium"><i class="fa-solid fa-lock mr-2"></i> Other modules (Fees, Gallery, Staff) will appear here.</p>
+                <!-- TAB 2: GALLERY (New) -->
+                <div id="tab-gallery" class="tab-content fade-in space-y-6">
+                    <div class="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-slate-200">
+                        <h3 class="font-bold text-slate-800 mb-4 text-sm uppercase"><i class="fa-solid fa-image mr-2 text-indigo-500"></i>Add Photo</h3>
+                        <form id="galleryForm" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <input type="text" id="imgUrl" required class="md:col-span-1 px-3 py-2 border rounded-lg text-sm outline-none" placeholder="Image URL (e.g. from Imgur or Drive)">
+                            <input type="text" id="imgCaption" required class="md:col-span-1 px-3 py-2 border rounded-lg text-sm outline-none" placeholder="Photo Caption">
+                            <button type="submit" id="galleryBtn" class="bg-indigo-600 text-white font-medium py-2 px-6 rounded-lg text-sm hover:bg-indigo-700">Add to Gallery</button>
+                        </form>
+                        <p class="text-[10px] text-slate-400 mt-2">*For mobile users, upload photo to a free site like imgbb.com and paste the direct link here.</p>
+                    </div>
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                        <div class="bg-slate-100 px-4 py-3 border-b"><h3 class="font-bold text-slate-700 text-sm">Live Gallery</h3></div>
+                        <div id="galleryList" class="p-4 grid grid-cols-2 md:grid-cols-4 gap-4 max-h-[400px] overflow-y-auto"></div>
+                    </div>
+                </div>
+
+                <!-- TAB 3: SETTINGS / BRANDING (New) -->
+                <div id="tab-settings" class="tab-content fade-in">
+                    <div class="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-slate-200">
+                        <h3 class="font-bold text-slate-800 mb-4 text-sm uppercase"><i class="fa-solid fa-paint-roller mr-2 text-indigo-500"></i>White-Label Branding Setup</h3>
+                        <form id="settingsForm" class="space-y-5">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Website Primary Color</label>
+                                <div class="flex items-center gap-3">
+                                    <input type="color" id="primaryColor" class="w-12 h-12 rounded cursor-pointer border-0 p-0" value="#2563EB">
+                                    <span class="text-sm text-slate-500">Choose your school's official color</span>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">School Logo URL</label>
+                                <input type="text" id="logoUrl" class="w-full px-3 py-2 border rounded-lg text-sm outline-none focus:border-indigo-500" placeholder="https://link-to-your-logo.png">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">About Us / Welcome Message</label>
+                                <textarea id="aboutText" rows="4" class="w-full px-3 py-2 border rounded-lg text-sm outline-none focus:border-indigo-500" placeholder="Write a short welcome message for your public website..."></textarea>
+                            </div>
+                            <button type="submit" id="settingsBtn" class="w-full bg-green-600 text-white font-bold py-3 rounded-lg text-sm hover:bg-green-700 transition-all shadow-md">
+                                Save Branding Settings
+                            </button>
+                        </form>
+                    </div>
                 </div>
 
             </div>
@@ -141,178 +143,129 @@
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
-        // --- CONFIGURATION ---
         const SUPABASE_URL = "https://xlmsgtxyrlovjobwvdom.supabase.co";
         const SUPABASE_ANON_KEY = "sb_publishable_iLRrB73mPbgH0FtPvMOVbg_eoNyCtd3"; 
+        const headers = { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` };
 
-        const headers = {
-            'Content-Type': 'application/json',
-            'apikey': SUPABASE_ANON_KEY,
-            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
-        };
-
-        // --- CHECK LOGIN STATUS ON LOAD ---
         document.addEventListener('DOMContentLoaded', () => {
-            const savedSchoolId = localStorage.getItem('school_id');
-            const savedSchoolName = localStorage.getItem('school_name');
-            
-            // Set today's date in form
+            const sid = localStorage.getItem('school_id');
+            const sname = localStorage.getItem('school_name');
             document.getElementById('noticeDate').valueAsDate = new Date();
-
-            if(savedSchoolId && savedSchoolName) {
-                showDashboard(savedSchoolName);
-            }
+            if(sid && sname) showDashboard(sname);
         });
 
-        // --- LOGIN LOGIC ---
+        // Login Logic
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('loginBtn');
             const err = document.getElementById('loginError');
-            const user = document.getElementById('loginUser').value;
-            const pass = document.getElementById('loginPass').value;
-
-            btn.innerHTML = `<div class="loader"></div>`;
-            err.classList.add('hidden');
+            btn.innerHTML = `<div class="loader"></div>`; err.classList.add('hidden');
 
             try {
-                // Fetch school where username & password match
-                const res = await fetch(`${SUPABASE_URL}/rest/v1/schools?username=eq.${user}&password=eq.${pass}&select=id,school_name,is_active`, {
-                    headers: headers
-                });
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/schools?username=eq.${document.getElementById('loginUser').value}&password=eq.${document.getElementById('loginPass').value}&select=id,school_name`, { headers });
                 const data = await res.json();
-
-                if(data.length === 0) {
-                    throw new Error("Invalid Username or Password!");
-                }
-                if(data[0].is_active === false) {
-                    throw new Error("Account is disabled. Contact Super Admin.");
-                }
-
-                // SUCCESS: Save core details in Local Storage (Multi-Tenancy Key)
+                if(data.length === 0) throw new Error("Invalid Credentials!");
+                
                 localStorage.setItem('school_id', data[0].id);
                 localStorage.setItem('school_name', data[0].school_name);
-                
                 showDashboard(data[0].school_name);
-
             } catch (error) {
-                err.innerText = error.message;
-                err.classList.remove('hidden');
-                btn.innerHTML = `<span>Secure Login</span>`;
+                err.innerText = error.message; err.classList.remove('hidden');
+                btn.innerHTML = `Secure Login`;
             }
         });
 
-        // --- SHOW DASHBOARD UI ---
-        function showDashboard(schoolName) {
+        function showDashboard(name) {
             document.getElementById('loginScreen').classList.add('hidden');
             document.getElementById('dashboardScreen').classList.remove('hidden');
+            document.getElementById('headerSchoolName').innerText = name;
+            document.getElementById('headerSchoolInitials').innerText = name.charAt(0).toUpperCase();
             
-            document.getElementById('headerSchoolName').innerText = schoolName;
-            document.getElementById('headerSchoolInitials').innerText = schoolName.charAt(0).toUpperCase();
-            
-            // Load School's Private Data
-            fetchNotices();
+            fetchNotices(); // Load default tab
+            fetchGallery();
+            fetchSettings();
         }
 
-        // --- LOGOUT LOGIC ---
-        function logout() {
-            localStorage.clear();
-            window.location.reload();
+        function logout() { localStorage.clear(); window.location.reload(); }
+
+        // Tab Switching Logic
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            document.getElementById(`tab-${tabId}`).classList.add('active');
         }
 
-        // --- FETCH NOTICES (MULTI-TENANT READ) ---
+        // --- NOTICES LOGIC ---
         async function fetchNotices() {
-            const schoolId = localStorage.getItem('school_id');
+            const res = await fetch(`${SUPABASE_URL}/rest/v1/notices?school_id=eq.${localStorage.getItem('school_id')}&order=created_at.desc`, { headers });
+            const data = await res.json();
             const list = document.getElementById('noticeList');
-            list.innerHTML = `<div class="text-center p-4"><div class="loader mx-auto border-brand"></div></div>`;
-
-            try {
-                // Notice the filter: ?school_id=eq.${schoolId} - THIS IS DATA ISOLATION
-                const res = await fetch(`${SUPABASE_URL}/rest/v1/notices?school_id=eq.${schoolId}&order=created_at.desc`, { headers: headers });
-                const data = await res.json();
-
-                if(data.length === 0) {
-                    list.innerHTML = `<div class="bg-white p-6 rounded-lg text-center border border-slate-200 text-slate-500 text-sm"><i class="fa-solid fa-folder-open text-2xl mb-2 text-slate-300 block"></i>No notices published yet.</div>`;
-                    return;
-                }
-
-                list.innerHTML = '';
-                data.forEach(notice => {
-                    const dateObj = new Date(notice.notice_date);
-                    const formattedDate = dateObj.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
-                    
-                    list.innerHTML += `
-                        <div class="bg-white p-4 rounded-xl border border-slate-200 hover:border-brand/30 hover:shadow-md transition-all flex gap-4 items-start group">
-                            <div class="bg-indigo-50 text-brand px-3 py-2 rounded-lg text-center min-w-[60px]">
-                                <span class="block text-xl font-bold leading-none">${dateObj.getDate()}</span>
-                                <span class="block text-xs font-semibold uppercase mt-1">${dateObj.toLocaleString('en-IN', { month: 'short' })}</span>
-                            </div>
-                            <div class="flex-1">
-                                <h4 class="font-bold text-slate-800 text-sm md:text-base">${notice.title}</h4>
-                                ${notice.description ? `<p class="text-slate-600 text-xs md:text-sm mt-1 line-clamp-2">${notice.description}</p>` : ''}
-                            </div>
-                            <button onclick="deleteNotice('${notice.id}')" class="text-slate-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all p-2">
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
-                        </div>
-                    `;
-                });
-            } catch (error) {
-                list.innerHTML = `<div class="text-red-500 text-sm text-center">Failed to load notices.</div>`;
-            }
+            if(data.length===0) return list.innerHTML = `<p class="text-sm text-slate-400 text-center py-4">No notices yet.</p>`;
+            list.innerHTML = data.map(n => `<div class="flex justify-between items-center p-3 border-b"><div class="text-sm font-semibold text-slate-800">${n.title} <span class="text-xs font-normal text-slate-400 block">${n.notice_date}</span></div> <button onclick="delData('notices','${n.id}')" class="text-red-400 hover:text-red-600"><i class="fa-solid fa-trash"></i></button></div>`).join('');
         }
-
-        // --- ADD NOTICE (MULTI-TENANT WRITE) ---
         document.getElementById('noticeForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const btn = document.getElementById('noticeBtn');
-            btn.innerText = "Publishing...";
-            btn.disabled = true;
-
-            const schoolId = localStorage.getItem('school_id'); // GET FROM MEMORY
-            const title = document.getElementById('noticeTitle').value;
-            const desc = document.getElementById('noticeDesc').value;
-            const date = document.getElementById('noticeDate').value;
-
-            try {
-                // Post data, automatically linking to the logged-in school
-                const res = await fetch(`${SUPABASE_URL}/rest/v1/notices`, {
-                    method: 'POST',
-                    headers: headers,
-                    body: JSON.stringify({
-                        school_id: schoolId,
-                        title: title,
-                        description: desc,
-                        notice_date: date
-                    })
-                });
-
-                if(!res.ok) throw new Error("Failed to add notice");
-
-                document.getElementById('noticeForm').reset();
-                document.getElementById('noticeDate').valueAsDate = new Date();
-                fetchNotices(); // Refresh the list
-                
-            } catch (error) {
-                alert(error.message);
-            } finally {
-                btn.innerText = "Publish Notice";
-                btn.disabled = false;
-            }
+            await fetch(`${SUPABASE_URL}/rest/v1/notices`, {
+                method: 'POST', headers,
+                body: JSON.stringify({ school_id: localStorage.getItem('school_id'), title: document.getElementById('noticeTitle').value, notice_date: document.getElementById('noticeDate').value })
+            });
+            document.getElementById('noticeForm').reset(); document.getElementById('noticeDate').valueAsDate = new Date(); fetchNotices();
         });
 
-        // --- DELETE NOTICE ---
-        async function deleteNotice(noticeId) {
-            if(!confirm("Are you sure you want to delete this notice?")) return;
-            try {
-                await fetch(`${SUPABASE_URL}/rest/v1/notices?id=eq.${noticeId}`, {
-                    method: 'DELETE',
-                    headers: headers
-                });
-                fetchNotices();
-            } catch (e) {
-                alert("Failed to delete.");
+        // --- GALLERY LOGIC ---
+        async function fetchGallery() {
+            const res = await fetch(`${SUPABASE_URL}/rest/v1/galleries?school_id=eq.${localStorage.getItem('school_id')}&order=created_at.desc`, { headers });
+            const data = await res.json();
+            const list = document.getElementById('galleryList');
+            if(data.length===0) return list.innerHTML = `<div class="col-span-full text-center text-sm text-slate-400">No photos added.</div>`;
+            list.innerHTML = data.map(img => `
+                <div class="relative group rounded-lg overflow-hidden border">
+                    <img src="${img.image_url}" class="w-full h-24 object-cover" onerror="this.src='https://via.placeholder.com/150?text=Error'">
+                    <div class="absolute bottom-0 w-full bg-black/60 text-white text-[10px] p-1 truncate">${img.caption}</div>
+                    <button onclick="delData('galleries','${img.id}')" class="absolute top-1 right-1 bg-red-600 text-white w-6 h-6 rounded-full opacity-0 group-hover:opacity-100"><i class="fa-solid fa-times text-xs"></i></button>
+                </div>
+            `).join('');
+        }
+        document.getElementById('galleryForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            await fetch(`${SUPABASE_URL}/rest/v1/galleries`, {
+                method: 'POST', headers,
+                body: JSON.stringify({ school_id: localStorage.getItem('school_id'), image_url: document.getElementById('imgUrl').value, caption: document.getElementById('imgCaption').value })
+            });
+            document.getElementById('galleryForm').reset(); fetchGallery();
+        });
+
+        // --- SETTINGS (BRANDING) LOGIC ---
+        async function fetchSettings() {
+            const res = await fetch(`${SUPABASE_URL}/rest/v1/schools?id=eq.${localStorage.getItem('school_id')}&select=primary_color,logo_url,about_us_text`, { headers });
+            const data = await res.json();
+            if(data.length > 0) {
+                if(data[0].primary_color) document.getElementById('primaryColor').value = data[0].primary_color;
+                if(data[0].logo_url) document.getElementById('logoUrl').value = data[0].logo_url;
+                if(data[0].about_us_text) document.getElementById('aboutText').value = data[0].about_us_text;
             }
+        }
+        document.getElementById('settingsForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('settingsBtn'); btn.innerText = "Saving...";
+            await fetch(`${SUPABASE_URL}/rest/v1/schools?id=eq.${localStorage.getItem('school_id')}`, {
+                method: 'PATCH', headers,
+                body: JSON.stringify({
+                    primary_color: document.getElementById('primaryColor').value,
+                    logo_url: document.getElementById('logoUrl').value,
+                    about_us_text: document.getElementById('aboutText').value
+                })
+            });
+            btn.innerText = "Saved Successfully!"; btn.classList.replace('bg-green-600', 'bg-slate-800');
+            setTimeout(() => { btn.innerText = "Save Branding Settings"; btn.classList.replace('bg-slate-800', 'bg-green-600'); }, 2000);
+        });
+
+        // Universal Delete Function
+        async function delData(table, id) {
+            if(!confirm("Delete this item?")) return;
+            await fetch(`${SUPABASE_URL}/rest/v1/${table}?id=eq.${id}`, { method: 'DELETE', headers });
+            if(table === 'notices') fetchNotices(); else fetchGallery();
         }
     </script>
 </body>
