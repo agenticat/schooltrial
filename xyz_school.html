@@ -4,112 +4,120 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>School Official Website</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = { theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'] } } } }
-    </script>
-    <style>
-        .skeleton { background: #e2e8f0; animation: pulse 1.5s infinite ease-in-out; border-radius: 4px; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
-    </style>
+    <script>tailwind.config = { theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'] } } } }</script>
+    <style>.skeleton { background: #e2e8f0; animation: pulse 1.5s infinite ease-in-out; border-radius: 4px; } @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }</style>
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans antialiased flex flex-col min-h-screen">
-
-    <!-- ========================================== -->
-    <!-- ⚙️ THE ONLY CONFIGURATION NEEDED (WHITE-LABEL) -->
-    <!-- ========================================== -->
     <script>
-        // AAP YAHAN APNI WAHI API KEY PASTE KARENGE JO MASTER PANEL SE MILI THI
-        const SCHOOL_API_KEY = "bc1dd513-5915-49b7-8b07-4d346e1e0445"; // <-- PASTE HERE
-        
-        // Central Backend System (Aapka Supabase)
+        const SCHOOL_API_KEY = "bc1dd513-5915-49b7-8b07-4d346e1e0445"; 
         const SUPABASE_URL = "https://xlmsgtxyrlovjobwvdom.supabase.co";
         const SUPABASE_ANON_KEY = "sb_publishable_iLRrB73mPbgH0FtPvMOVbg_eoNyCtd3"; 
-        
-        const headers = {
-            'Content-Type': 'application/json',
-            'apikey': SUPABASE_ANON_KEY,
-            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
-        };
+        const headers = { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` };
     </script>
 
     <!-- HEADER SECTION -->
     <header class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <div id="logoContainer" class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xl shadow-md" >
+                <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xl shadow-md overflow-hidden" id="logoContainer">
                     <i class="fa-solid fa-school"></i>
                 </div>
                 <div>
-                    <!-- School Name Auto-Loads Here -->
                     <h1 id="publicSchoolName" class="text-xl md:text-2xl font-bold text-gray-900 skeleton w-48 h-6 mb-1"></h1>
                     <p class="text-xs md:text-sm text-gray-500 font-medium">Welcome to our official portal</p>
                 </div>
             </div>
             <nav class="hidden md:flex gap-6 font-medium text-gray-600">
-                <a href="#" class="hover:text-blue-600">Home</a>
-                <a href="#" class="hover:text-blue-600">About</a>
+                <a href="#heroSection" class="hover:text-blue-600">Home</a>
                 <a href="#notice-board" class="hover:text-blue-600">Notices</a>
-                <a href="#" class="hover:text-blue-600">Contact</a>
+                <a href="#eventsSection" class="hover:text-blue-600">Events</a>
+                <a href="#staffSection" class="hover:text-blue-600">Staff</a>
+                <a href="#gallerySection" class="hover:text-blue-600">Gallery</a>
+                <a href="#contactSection" class="hover:text-blue-600">Contact</a>
             </nav>
-            <button class="md:hidden text-gray-600 text-2xl"><i class="fa-solid fa-bars"></i></button>
         </div>
     </header>
 
     <!-- HERO SECTION -->
-    <section id="heroSection" class="bg-blue-900 text-white py-16 md:py-24 px-4 text-center">
+    <section id="heroSection" class="bg-blue-900 text-white py-16 md:py-24 px-4 text-center transition-colors duration-500">
         <div class="max-w-3xl mx-auto">
-            <h2 class="text-3xl md:text-5xl font-bold mb-4 leading-tight">Empowering Students for a Better Tomorrow</h2>
-            <p class="text-blue-200 text-lg md:text-xl mb-8">Stay updated with the latest announcements, events, and academic notices.</p>
+            <h2 id="heroTitle" class="text-3xl md:text-5xl font-bold mb-4 leading-tight">Empowering Students for a Better Tomorrow</h2>
+            <p id="aboutText" class="text-blue-100 text-lg md:text-xl mb-8">Welcome to our school's digital portal. This platform is designed to keep parents, students, and staff connected seamlessly.</p>
         </div>
     </section>
 
     <!-- MAIN CONTENT -->
     <main class="flex-1 max-w-7xl mx-auto px-4 py-12 w-full grid grid-cols-1 md:grid-cols-3 gap-8">
-        
-        <!-- LEFT: About Placeholder -->
-        <div class="md:col-span-2 space-y-6">
-            <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
-                <h3 class="text-2xl font-bold text-gray-800 mb-4">Welcome Message</h3>
-                <p class="text-gray-600 leading-relaxed mb-4">
-                    </p><p id="aboutText" class="text-gray-600 leading-relaxed mb-4">Welcome to our school's digital portal. This platform is designed to keep parents, students, and staff connected seamlessly. All official updates and notices will be published directly to this website by the school administration.
-                </p>
-                <div class="bg-blue-50 border-l-4 border-blue-600 p-4 rounded-r-lg">
-                    <p class="text-blue-800 font-medium text-sm"><i class="fa-solid fa-circle-info mr-2"></i> This is a white-label template connected to your central SaaS architecture.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- RIGHT: Live Notice Board -->
-        <div class="md:col-span-1" id="notice-board">
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <!-- LEFT COL: Notices & Events -->
+        <div class="md:col-span-2 space-y-8">
+            <!-- Notices -->
+            <div id="notice-board" class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                 <div class="bg-red-50 border-b border-red-100 px-6 py-4 flex items-center justify-between">
-                    <h3 class="font-bold text-red-700"><i class="fa-solid fa-bell mr-2 animate-bounce"></i> Notice Board</h3>
+                    <h3 class="font-bold text-red-700"><i class="fa-solid fa-bell mr-2 animate-bounce"></i> Official Notice Board</h3>
                 </div>
-                
-                <div id="noticeContainer" class="divide-y divide-gray-100 max-h-[400px] overflow-y-auto">
-                    <!-- Skeletons for Loading -->
-                    <div class="p-4 flex gap-3">
-                        <div class="skeleton w-12 h-12 rounded"></div>
-                        <div class="flex-1"><div class="skeleton w-full h-4 mb-2"></div><div class="skeleton w-2/3 h-3"></div></div>
-                    </div>
-                    <div class="p-4 flex gap-3">
-                        <div class="skeleton w-12 h-12 rounded"></div>
-                        <div class="flex-1"><div class="skeleton w-full h-4 mb-2"></div><div class="skeleton w-2/3 h-3"></div></div>
-                    </div>
+                <div id="noticeContainer" class="divide-y divide-gray-100 max-h-[400px] overflow-y-auto p-2">
+                    <div class="p-4 flex gap-3"><div class="skeleton w-12 h-12 rounded"></div><div class="flex-1"><div class="skeleton w-full h-4 mb-2"></div><div class="skeleton w-2/3 h-3"></div></div></div>
+                </div>
+            </div>
+
+            <!-- Events -->
+            <div id="eventsSection" class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hidden">
+                <div class="bg-indigo-50 border-b border-indigo-100 px-6 py-4">
+                    <h3 class="font-bold text-indigo-700"><i class="fa-solid fa-calendar-days mr-2"></i> Upcoming Events</h3>
+                </div>
+                <div id="eventContainer" class="divide-y divide-gray-100 p-2"></div>
+            </div>
+            
+            <!-- Facilities & Achievements -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div id="facilitiesSection" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hidden">
+                    <h3 class="font-bold text-gray-800 mb-4"><i class="fa-solid fa-building text-blue-500 mr-2"></i> Our Facilities</h3>
+                    <ul id="facilityContainer" class="space-y-2 text-sm text-gray-600"></ul>
+                </div>
+                <div id="achievementsSection" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hidden">
+                    <h3 class="font-bold text-gray-800 mb-4"><i class="fa-solid fa-trophy text-yellow-500 mr-2"></i> Achievements</h3>
+                    <ul id="achievementContainer" class="space-y-2 text-sm text-gray-600"></ul>
                 </div>
             </div>
         </div>
 
+        <!-- RIGHT COL: Staff & Contact -->
+        <div class="md:col-span-1 space-y-8">
+            <!-- Staff Directory Widget -->
+            <div id="staffSection" class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hidden">
+                <div class="bg-green-50 border-b border-green-100 px-6 py-4">
+                    <h3 class="font-bold text-green-700"><i class="fa-solid fa-chalkboard-user mr-2"></i> Faculty & Staff</h3>
+                </div>
+                <div id="staffContainer" class="p-4 space-y-4"></div>
+            </div>
+
+            <!-- Contact Form -->
+            <div id="contactSection" class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="bg-gray-800 border-b border-gray-900 px-6 py-4 text-white">
+                    <h3 class="font-bold"><i class="fa-solid fa-envelope mr-2"></i> Contact Us</h3>
+                </div>
+                <div class="p-6">
+                    <form id="inquiryForm" class="space-y-4">
+                        <input type="text" id="inqName" required placeholder="Your Name" class="w-full px-3 py-2 border rounded-lg text-sm outline-none focus:border-blue-500">
+                        <input type="email" id="inqEmail" required placeholder="Email Address" class="w-full px-3 py-2 border rounded-lg text-sm outline-none focus:border-blue-500">
+                        <input type="text" id="inqPhone" placeholder="Phone Number" class="w-full px-3 py-2 border rounded-lg text-sm outline-none focus:border-blue-500">
+                        <textarea id="inqMessage" required placeholder="Your Message..." rows="3" class="w-full px-3 py-2 border rounded-lg text-sm outline-none focus:border-blue-500"></textarea>
+                        <button type="submit" id="inqBtn" class="w-full bg-blue-600 text-white font-bold py-2 rounded-lg text-sm hover:bg-blue-700 transition">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </main>
 
     <!-- GALLERY SECTION -->
-    <section id="gallerySection" class="hidden max-w-7xl mx-auto px-4 py-8 border-t border-gray-100">
-        <h3 class="text-2xl font-bold text-gray-800 mb-6"><i class="fa-solid fa-images text-blue-600 mr-2"></i>School Gallery</h3>
-        <div id="galleryContainer" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
+    <section id="gallerySection" class="hidden bg-white border-t border-gray-200 py-12">
+        <div class="max-w-7xl mx-auto px-4">
+            <h3 class="text-2xl font-bold text-gray-800 mb-8 text-center"><i class="fa-solid fa-images text-blue-600 mr-2"></i>Campus Gallery</h3>
+            <div id="galleryContainer" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
+        </div>
     </section>
 
     <!-- FOOTER -->
@@ -117,72 +125,132 @@
         <p>&copy; <span id="year">2026</span> <span id="footerSchoolName">School</span>. All Rights Reserved.</p>
     </footer>
 
-    <!-- LOGIC: FETCHING DATA MAGIC -->
+    <!-- LOGIC -->
     <script>
         document.getElementById('year').innerText = new Date().getFullYear();
+        let globalSchoolId = null;
 
         async function loadSchoolWebsite() {
             try {
-                // STEP 1: VERIFY API KEY & GET SCHOOL ID
-                // Hum database se pooch rahe hain ki "Ye API Key kis school ki hai?"
-                const schoolRes = await fetch(`${SUPABASE_URL}/rest/v1/schools?api_key=eq.${SCHOOL_API_KEY}&select=id,school_name`, { headers });
+                // 1. Fetch School Branding
+                const schoolRes = await fetch(`${SUPABASE_URL}/rest/v1/schools?api_key=eq.${SCHOOL_API_KEY}&select=*`, { headers });
                 const schoolData = await schoolRes.json();
-
-                if (schoolData.length === 0) {
-                    throw new Error("Invalid API Key! This website is not registered.");
-                }
-
-                const schoolId = schoolData[0].id;
-                const schoolName = schoolData[0].school_name;
-
-                // Update UI with School Name (Removing Skeletons)
-                const nameEl = document.getElementById('publicSchoolName');
-                nameEl.classList.remove('skeleton', 'w-48', 'h-6');
-                nameEl.innerText = schoolName;
-                document.getElementById('footerSchoolName').innerText = schoolName;
-                // Replaced by new branding logic
-
-                // STEP 2: FETCH ONLY THIS SCHOOL'S NOTICES
-                // Ab hume schoolId mil gaya, to hum sirf uske notices fetch karenge
-                const noticeRes = await fetch(`${SUPABASE_URL}/rest/v1/notices?school_id=eq.${schoolId}&order=created_at.desc&limit=5`, { headers });
-                const notices = await noticeRes.json();
-
-                const noticeContainer = document.getElementById('noticeContainer');
+                if (schoolData.length === 0) throw new Error("Invalid API Key!");
                 
-                if (notices.length === 0) {
-                    noticeContainer.innerHTML = `<div class="p-6 text-center text-gray-500 text-sm">No new notices at the moment.</div>`;
-                    return;
+                const s = schoolData[0];
+                globalSchoolId = s.id;
+                
+                // Branding
+                document.getElementById('publicSchoolName').classList.remove('skeleton', 'w-48', 'h-6');
+                document.getElementById('publicSchoolName').innerText = s.school_name;
+                document.getElementById('footerSchoolName').innerText = s.school_name;
+                
+                if (s.primary_color) {
+                    document.getElementById('heroSection').style.backgroundColor = s.primary_color;
+                    const btns = document.querySelectorAll('.bg-blue-600');
+                    btns.forEach(b => b.style.backgroundColor = s.primary_color);
                 }
+                if (s.logo_url) {
+                    document.getElementById('logoContainer').innerHTML = `<img src="${s.logo_url}" class="w-full h-full object-cover">`;
+                } else {
+                    document.getElementById('logoContainer').innerHTML = `<span class="text-xl">${s.school_name.charAt(0)}</span>`;
+                }
+                if (s.about_us_text) document.getElementById('aboutText').innerText = s.about_us_text;
 
-                // Render Notices
-                noticeContainer.innerHTML = '';
-                notices.forEach(notice => {
-                    const d = new Date(notice.notice_date);
-                    noticeContainer.innerHTML += `
-                        <div class="p-4 hover:bg-gray-50 transition-colors flex gap-4">
-                            <div class="bg-red-50 text-red-600 rounded-lg p-2 text-center min-w-[50px] border border-red-100 flex flex-col justify-center">
-                                <span class="text-lg font-bold leading-none">${d.getDate()}</span>
-                                <span class="text-[10px] font-semibold uppercase mt-1">${d.toLocaleString('en-IN', { month: 'short' })}</span>
-                            </div>
-                            <div>
-                                <h4 class="font-semibold text-gray-800 text-sm">${notice.title}</h4>
-                                ${notice.description ? `<p class="text-xs text-gray-500 mt-1 line-clamp-2">${notice.description}</p>` : ''}
-                            </div>
-                        </div>
-                    `;
+                // 2. Fetch Notices
+                fetchData('notices', 'noticeContainer', (n) => {
+                    const d = new Date(n.notice_date);
+                    return `<div class="p-4 hover:bg-gray-50 flex gap-4">
+                                <div class="bg-red-50 text-red-600 rounded-lg p-2 text-center min-w-[50px] border border-red-100 flex flex-col justify-center">
+                                    <span class="text-lg font-bold">${d.getDate()}</span>
+                                    <span class="text-[10px] font-semibold uppercase mt-1">${d.toLocaleString('en', {month:'short'})}</span>
+                                </div>
+                                <div><h4 class="font-semibold text-sm">${n.title}</h4>
+                                ${n.description ? `<p class="text-xs text-gray-500 mt-1">${n.description}</p>`:''}</div>
+                            </div>`;
                 });
 
-            } catch (error) {
-                console.error("Website Load Error:", error);
-                document.getElementById('publicSchoolName').innerText = "System Error";
-                document.getElementById('noticeContainer').innerHTML = `<div class="p-4 text-red-500 text-sm text-center">Failed to load system. Please check API Key.</div>`;
+                // 3. Fetch Events
+                fetchData('events', 'eventContainer', (e) => {
+                    const d = new Date(e.event_date);
+                    return `<div class="p-4 hover:bg-gray-50">
+                                <div class="flex justify-between items-start mb-1">
+                                    <h4 class="font-semibold text-sm text-indigo-900">${e.title}</h4>
+                                    <span class="text-xs bg-indigo-100 text-indigo-800 px-2 py-0.5 rounded">${d.toLocaleDateString()}</span>
+                                </div>
+                                ${e.description ? `<p class="text-xs text-gray-600">${e.description}</p>`:''}
+                                ${e.location ? `<p class="text-xs text-gray-400 mt-1"><i class="fa-solid fa-location-dot mr-1"></i>${e.location}</p>`:''}
+                            </div>`;
+                }, 'eventsSection');
+
+                // 4. Fetch Staff
+                fetchData('staff_members', 'staffContainer', (s) => `
+                    <div class="flex items-center gap-3">
+                        <img src="${s.photo_url || 'https://via.placeholder.com/50'}" class="w-10 h-10 rounded-full object-cover bg-gray-200">
+                        <div>
+                            <h4 class="text-sm font-semibold">${s.name}</h4>
+                            <p class="text-xs text-gray-500">${s.role}</p>
+                        </div>
+                    </div>
+                `, 'staffSection');
+
+                // 5. Fetch Gallery
+                fetchData('galleries', 'galleryContainer', (g) => `
+                    <div class="rounded-xl overflow-hidden shadow-sm group">
+                        <img src="${g.image_url}" class="w-full h-40 object-cover group-hover:scale-105 transition-transform">
+                        ${g.caption ? `<div class="p-2 bg-gray-50 text-xs text-center">${g.caption}</div>`:''}
+                    </div>
+                `, 'gallerySection');
+
+                // 6. Fetch Facilities
+                fetchData('facilities', 'facilityContainer', (f) => `<li><i class="fa-solid fa-check text-green-500 mr-2"></i><b>${f.name}</b> ${f.description ? `- ${f.description}`:''}</li>`, 'facilitiesSection');
+
+                // 7. Fetch Achievements
+                fetchData('achievements', 'achievementContainer', (a) => `<li><i class="fa-solid fa-star text-yellow-500 mr-2"></i><b>${a.title}</b> ${a.description ? `- ${a.description}`:''}</li>`, 'achievementsSection');
+
+            } catch (err) {
+                console.error(err);
+                document.getElementById('noticeContainer').innerHTML = `<div class="p-4 text-red-500 text-sm text-center">Failed to load school data. Check API Key.</div>`;
             }
         }
 
-        // Start the Magic!
+        async function fetchData(table, containerId, templateFn, sectionId = null) {
+            const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?school_id=eq.${globalSchoolId}&order=created_at.desc&limit=10`, { headers });
+            const data = await res.json();
+            const container = document.getElementById(containerId);
+            if(data.length > 0) {
+                if(sectionId) document.getElementById(sectionId).classList.remove('hidden');
+                container.innerHTML = data.map(templateFn).join('');
+            } else if (!sectionId) {
+                container.innerHTML = `<p class="p-4 text-sm text-gray-500 text-center">No records found.</p>`;
+            }
+        }
+
+        // Handle Inquiry Form
+        document.getElementById('inquiryForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('inqBtn');
+            btn.innerText = "Sending...";
+            
+            await fetch(`${SUPABASE_URL}/rest/v1/inquiries`, {
+                method: 'POST', headers,
+                body: JSON.stringify({
+                    school_id: globalSchoolId,
+                    name: document.getElementById('inqName').value,
+                    email: document.getElementById('inqEmail').value,
+                    phone: document.getElementById('inqPhone').value,
+                    message: document.getElementById('inqMessage').value,
+                    status: 'new'
+                })
+            });
+            
+            document.getElementById('inquiryForm').reset();
+            btn.innerText = "Message Sent Successfully!";
+            btn.classList.replace('bg-blue-600', 'bg-green-600');
+            setTimeout(() => { btn.innerText = "Send Message"; btn.classList.replace('bg-green-600', 'bg-blue-600'); }, 3000);
+        });
+
         loadSchoolWebsite();
     </script>
 </body>
 </html>
-
-
