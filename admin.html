@@ -296,19 +296,66 @@ async function loadList(t){
     const r=await fetch(`${SB}/rest/v1/${t}?school_id=eq.${sid()}&order=created_at.desc`,{headers:H});const d=await r.json();
     let el=document.getElementById(`l-${t}`);if(!el)return;
     if(!d.length)return el.innerHTML='<p class="p-6 text-sm text-gray-400 text-center italic">No records yet.</p>';
-    const renders={
-        notices:i=>`<div class="p-4 border-b hover:bg-gray-50 flex justify-between items-center"><div class="flex items-center gap-3"><div class="bg-blue-100 text-blue-800 px-3 py-1 rounded text-xs font-bold">${i.notice_date}</div><p class="font-bold text-gray-800">${i.title}</p></div><button onclick="del('${t}','${i.id}')" class="text-red-400 hover:text-red-600 p-2"><i class="fa-solid fa-trash"></i></button></div>`,
-        toppers:i=>`<div class="bg-yellow-50 border border-yellow-200 rounded-xl p-4 text-center relative"><button onclick="del('${t}','${i.id}')" class="absolute top-2 right-2 text-red-400"><i class="fa-solid fa-times"></i></button><img src="${i.photo_url||'https://via.placeholder.com/100'}" class="w-16 h-16 mx-auto rounded-full object-cover border-2 border-yellow-400 mb-2"><h4 class="font-bold text-gray-800">${i.student_name}</h4><p class="text-xs text-gray-500">${i.exam_name} (${i.passing_year})</p><div class="mt-2 bg-yellow-100 text-yellow-800 font-black text-lg py-1 rounded">${i.percentage_or_grade}</div></div>`,
-        galleries:i=>`<div class="relative group rounded-xl overflow-hidden shadow-sm border"><img src="${i.image_url}" class="w-full h-32 object-cover"><div class="absolute bottom-0 w-full bg-black/70 text-white text-[10px] p-2 truncate">${i.caption||''}</div><button onclick="del('${t}','${i.id}')" class="absolute top-2 right-2 bg-red-600 text-white w-7 h-7 rounded-full opacity-0 group-hover:opacity-100"><i class="fa-solid fa-trash text-xs"></i></button></div>`,
-        facilities:i=>`<div class="p-4 border-b flex justify-between items-center"><div class="flex items-center gap-3"><i class="fa-solid fa-check-circle text-green-500"></i><div><p class="font-bold">${i.facility_name}</p><p class="text-xs text-gray-500">${i.description||''}</p></div></div><button onclick="del('${t}','${i.id}')" class="text-red-400 p-2"><i class="fa-solid fa-trash"></i></button></div>`,
-        downloads:i=>`<div class="p-4 border-b flex justify-between items-center"><div class="flex items-center gap-3"><i class="fa-solid fa-file-pdf text-red-500 text-xl"></i><div><p class="font-bold">${i.document_title}</p><p class="text-xs text-gray-500">${i.document_category} · <a href="${i.file_url}" target="_blank" class="text-blue-600">View</a></p></div></div><button onclick="del('${t}','${i.id}')" class="text-red-400 p-2"><i class="fa-solid fa-trash"></i></button></div>`,
-        fee_structures:i=>`<div class="p-4 border-b flex justify-between items-center"><div class="flex items-center gap-3"><div class="bg-green-100 text-green-800 px-3 py-1 rounded font-bold text-sm">${i.class_name}</div><span class="text-xs text-gray-500">${i.academic_session||''}</span></div><div class="flex items-center gap-3"><span class="font-black text-gray-800 text-lg">₹${i.total_fee}</span><button onclick="del('${t}','${i.id}')" class="text-red-400 p-2"><i class="fa-solid fa-trash"></i></button></div></div>`,
-        staff_members:i=>`<div class="flex items-center gap-4 bg-white border p-4 rounded-xl shadow-sm"><img src="${i.photo_url||'https://via.placeholder.com/60'}" class="w-12 h-12 rounded-full object-cover border"><div><p class="font-bold">${i.name}</p><p class="text-xs text-indigo-600 font-medium">${i.designation}</p><p class="text-xs text-gray-500">${i.qualification||''}</p></div><button onclick="del('${t}','${i.id}')" class="ml-auto text-red-400"><i class="fa-solid fa-trash"></i></button></div>`,
-        achievements:i=>`<div class="p-4 border-b flex justify-between items-center"><div class="flex items-center gap-3"><i class="fa-solid fa-trophy text-yellow-500"></i><div><p class="font-bold">${i.title}</p><p class="text-xs text-gray-500">${i.description||''}</p></div></div><button onclick="del('${t}','${i.id}')" class="text-red-400 p-2"><i class="fa-solid fa-trash"></i></button></div>`,
-        testimonials:i=>`<div class="p-4 border-b"><div class="flex justify-between"><div><p class="font-bold">${i.reviewer_name} <span class="text-xs text-gray-500 font-normal">${i.reviewer_relation||''}</span></p><p class="text-yellow-500 text-sm">${'★'.repeat(i.rating||5)}</p></div><button onclick="del('${t}','${i.id}')" class="text-red-400"><i class="fa-solid fa-trash"></i></button></div><p class="text-sm text-gray-600 mt-2 italic">"${i.review_text}"</p></div>`,
-        inquiries:i=>`<div class="bg-white p-5 rounded-xl border-l-4 border-l-blue-500 shadow-sm"><div class="flex justify-between"><div><p class="font-bold">${i.student_name||i.parent_name||'Inquiry'}</p><p class="text-xs text-gray-500">${i.phone_number||''} · ${i.email||''} · Class: ${i.class_applied_for||'N/A'}</p></div><span class="text-xs text-gray-400">${new Date(i.created_at).toLocaleDateString()}</span></div><p class="text-sm mt-2 p-2 bg-gray-50 rounded italic">"${i.message}"</p></div>`
-    };
+// ── STATE ──
+let editingState = { table: null, id: null };
+
+// ── RENDERERS ──
+const renders={
+    notices:i=>`<div class="p-4 border-b hover:bg-gray-50 flex justify-between items-center"><div class="flex items-center gap-3"><div class="bg-blue-100 text-blue-800 px-3 py-1 rounded text-xs font-bold">${i.notice_date}</div><p class="font-bold text-gray-800">${i.title}</p></div><div class="flex gap-2"><button onclick="edit('notices','${i.id}')" class="text-blue-500 hover:text-blue-700 p-2"><i class="fa-solid fa-pen"></i></button><button onclick="del('${t}','${i.id}')" class="text-red-400 hover:text-red-600 p-2"><i class="fa-solid fa-trash"></i></button></div></div>`,
+    toppers:i=>`<div class="bg-yellow-50 border border-yellow-200 rounded-xl p-4 text-center relative"><div class="absolute top-2 right-2 flex gap-1"><button onclick="edit('toppers','${i.id}')" class="text-blue-500 bg-white rounded-full w-6 h-6 shadow"><i class="fa-solid fa-pen text-xs"></i></button><button onclick="del('${t}','${i.id}')" class="text-red-400 bg-white rounded-full w-6 h-6 shadow"><i class="fa-solid fa-times text-xs"></i></button></div><img src="${i.photo_url||'https://via.placeholder.com/100'}" onerror="this.src='https://via.placeholder.com/100?text=No+Photo'" class="w-16 h-16 mx-auto rounded-full object-cover border-2 border-yellow-400 mb-2"><h4 class="font-bold text-gray-800">${i.student_name}</h4><p class="text-xs text-gray-500">${i.exam_name} (${i.passing_year})</p><div class="mt-2 bg-yellow-100 text-yellow-800 font-black text-lg py-1 rounded">${i.percentage_or_grade}</div></div>`,
+    galleries:i=>`<div class="relative group rounded-xl overflow-hidden shadow-sm border"><img src="${i.image_url}" onerror="this.src='https://via.placeholder.com/400x300?text=Broken+Link'" class="w-full h-32 object-cover"><div class="absolute bottom-0 w-full bg-black/70 text-white text-[10px] p-2 truncate">${i.caption||''}</div><div class="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition"><button onclick="edit('galleries','${i.id}')" class="bg-blue-600 text-white w-7 h-7 rounded-full shadow"><i class="fa-solid fa-pen text-xs"></i></button><button onclick="del('${t}','${i.id}')" class="bg-red-600 text-white w-7 h-7 rounded-full shadow"><i class="fa-solid fa-trash text-xs"></i></button></div></div>`,
+    facilities:i=>`<div class="p-4 border-b flex justify-between items-center"><div class="flex items-center gap-3"><i class="fa-solid fa-check-circle text-green-500"></i><div><p class="font-bold">${i.facility_name}</p><p class="text-xs text-gray-500">${i.description||''}</p></div></div><div class="flex gap-2"><button onclick="edit('facilities','${i.id}')" class="text-blue-500 p-2"><i class="fa-solid fa-pen"></i></button><button onclick="del('${t}','${i.id}')" class="text-red-400 p-2"><i class="fa-solid fa-trash"></i></button></div></div>`,
+    downloads:i=>`<div class="p-4 border-b flex justify-between items-center"><div class="flex items-center gap-3"><i class="fa-solid fa-file-pdf text-red-500 text-xl"></i><div><p class="font-bold">${i.document_title}</p><p class="text-xs text-gray-500">${i.document_category} · <a href="${i.file_url}" target="_blank" class="text-blue-600">View</a></p></div></div><div class="flex gap-2"><button onclick="edit('downloads','${i.id}')" class="text-blue-500 p-2"><i class="fa-solid fa-pen"></i></button><button onclick="del('${t}','${i.id}')" class="text-red-400 p-2"><i class="fa-solid fa-trash"></i></button></div></div>`,
+    fee_structures:i=>`<div class="p-4 border-b flex justify-between items-center"><div class="flex items-center gap-3"><div class="bg-green-100 text-green-800 px-3 py-1 rounded font-bold text-sm">${i.class_name}</div><span class="text-xs text-gray-500">${i.academic_session||''}</span></div><div class="flex items-center gap-3"><span class="font-black text-gray-800 text-lg">₹${i.total_fee}</span><button onclick="edit('fee_structures','${i.id}')" class="text-blue-500 p-2"><i class="fa-solid fa-pen"></i></button><button onclick="del('${t}','${i.id}')" class="text-red-400 p-2"><i class="fa-solid fa-trash"></i></button></div></div>`,
+    staff_members:i=>`<div class="flex items-center gap-4 bg-white border p-4 rounded-xl shadow-sm"><img src="${i.photo_url||'https://via.placeholder.com/60'}" onerror="this.src='https://via.placeholder.com/60?text=N/A'" class="w-12 h-12 rounded-full object-cover border"><div><p class="font-bold">${i.name}</p><p class="text-xs text-indigo-600 font-medium">${i.designation}</p><p class="text-xs text-gray-500">${i.qualification||''}</p></div><div class="ml-auto flex gap-2"><button onclick="edit('staff_members','${i.id}')" class="text-blue-500"><i class="fa-solid fa-pen"></i></button><button onclick="del('${t}','${i.id}')" class="text-red-400"><i class="fa-solid fa-trash"></i></button></div></div>`,
+    achievements:i=>`<div class="p-4 border-b flex justify-between items-center"><div class="flex items-center gap-3"><i class="fa-solid fa-trophy text-yellow-500"></i><div><p class="font-bold">${i.title}</p><p class="text-xs text-gray-500">${i.description||''}</p></div></div><div class="flex gap-2"><button onclick="edit('achievements','${i.id}')" class="text-blue-500 p-2"><i class="fa-solid fa-pen"></i></button><button onclick="del('${t}','${i.id}')" class="text-red-400 p-2"><i class="fa-solid fa-trash"></i></button></div></div>`,
+    testimonials:i=>`<div class="p-4 border-b"><div class="flex justify-between"><div><p class="font-bold">${i.reviewer_name} <span class="text-xs text-gray-500 font-normal">${i.reviewer_relation||''}</span></p><p class="text-yellow-500 text-sm">${'★'.repeat(i.rating||5)}</p></div><div class="flex gap-2"><button onclick="edit('testimonials','${i.id}')" class="text-blue-500"><i class="fa-solid fa-pen"></i></button><button onclick="del('${t}','${i.id}')" class="text-red-400"><i class="fa-solid fa-trash"></i></button></div></div><p class="text-sm text-gray-600 mt-2 italic">"${i.review_text}"</p></div>`,
+    inquiries:i=>`<div class="bg-white p-5 rounded-xl border-l-4 border-l-blue-500 shadow-sm"><div class="flex justify-between"><div><p class="font-bold">${i.student_name||i.parent_name||'Inquiry'}</p><p class="text-xs text-gray-500">${i.phone_number||''} · ${i.email||''} · Class: ${i.class_applied_for||'N/A'}</p></div><span class="text-xs text-gray-400">${new Date(i.created_at).toLocaleDateString()}</span></div><p class="text-sm mt-2 p-2 bg-gray-50 rounded italic">"${i.message}"</p><button onclick="del('${t}','${i.id}')" class="mt-3 text-red-500 text-xs font-bold hover:underline"><i class="fa-solid fa-trash mr-1"></i>Delete Inquiry</button></div>`
+};
+
+// ... inside loadList
+async function loadList(t){
+    const r=await fetch(`${SB}/rest/v1/${t}?school_id=eq.${sid()}&order=created_at.desc`,{headers:H});const d=await r.json();
+    let el=document.getElementById(`l-${t}`);if(!el)return;
+    window[`data_${t}`] = d; // Store data for editing
+    if(!d.length)return el.innerHTML='<p class="p-6 text-sm text-gray-400 text-center italic">No records yet.</p>';
     el.innerHTML=d.map(renders[t]).join('')}
+
+// ── EDIT FLOW ──
+const mappings = {
+    notices: {title:'n_title', notice_date:'n_date'},
+    toppers: {student_name:'t_name', exam_name:'t_exam', percentage_or_grade:'t_score', passing_year:'t_year', photo_url:'t_photo'},
+    galleries: {image_url:'g_url', caption:'g_cap'},
+    facilities: {facility_name:'fc_name', description:'fc_desc'},
+    downloads: {document_title:'dl_title', document_category:'dl_cat', file_url:'dl_url'},
+    fee_structures: {class_name:'fe_class', academic_session:'fe_session', total_fee:'fe_total'},
+    staff_members: {name:'st_name', designation:'st_desg', qualification:'st_qual', photo_url:'st_photo'},
+    achievements: {title:'ach_title', description:'ach_desc'},
+    testimonials: {reviewer_name:'tm_name', reviewer_relation:'tm_rel', review_text:'tm_text', rating:'tm_rat'}
+};
+
+function edit(t, id) {
+    const item = window[`data_${t}`].find(x => x.id === id);
+    if (!item || !mappings[t]) return;
+    
+    // Scroll to top
+    document.getElementById(`tab-${t}`).scrollIntoView({behavior: 'smooth'});
+    
+    // Populate form
+    Object.keys(mappings[t]).forEach(dbField => {
+        const domId = mappings[t][dbField];
+        if(document.getElementById(domId)) document.getElementById(domId).value = item[dbField] || '';
+    });
+    
+    editingState = { table: t, id: id };
+    const form = document.getElementById(`f-${t}`);
+    const btn = form.querySelector('button');
+    btn.innerHTML = `<i class="fa-solid fa-check mr-1"></i> Update`;
+    btn.classList.replace('bg-blue-600', 'bg-purple-600');
+    btn.classList.replace('bg-yellow-500', 'bg-purple-600');
+    btn.classList.replace('bg-green-600', 'bg-purple-600');
+    btn.classList.replace('bg-yellow-600', 'bg-purple-600');
+}
 
 // ── FORM HANDLERS ──
 const forms=[
@@ -323,11 +370,29 @@ const forms=[
     ['f-testimonials','testimonials',()=>({reviewer_name:v('tm_name'),reviewer_relation:v('tm_rel'),review_text:v('tm_text'),rating:parseInt(v('tm_rat'))})]
 ];
 function v(id){return document.getElementById(id).value}
+
 forms.forEach(([fid,table,payload])=>{document.getElementById(fid).addEventListener('submit',async e=>{e.preventDefault();
-    const btn=e.target.querySelector('button');const orig=btn.innerText;btn.innerText='Saving...';
-    await fetch(`${SB}/rest/v1/${table}`,{method:'POST',headers:H,body:JSON.stringify({school_id:sid(),...payload()})});
+    const btn=e.target.querySelector('button');const orig=btn.innerHTML;btn.innerText='Saving...';
+    
+    if (editingState.table === table && editingState.id) {
+        // UPDATE
+        await fetch(`${SB}/rest/v1/${table}?id=eq.${editingState.id}`,{method:'PATCH',headers:H,body:JSON.stringify(payload())});
+        editingState = { table: null, id: null };
+        btn.innerHTML='Updated!';
+        // Reset button colors
+        setTimeout(() => {
+            btn.innerHTML = 'Add';
+            btn.classList.replace('bg-purple-600', 'bg-blue-600');
+        }, 1500);
+    } else {
+        // INSERT
+        await fetch(`${SB}/rest/v1/${table}`,{method:'POST',headers:H,body:JSON.stringify({school_id:sid(),...payload()})});
+        btn.innerHTML='Saved!';
+        setTimeout(()=>btn.innerHTML=orig,1500);
+    }
+    
     e.target.reset();if(fid==='f-notices')document.getElementById('n_date').valueAsDate=new Date();
-    btn.innerText='Saved!';setTimeout(()=>btn.innerText=orig,1500);loadList(table)})});
+    loadList(table)})});
 
 async function del(t,id){if(!confirm('Delete?'))return;await fetch(`${SB}/rest/v1/${t}?id=eq.${id}`,{method:'DELETE',headers:H});loadList(t)}
 
