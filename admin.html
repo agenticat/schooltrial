@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>School Admin Portal - Pro</title>
+    <title>School Admin Portal - Ultimate</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -13,9 +13,13 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .loader { border: 3px solid #f3f3f3; border-top: 3px solid #4f46e5; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .tab-btn.active { border-bottom: 2px solid #4f46e5; color: #4f46e5; font-weight: 600; }
+        .tab-btn.active { border-bottom: 2px solid #4f46e5; color: #4f46e5; font-weight: 600; background-color: #f8fafc; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
+        
+        /* Custom scrollbar for horizontal tabs */
+        .tabs-scroll::-webkit-scrollbar { height: 4px; }
+        .tabs-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased h-screen overflow-hidden flex flex-col">
@@ -26,7 +30,7 @@
             <div class="bg-slate-800 p-8 text-center">
                 <i class="fa-solid fa-graduation-cap text-4xl text-white mb-2"></i>
                 <h2 class="text-2xl font-bold text-white">School Portal</h2>
-                <p class="text-slate-300 text-sm mt-1">Pro Administration Dashboard</p>
+                <p class="text-slate-300 text-sm mt-1">Ultimate Administration Dashboard</p>
             </div>
             <div class="p-8">
                 <form id="loginForm" class="space-y-5">
@@ -60,11 +64,14 @@
                 <button onclick="logout()" class="text-slate-400 hover:text-red-500 p-2"><i class="fa-solid fa-power-off text-xl"></i></button>
             </div>
             <!-- Tabs -->
-            <div class="max-w-7xl mx-auto px-4 flex overflow-x-auto border-t">
+            <div class="max-w-7xl mx-auto px-4 flex overflow-x-auto border-t tabs-scroll">
                 <button onclick="switchTab('notices')" class="tab-btn active px-4 py-3 text-sm whitespace-nowrap"><i class="fa-solid fa-bullhorn mr-2"></i>Notices</button>
                 <button onclick="switchTab('events')" class="tab-btn px-4 py-3 text-sm whitespace-nowrap"><i class="fa-solid fa-calendar-days mr-2"></i>Events</button>
                 <button onclick="switchTab('staff')" class="tab-btn px-4 py-3 text-sm whitespace-nowrap"><i class="fa-solid fa-chalkboard-user mr-2"></i>Staff</button>
                 <button onclick="switchTab('gallery')" class="tab-btn px-4 py-3 text-sm whitespace-nowrap"><i class="fa-solid fa-images mr-2"></i>Gallery</button>
+                <button onclick="switchTab('facilities')" class="tab-btn px-4 py-3 text-sm whitespace-nowrap"><i class="fa-solid fa-building mr-2"></i>Facilities</button>
+                <button onclick="switchTab('achievements')" class="tab-btn px-4 py-3 text-sm whitespace-nowrap"><i class="fa-solid fa-trophy mr-2"></i>Achievements</button>
+                <button onclick="switchTab('faqs')" class="tab-btn px-4 py-3 text-sm whitespace-nowrap"><i class="fa-solid fa-circle-question mr-2"></i>FAQs</button>
                 <button onclick="switchTab('inquiries')" class="tab-btn px-4 py-3 text-sm whitespace-nowrap"><i class="fa-solid fa-envelope mr-2"></i>Inquiries</button>
                 <button onclick="switchTab('settings')" class="tab-btn px-4 py-3 text-sm whitespace-nowrap"><i class="fa-solid fa-gear mr-2"></i>Branding</button>
             </div>
@@ -77,9 +84,9 @@
                 <!-- NOTICES -->
                 <div id="tab-notices" class="tab-content active fade-in space-y-6">
                     <div class="bg-white p-4 rounded-2xl shadow-sm border">
-                        <h3 class="font-bold text-sm mb-4"><i class="fa-solid fa-plus text-indigo-500 mr-2"></i>Post Notice</h3>
-                        <form id="noticeForm" class="flex gap-4">
-                            <input type="text" id="noticeTitle" required class="flex-1 px-3 py-2 border rounded-lg text-sm" placeholder="Title">
+                        <h3 class="font-bold text-sm mb-4">Post Notice</h3>
+                        <form id="noticeForm" class="flex flex-wrap gap-4">
+                            <input type="text" id="noticeTitle" required class="flex-1 min-w-[200px] px-3 py-2 border rounded-lg text-sm" placeholder="Title">
                             <input type="date" id="noticeDate" required class="px-3 py-2 border rounded-lg text-sm">
                             <button class="bg-slate-800 text-white py-2 px-6 rounded-lg text-sm">Post</button>
                         </form>
@@ -93,7 +100,7 @@
                 <!-- EVENTS -->
                 <div id="tab-events" class="tab-content fade-in space-y-6">
                     <div class="bg-white p-4 rounded-2xl shadow-sm border">
-                        <h3 class="font-bold text-sm mb-4"><i class="fa-solid fa-plus text-indigo-500 mr-2"></i>Add Event</h3>
+                        <h3 class="font-bold text-sm mb-4">Add Event</h3>
                         <form id="eventForm" class="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <input type="text" id="evTitle" required class="px-3 py-2 border rounded-lg text-sm" placeholder="Event Name">
                             <input type="date" id="evDate" required class="px-3 py-2 border rounded-lg text-sm">
@@ -110,7 +117,7 @@
                 <!-- STAFF -->
                 <div id="tab-staff" class="tab-content fade-in space-y-6">
                     <div class="bg-white p-4 rounded-2xl shadow-sm border">
-                        <h3 class="font-bold text-sm mb-4"><i class="fa-solid fa-plus text-indigo-500 mr-2"></i>Add Staff Member</h3>
+                        <h3 class="font-bold text-sm mb-4">Add Staff Member</h3>
                         <form id="staffForm" class="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <input type="text" id="stName" required class="px-3 py-2 border rounded-lg text-sm" placeholder="Name">
                             <input type="text" id="stRole" required class="px-3 py-2 border rounded-lg text-sm" placeholder="Role/Subject">
@@ -127,16 +134,64 @@
                 <!-- GALLERY -->
                 <div id="tab-gallery" class="tab-content fade-in space-y-6">
                     <div class="bg-white p-4 rounded-2xl shadow-sm border">
-                        <h3 class="font-bold text-sm mb-4"><i class="fa-solid fa-plus text-indigo-500 mr-2"></i>Upload Photo</h3>
-                        <form id="galleryForm" class="flex gap-4">
-                            <input type="text" id="galUrl" required class="flex-1 px-3 py-2 border rounded-lg text-sm" placeholder="Image URL">
-                            <input type="text" id="galCap" class="flex-1 px-3 py-2 border rounded-lg text-sm" placeholder="Caption">
+                        <h3 class="font-bold text-sm mb-4">Upload Photo</h3>
+                        <form id="galleryForm" class="flex flex-wrap gap-4">
+                            <input type="text" id="galUrl" required class="flex-1 min-w-[200px] px-3 py-2 border rounded-lg text-sm" placeholder="Image URL">
+                            <input type="text" id="galCap" class="flex-1 min-w-[200px] px-3 py-2 border rounded-lg text-sm" placeholder="Caption">
                             <button class="bg-indigo-600 text-white py-2 px-6 rounded-lg text-sm">Upload</button>
                         </form>
                     </div>
                     <div class="bg-white rounded-2xl shadow-sm border overflow-hidden">
                         <div class="bg-slate-100 px-4 py-3 font-bold text-sm border-b">Live Gallery</div>
                         <div id="list-gallery" class="p-4 grid grid-cols-3 gap-4"></div>
+                    </div>
+                </div>
+                
+                <!-- FACILITIES -->
+                <div id="tab-facilities" class="tab-content fade-in space-y-6">
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border">
+                        <h3 class="font-bold text-sm mb-4">Add Facility (e.g. Science Lab, Library)</h3>
+                        <form id="facilityForm" class="flex flex-col gap-4">
+                            <input type="text" id="facName" required class="px-3 py-2 border rounded-lg text-sm" placeholder="Facility Name (e.g., Olympic Swimming Pool)">
+                            <textarea id="facDesc" class="px-3 py-2 border rounded-lg text-sm" rows="2" placeholder="Short description..."></textarea>
+                            <button class="bg-indigo-600 text-white py-2 px-6 rounded-lg text-sm self-start">Add Facility</button>
+                        </form>
+                    </div>
+                    <div class="bg-white rounded-2xl shadow-sm border overflow-hidden">
+                        <div class="bg-slate-100 px-4 py-3 font-bold text-sm border-b">Campus Facilities</div>
+                        <div id="list-facilities" class="p-2 space-y-2"></div>
+                    </div>
+                </div>
+
+                <!-- ACHIEVEMENTS -->
+                <div id="tab-achievements" class="tab-content fade-in space-y-6">
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border">
+                        <h3 class="font-bold text-sm mb-4">Add Achievement / Award</h3>
+                        <form id="achievementForm" class="flex flex-col gap-4">
+                            <input type="text" id="achTitle" required class="px-3 py-2 border rounded-lg text-sm" placeholder="Achievement Title (e.g., National Debate Champions)">
+                            <textarea id="achDesc" class="px-3 py-2 border rounded-lg text-sm" rows="2" placeholder="Details..."></textarea>
+                            <button class="bg-yellow-600 text-white py-2 px-6 rounded-lg text-sm self-start">Post Achievement</button>
+                        </form>
+                    </div>
+                    <div class="bg-white rounded-2xl shadow-sm border overflow-hidden">
+                        <div class="bg-slate-100 px-4 py-3 font-bold text-sm border-b">School Achievements</div>
+                        <div id="list-achievements" class="p-2 space-y-2"></div>
+                    </div>
+                </div>
+                
+                <!-- FAQS -->
+                <div id="tab-faqs" class="tab-content fade-in space-y-6">
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border">
+                        <h3 class="font-bold text-sm mb-4">Add Frequently Asked Question</h3>
+                        <form id="faqForm" class="flex flex-col gap-4">
+                            <input type="text" id="faqQ" required class="px-3 py-2 border rounded-lg text-sm font-bold" placeholder="Question?">
+                            <textarea id="faqA" required class="px-3 py-2 border rounded-lg text-sm" rows="2" placeholder="Answer..."></textarea>
+                            <button class="bg-slate-600 text-white py-2 px-6 rounded-lg text-sm self-start">Add FAQ</button>
+                        </form>
+                    </div>
+                    <div class="bg-white rounded-2xl shadow-sm border overflow-hidden">
+                        <div class="bg-slate-100 px-4 py-3 font-bold text-sm border-b">Manage FAQs</div>
+                        <div id="list-faqs" class="p-2 space-y-2"></div>
                     </div>
                 </div>
 
@@ -155,10 +210,10 @@
                     <div class="bg-white p-6 rounded-2xl shadow-sm border">
                         <h3 class="font-bold text-sm mb-4">White-Label Branding Setup</h3>
                         <form id="settingsForm" class="space-y-4">
-                            <div><label class="text-xs font-bold text-slate-500">Primary Color</label><input type="color" id="setCol" class="w-full h-10"></div>
+                            <div><label class="text-xs font-bold text-slate-500">Primary Color</label><input type="color" id="setCol" class="w-full h-10 border rounded cursor-pointer"></div>
                             <div><label class="text-xs font-bold text-slate-500">Logo URL</label><input type="text" id="setLog" class="w-full px-3 py-2 border rounded text-sm"></div>
                             <div><label class="text-xs font-bold text-slate-500">About Us Text</label><textarea id="setAbt" rows="4" class="w-full px-3 py-2 border rounded text-sm"></textarea></div>
-                            <button id="setBtn" class="w-full bg-green-600 text-white py-2 rounded font-bold">Save Branding</button>
+                            <button id="setBtn" class="w-full bg-green-600 text-white py-3 rounded-lg font-bold shadow-md hover:bg-green-700">Save Branding</button>
                         </form>
                     </div>
                 </div>
@@ -203,7 +258,8 @@
             document.getElementById('headerInitials').innerText = name.charAt(0);
             
             // Load all data
-            loadList('notices'); loadList('events'); loadList('staff_members'); loadList('galleries'); loadList('inquiries');
+            const tables = ['notices', 'events', 'staff_members', 'galleries', 'facilities', 'achievements', 'faqs', 'inquiries'];
+            tables.forEach(t => loadList(t));
             loadSettings();
         }
         function logout() { localStorage.clear(); window.location.reload(); }
@@ -218,7 +274,15 @@
         async function loadList(table) {
             const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?school_id=eq.${localStorage.getItem('sid')}&order=created_at.desc`, { headers });
             const data = await res.json();
-            const el = document.getElementById(`list-${table==='staff_members'?'staff':(table==='galleries'?'gallery':table)}`);
+            
+            // Map table name to DOM element ID
+            let elId = `list-${table}`;
+            if(table === 'staff_members') elId = 'list-staff';
+            if(table === 'galleries') elId = 'list-gallery';
+            
+            const el = document.getElementById(elId);
+            if(!el) return;
+            
             if(!data.length) return el.innerHTML = '<p class="text-center text-sm text-slate-400 py-4">No data found.</p>';
 
             if(table === 'notices') {
@@ -229,17 +293,23 @@
                 el.innerHTML = data.map(i => `<div class="flex items-center gap-3 border p-3 rounded"><img src="${i.photo_url||'https://via.placeholder.com/50'}" class="w-10 h-10 rounded-full object-cover"><div><p class="font-bold text-sm">${i.name}</p><p class="text-xs text-slate-500">${i.role}</p></div><button onclick="del('${table}','${i.id}')" class="ml-auto text-red-500"><i class="fa-solid fa-trash"></i></button></div>`).join('');
             } else if(table === 'galleries') {
                 el.innerHTML = data.map(i => `<div class="relative group rounded border overflow-hidden"><img src="${i.image_url}" class="w-full h-24 object-cover"><div class="absolute bottom-0 w-full bg-black/60 text-white text-[10px] p-1 truncate">${i.caption||''}</div><button onclick="del('${table}','${i.id}')" class="absolute top-1 right-1 bg-red-600 text-white w-6 h-6 rounded-full opacity-0 group-hover:opacity-100"><i class="fa-solid fa-times text-xs"></i></button></div>`).join('');
+            } else if(table === 'facilities' || table === 'achievements') {
+                el.innerHTML = data.map(i => `<div class="p-3 border-b flex justify-between items-center"><div><p class="font-bold text-sm text-slate-800">${i.name || i.title}</p><p class="text-xs text-slate-500">${i.description||''}</p></div><button onclick="del('${table}','${i.id}')" class="text-red-500 px-2"><i class="fa-solid fa-trash"></i></button></div>`).join('');
+            } else if(table === 'faqs') {
+                el.innerHTML = data.map(i => `<div class="p-3 border-b flex justify-between items-start"><div><p class="font-bold text-sm text-slate-800">Q: ${i.question}</p><p class="text-xs text-slate-600 mt-1">A: ${i.answer}</p></div><button onclick="del('${table}','${i.id}')" class="text-red-500 px-2"><i class="fa-solid fa-trash"></i></button></div>`).join('');
             } else if(table === 'inquiries') {
                 el.innerHTML = data.map(i => `<div class="p-3 border border-l-4 border-l-indigo-500 rounded"><div class="flex justify-between"><p class="font-bold text-sm">${i.name} <span class="font-normal text-xs text-slate-500">&lt;${i.email}&gt;</span></p><span class="text-xs text-slate-400">${new Date(i.created_at).toLocaleDateString()}</span></div><p class="text-sm mt-2 p-2 bg-slate-50 rounded">${i.message}</p></div>`).join('');
             }
         }
 
         // Generic Save
-        async function saveData(formId, table, payloadFunc) {
+        function saveData(formId, table, payloadFunc) {
             document.getElementById(formId).addEventListener('submit', async (e) => {
                 e.preventDefault();
                 await fetch(`${SUPABASE_URL}/rest/v1/${table}`, { method: 'POST', headers, body: JSON.stringify({ school_id: localStorage.getItem('sid'), ...payloadFunc() }) });
                 document.getElementById(formId).reset();
+                if(formId==='noticeForm') document.getElementById('noticeDate').valueAsDate = new Date();
+                if(formId==='eventForm') document.getElementById('evDate').valueAsDate = new Date();
                 loadList(table);
             });
         }
@@ -248,9 +318,12 @@
         saveData('eventForm', 'events', () => ({ title: document.getElementById('evTitle').value, event_date: document.getElementById('evDate').value, location: document.getElementById('evLoc').value }));
         saveData('staffForm', 'staff_members', () => ({ name: document.getElementById('stName').value, role: document.getElementById('stRole').value, photo_url: document.getElementById('stPhoto').value }));
         saveData('galleryForm', 'galleries', () => ({ image_url: document.getElementById('galUrl').value, caption: document.getElementById('galCap').value }));
+        saveData('facilityForm', 'facilities', () => ({ name: document.getElementById('facName').value, description: document.getElementById('facDesc').value }));
+        saveData('achievementForm', 'achievements', () => ({ title: document.getElementById('achTitle').value, description: document.getElementById('achDesc').value }));
+        saveData('faqForm', 'faqs', () => ({ question: document.getElementById('faqQ').value, answer: document.getElementById('faqA').value }));
 
         async function del(table, id) {
-            if(!confirm('Delete?')) return;
+            if(!confirm('Delete this item?')) return;
             await fetch(`${SUPABASE_URL}/rest/v1/${table}?id=eq.${id}`, { method: 'DELETE', headers });
             loadList(table);
         }
