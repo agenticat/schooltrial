@@ -3,383 +3,278 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>School Admin - Mega Edition</title>
+    <title>School Admin Portal - Premium Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        .tab-btn.active { border-bottom: 2px solid #4f46e5; color: #4f46e5; font-weight: 600; background-color: #f8fafc; }
+        body { font-family: 'Inter', sans-serif; }
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .tab-btn.active { border-bottom: 3px solid #2563eb; color: #1e3a8a; font-weight: 700; background-color: #eff6ff; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
-        .tabs-scroll::-webkit-scrollbar { height: 6px; }
+        .tabs-scroll::-webkit-scrollbar { height: 4px; }
         .tabs-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 h-screen overflow-hidden flex flex-col">
+<body class="bg-gray-50 text-gray-800 h-screen overflow-hidden flex flex-col">
     <!-- LOGIN -->
-    <div id="loginScreen" class="h-full flex items-center justify-center p-4">
-        <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md text-center">
-            <h2 class="text-2xl font-bold mb-4">Admin Login</h2>
-            <form id="loginForm" class="space-y-4">
-                <input type="text" id="loginUser" required placeholder="Username" class="w-full px-4 py-2 border rounded">
-                <input type="password" id="loginPass" required placeholder="Password" class="w-full px-4 py-2 border rounded">
-                <button type="submit" class="w-full bg-indigo-600 text-white py-2 rounded font-bold">Login</button>
-                <div id="loginError" class="hidden text-red-500 text-sm"></div>
+    <div id="loginScreen" class="h-full flex items-center justify-center p-4 bg-gradient-to-br from-blue-900 to-indigo-900">
+        <div class="bg-white p-10 rounded-3xl shadow-2xl w-full max-w-md text-center fade-in">
+            <div class="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 text-blue-600 text-3xl shadow-inner">
+                <i class="fa-solid fa-user-shield"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-gray-800 mb-1">Admin Portal</h2>
+            <p class="text-gray-500 text-sm mb-8">Premium School Management System</p>
+            
+            <form id="loginForm" class="space-y-5 text-left">
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 uppercase mb-1">Username</label>
+                    <input type="text" id="loginUser" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 uppercase mb-1">Password</label>
+                    <input type="password" id="loginPass" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                </div>
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-bold shadow-lg transition-all transform hover:scale-[1.02]">Secure Login</button>
+                <div id="loginError" class="hidden text-red-500 text-sm text-center font-medium mt-2"></div>
             </form>
         </div>
     </div>
 
     <!-- DASHBOARD -->
     <div id="dashboardScreen" class="hidden h-full flex flex-col">
-        <header class="bg-white border-b shadow-sm z-20">
+        <header class="bg-white border-b border-gray-200 shadow-sm z-20">
             <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-                <h1 id="headerName" class="font-bold text-lg">School Admin</h1>
-                <button onclick="logout()" class="text-red-500"><i class="fa-solid fa-power-off"></i> Logout</button>
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-blue-600 text-white rounded-lg flex items-center justify-center font-bold text-xl shadow-md" id="headerInitials">S</div>
+                    <div>
+                        <h1 id="headerName" class="font-bold text-gray-900 text-lg leading-tight">School</h1>
+                        <p class="text-xs text-blue-600 font-bold uppercase tracking-wider">Premium Admin</p>
+                    </div>
+                </div>
+                <button onclick="logout()" class="text-gray-400 hover:text-red-500 transition-colors font-medium text-sm"><i class="fa-solid fa-power-off mr-1"></i> Logout</button>
             </div>
-            <div class="max-w-7xl mx-auto px-4 flex overflow-x-auto tabs-scroll">
-                <button onclick="switchTab('notices')" class="tab-btn active px-4 py-3 text-sm whitespace-nowrap"><i class="fa-solid fa-bullhorn mr-2"></i>Notices</button>
-                <button onclick="switchTab('events')" class="tab-btn  px-4 py-3 text-sm whitespace-nowrap"><i class="fa-solid fa-calendar-days mr-2"></i>Events</button>
-                <button onclick="switchTab('staff_members')" class="tab-btn  px-4 py-3 text-sm whitespace-nowrap"><i class="fa-solid fa-chalkboard-user mr-2"></i>Staff</button>
-                <button onclick="switchTab('galleries')" class="tab-btn  px-4 py-3 text-sm whitespace-nowrap"><i class="fa-solid fa-images mr-2"></i>Gallery</button>
-                <button onclick="switchTab('facilities')" class="tab-btn  px-4 py-3 text-sm whitespace-nowrap"><i class="fa-solid fa-building mr-2"></i>Facilities</button>
-                <button onclick="switchTab('achievements')" class="tab-btn  px-4 py-3 text-sm whitespace-nowrap"><i class="fa-solid fa-trophy mr-2"></i>Achievements</button>
-                <button onclick="switchTab('faqs')" class="tab-btn  px-4 py-3 text-sm whitespace-nowrap"><i class="fa-solid fa-circle-question mr-2"></i>FAQs</button>
-                <button onclick="switchTab('fee_structures')" class="tab-btn  px-4 py-3 text-sm whitespace-nowrap"><i class="fa-solid fa-money-bill mr-2"></i>Fees</button>
-                <button onclick="switchTab('timetables')" class="tab-btn  px-4 py-3 text-sm whitespace-nowrap"><i class="fa-solid fa-table mr-2"></i>Timetables</button>
-                <button onclick="switchTab('holidays')" class="tab-btn  px-4 py-3 text-sm whitespace-nowrap"><i class="fa-solid fa-plane mr-2"></i>Holidays</button>
-                <button onclick="switchTab('toppers')" class="tab-btn  px-4 py-3 text-sm whitespace-nowrap"><i class="fa-solid fa-medal mr-2"></i>Toppers</button>
-                <button onclick="switchTab('testimonials')" class="tab-btn  px-4 py-3 text-sm whitespace-nowrap"><i class="fa-solid fa-comment mr-2"></i>Testimonials</button>
-                <button onclick="switchTab('alumni')" class="tab-btn  px-4 py-3 text-sm whitespace-nowrap"><i class="fa-solid fa-user-graduate mr-2"></i>Alumni</button>
-                <button onclick="switchTab('careers')" class="tab-btn  px-4 py-3 text-sm whitespace-nowrap"><i class="fa-solid fa-briefcase mr-2"></i>Careers</button>
-                <button onclick="switchTab('blogs')" class="tab-btn  px-4 py-3 text-sm whitespace-nowrap"><i class="fa-solid fa-blog mr-2"></i>Blogs</button>
-                <button onclick="switchTab('downloads')" class="tab-btn  px-4 py-3 text-sm whitespace-nowrap"><i class="fa-solid fa-download mr-2"></i>Downloads</button>
-                <button onclick="switchTab('alerts')" class="tab-btn  px-4 py-3 text-sm whitespace-nowrap"><i class="fa-solid fa-triangle-exclamation mr-2"></i>Alerts</button>
-                <button onclick="switchTab('custom_pages')" class="tab-btn  px-4 py-3 text-sm whitespace-nowrap"><i class="fa-solid fa-file mr-2"></i>Pages</button>
-                <button onclick="switchTab('inquiries')" class="tab-btn px-4 py-3 text-sm whitespace-nowrap"><i class="fa-solid fa-envelope mr-2"></i>Inquiries</button>
-                <button onclick="switchTab('subscribers')" class="tab-btn px-4 py-3 text-sm whitespace-nowrap"><i class="fa-solid fa-users mr-2"></i>Subscribers</button>
-                <button onclick="switchTab('settings')" class="tab-btn px-4 py-3 text-sm whitespace-nowrap"><i class="fa-solid fa-gear mr-2"></i>Branding</button>
+            <div class="max-w-7xl mx-auto px-4 flex overflow-x-auto tabs-scroll border-t border-gray-100">
+                <button onclick="switchTab('notices')" class="tab-btn active px-4 py-3 text-sm whitespace-nowrap"><i class="fa-regular fa-bell mr-2"></i>Notices & Updates</button>
+                <button onclick="switchTab('toppers')" class="tab-btn px-4 py-3 text-sm whitespace-nowrap"><i class="fa-solid fa-medal mr-2"></i>Board Toppers</button>
+                <button onclick="switchTab('gallery')" class="tab-btn px-4 py-3 text-sm whitespace-nowrap"><i class="fa-regular fa-images mr-2"></i>Gallery</button>
+                <button onclick="switchTab('facilities')" class="tab-btn px-4 py-3 text-sm whitespace-nowrap"><i class="fa-solid fa-building mr-2"></i>Facilities</button>
+                <button onclick="switchTab('downloads')" class="tab-btn px-4 py-3 text-sm whitespace-nowrap"><i class="fa-solid fa-download mr-2"></i>Downloads / Syllabus</button>
+                <button onclick="switchTab('fees')" class="tab-btn px-4 py-3 text-sm whitespace-nowrap"><i class="fa-solid fa-indian-rupee-sign mr-2"></i>Fee Structure</button>
+                <button onclick="switchTab('staff')" class="tab-btn px-4 py-3 text-sm whitespace-nowrap"><i class="fa-solid fa-chalkboard-user mr-2"></i>Teachers</button>
+                <button onclick="switchTab('inquiries')" class="tab-btn px-4 py-3 text-sm whitespace-nowrap"><i class="fa-regular fa-envelope mr-2"></i>Admissions Inbox</button>
+                <button onclick="switchTab('settings')" class="tab-btn px-4 py-3 text-sm whitespace-nowrap"><i class="fa-solid fa-gear mr-2"></i>Branding Setup</button>
             </div>
         </header>
 
-        <main class="flex-1 overflow-y-auto bg-slate-50 p-4">
+        <main class="flex-1 overflow-y-auto bg-gray-50 p-4 md:p-8">
             <div class="max-w-5xl mx-auto space-y-6">
-                <div id="tab-notices" class="tab-content active space-y-6">
-                    <div class="bg-white p-4 rounded-2xl shadow-sm border">
-                        <h3 class="font-bold text-sm mb-4">Add Notices</h3>
-                        <form id="form-notices" class="flex flex-wrap gap-4">
-                            <input type="text" id="notices_title" required class="flex-1 min-w-[200px] px-3 py-2 border rounded text-sm" placeholder="Title">
-                            <input type="date" id="notices_notice_date" required class="flex-1 min-w-[200px] px-3 py-2 border rounded text-sm" placeholder="Date">
-                            <button class="bg-indigo-600 text-white py-2 px-6 rounded text-sm">Add</button>
+                
+                <!-- NOTICES -->
+                <div id="tab-notices" class="tab-content active fade-in space-y-6">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+                        <h3 class="font-bold text-gray-800 mb-4">Post a New Notice</h3>
+                        <form id="noticeForm" class="flex flex-col md:flex-row gap-4">
+                            <input type="text" id="noticeTitle" required class="flex-1 px-4 py-2 border rounded-xl outline-none focus:border-blue-500" placeholder="e.g., Summer Holiday Announcement">
+                            <input type="date" id="noticeDate" required class="px-4 py-2 border rounded-xl outline-none focus:border-blue-500 w-full md:w-auto">
+                            <button class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-8 rounded-xl font-bold shadow-md transition-all">Publish</button>
                         </form>
                     </div>
-                    <div class="bg-white rounded-2xl shadow-sm border overflow-hidden">
-                        <div class="bg-slate-100 px-4 py-3 font-bold text-sm border-b">Manage Notices</div>
-                        <div id="list-notices" class="p-2 space-y-2"></div>
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+                        <div class="bg-gray-100 px-6 py-4 font-bold text-gray-700 border-b">Active Notices</div>
+                        <div id="list-notices" class="p-2"></div>
                     </div>
                 </div>
-                <div id="tab-events" class="tab-content  space-y-6">
-                    <div class="bg-white p-4 rounded-2xl shadow-sm border">
-                        <h3 class="font-bold text-sm mb-4">Add Events</h3>
-                        <form id="form-events" class="flex flex-wrap gap-4">
-                            <input type="text" id="events_title" required class="flex-1 min-w-[200px] px-3 py-2 border rounded text-sm" placeholder="Event Name">
-                            <input type="date" id="events_event_date" required class="flex-1 min-w-[200px] px-3 py-2 border rounded text-sm" placeholder="Date">
-                            <input type="text" id="events_location" required class="flex-1 min-w-[200px] px-3 py-2 border rounded text-sm" placeholder="Location">
-                            <button class="bg-indigo-600 text-white py-2 px-6 rounded text-sm">Add</button>
+
+                <!-- TOPPERS (Crucial for Bihar Schools) -->
+                <div id="tab-toppers" class="tab-content fade-in space-y-6">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+                        <h3 class="font-bold text-gray-800 mb-4">Add Student Topper</h3>
+                        <form id="topperForm" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <input type="text" id="topName" required class="px-4 py-2 border rounded-xl outline-none focus:border-blue-500" placeholder="Student Name">
+                            <input type="text" id="topExam" required class="px-4 py-2 border rounded-xl outline-none focus:border-blue-500" placeholder="Exam (e.g., CBSE 10th)">
+                            <input type="text" id="topScore" required class="px-4 py-2 border rounded-xl outline-none focus:border-blue-500" placeholder="Score (e.g., 98.5%)">
+                            <input type="text" id="topPhoto" class="px-4 py-2 border rounded-xl outline-none focus:border-blue-500" placeholder="Photo URL">
+                            <button class="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-6 rounded-xl font-bold shadow-md lg:col-span-4">Add Topper to Wall of Fame</button>
                         </form>
                     </div>
-                    <div class="bg-white rounded-2xl shadow-sm border overflow-hidden">
-                        <div class="bg-slate-100 px-4 py-3 font-bold text-sm border-b">Manage Events</div>
-                        <div id="list-events" class="p-2 space-y-2"></div>
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+                        <div class="bg-yellow-50 px-6 py-4 font-bold text-yellow-800 border-b border-yellow-100">Wall of Fame</div>
+                        <div id="list-toppers" class="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
                     </div>
                 </div>
-                <div id="tab-staff_members" class="tab-content  space-y-6">
-                    <div class="bg-white p-4 rounded-2xl shadow-sm border">
-                        <h3 class="font-bold text-sm mb-4">Add Staff</h3>
-                        <form id="form-staff_members" class="flex flex-wrap gap-4">
-                            <input type="text" id="staff_members_name" required class="flex-1 min-w-[200px] px-3 py-2 border rounded text-sm" placeholder="Name">
-                            <input type="text" id="staff_members_designation" required class="flex-1 min-w-[200px] px-3 py-2 border rounded text-sm" placeholder="Designation">
-                            <input type="text" id="staff_members_photo_url" required class="flex-1 min-w-[200px] px-3 py-2 border rounded text-sm" placeholder="Photo URL">
-                            <button class="bg-indigo-600 text-white py-2 px-6 rounded text-sm">Add</button>
+
+                <!-- GALLERY -->
+                <div id="tab-gallery" class="tab-content fade-in space-y-6">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+                        <h3 class="font-bold text-gray-800 mb-4">Upload Campus Photo</h3>
+                        <form id="galleryForm" class="flex flex-col md:flex-row gap-4">
+                            <input type="text" id="galUrl" required class="flex-1 px-4 py-2 border rounded-xl outline-none focus:border-blue-500" placeholder="Image URL (Upload to imgbb.com and paste direct link)">
+                            <input type="text" id="galCap" class="flex-1 px-4 py-2 border rounded-xl outline-none focus:border-blue-500" placeholder="Caption (e.g., Annual Sports Day)">
+                            <button class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-8 rounded-xl font-bold shadow-md">Add to Gallery</button>
                         </form>
                     </div>
-                    <div class="bg-white rounded-2xl shadow-sm border overflow-hidden">
-                        <div class="bg-slate-100 px-4 py-3 font-bold text-sm border-b">Manage Staff</div>
-                        <div id="list-staff_members" class="p-2 space-y-2"></div>
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+                        <div class="bg-gray-100 px-6 py-4 font-bold text-gray-700 border-b">Live Gallery</div>
+                        <div id="list-galleries" class="p-4 grid grid-cols-2 md:grid-cols-4 gap-4"></div>
                     </div>
                 </div>
-                <div id="tab-galleries" class="tab-content  space-y-6">
-                    <div class="bg-white p-4 rounded-2xl shadow-sm border">
-                        <h3 class="font-bold text-sm mb-4">Add Gallery</h3>
-                        <form id="form-galleries" class="flex flex-wrap gap-4">
-                            <input type="text" id="galleries_image_url" required class="flex-1 min-w-[200px] px-3 py-2 border rounded text-sm" placeholder="Image URL">
-                            <input type="text" id="galleries_caption" required class="flex-1 min-w-[200px] px-3 py-2 border rounded text-sm" placeholder="Caption">
-                            <button class="bg-indigo-600 text-white py-2 px-6 rounded text-sm">Add</button>
+
+                <!-- FACILITIES -->
+                <div id="tab-facilities" class="tab-content fade-in space-y-6">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+                        <h3 class="font-bold text-gray-800 mb-4">Add Campus Facility</h3>
+                        <form id="facilityForm" class="flex flex-col gap-4">
+                            <input type="text" id="facName" required class="px-4 py-2 border rounded-xl outline-none focus:border-blue-500" placeholder="Facility (e.g., Smart Classrooms, AC Transport)">
+                            <textarea id="facDesc" class="px-4 py-2 border rounded-xl outline-none focus:border-blue-500" rows="2" placeholder="Short description for parents..."></textarea>
+                            <button class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-8 rounded-xl font-bold shadow-md w-full md:w-auto self-start">Add Facility</button>
                         </form>
                     </div>
-                    <div class="bg-white rounded-2xl shadow-sm border overflow-hidden">
-                        <div class="bg-slate-100 px-4 py-3 font-bold text-sm border-b">Manage Gallery</div>
-                        <div id="list-galleries" class="p-2 space-y-2"></div>
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+                        <div class="bg-gray-100 px-6 py-4 font-bold text-gray-700 border-b">Our Facilities</div>
+                        <div id="list-facilities" class="p-2"></div>
                     </div>
                 </div>
-                <div id="tab-facilities" class="tab-content  space-y-6">
-                    <div class="bg-white p-4 rounded-2xl shadow-sm border">
-                        <h3 class="font-bold text-sm mb-4">Add Facilities</h3>
-                        <form id="form-facilities" class="flex flex-wrap gap-4">
-                            <input type="text" id="facilities_facility_name" required class="flex-1 min-w-[200px] px-3 py-2 border rounded text-sm" placeholder="Name">
-                            <input type="text" id="facilities_description" required class="flex-1 min-w-[200px] px-3 py-2 border rounded text-sm" placeholder="Description">
-                            <button class="bg-indigo-600 text-white py-2 px-6 rounded text-sm">Add</button>
+
+                <!-- DOWNLOADS / SYLLABUS -->
+                <div id="tab-downloads" class="tab-content fade-in space-y-6">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+                        <h3 class="font-bold text-gray-800 mb-4">Upload Document (Syllabus, Forms, Booklist)</h3>
+                        <form id="downloadForm" class="flex flex-col md:flex-row gap-4">
+                            <input type="text" id="dlTitle" required class="flex-1 px-4 py-2 border rounded-xl outline-none focus:border-blue-500" placeholder="Title (e.g., Class 10 Syllabus 2026)">
+                            <input type="text" id="dlUrl" required class="flex-1 px-4 py-2 border rounded-xl outline-none focus:border-blue-500" placeholder="PDF/Google Drive Link">
+                            <button class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-8 rounded-xl font-bold shadow-md">Add Link</button>
                         </form>
                     </div>
-                    <div class="bg-white rounded-2xl shadow-sm border overflow-hidden">
-                        <div class="bg-slate-100 px-4 py-3 font-bold text-sm border-b">Manage Facilities</div>
-                        <div id="list-facilities" class="p-2 space-y-2"></div>
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+                        <div class="bg-gray-100 px-6 py-4 font-bold text-gray-700 border-b">Public Downloads</div>
+                        <div id="list-downloads" class="p-2"></div>
                     </div>
                 </div>
-                <div id="tab-achievements" class="tab-content  space-y-6">
-                    <div class="bg-white p-4 rounded-2xl shadow-sm border">
-                        <h3 class="font-bold text-sm mb-4">Add Achievements</h3>
-                        <form id="form-achievements" class="flex flex-wrap gap-4">
-                            <input type="text" id="achievements_title" required class="flex-1 min-w-[200px] px-3 py-2 border rounded text-sm" placeholder="Title">
-                            <input type="text" id="achievements_description" required class="flex-1 min-w-[200px] px-3 py-2 border rounded text-sm" placeholder="Description">
-                            <button class="bg-indigo-600 text-white py-2 px-6 rounded text-sm">Add</button>
+
+                <!-- FEES -->
+                <div id="tab-fees" class="tab-content fade-in space-y-6">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+                        <h3 class="font-bold text-gray-800 mb-4">Add Class Fee Structure</h3>
+                        <form id="feeForm" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <input type="text" id="feeClass" required class="px-4 py-2 border rounded-xl outline-none focus:border-blue-500" placeholder="Class (e.g., Class 1 to 5)">
+                            <input type="number" id="feeTotal" required class="px-4 py-2 border rounded-xl outline-none focus:border-blue-500" placeholder="Monthly Fee (₹)">
+                            <button class="bg-green-600 hover:bg-green-700 text-white py-2 px-8 rounded-xl font-bold shadow-md">Add Fee Record</button>
                         </form>
                     </div>
-                    <div class="bg-white rounded-2xl shadow-sm border overflow-hidden">
-                        <div class="bg-slate-100 px-4 py-3 font-bold text-sm border-b">Manage Achievements</div>
-                        <div id="list-achievements" class="p-2 space-y-2"></div>
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+                        <div class="bg-green-50 px-6 py-4 font-bold text-green-800 border-b border-green-100">Fee Structure Table</div>
+                        <div id="list-fees" class="p-2"></div>
                     </div>
                 </div>
-                <div id="tab-faqs" class="tab-content  space-y-6">
-                    <div class="bg-white p-4 rounded-2xl shadow-sm border">
-                        <h3 class="font-bold text-sm mb-4">Add FAQs</h3>
-                        <form id="form-faqs" class="flex flex-wrap gap-4">
-                            <input type="text" id="faqs_question" required class="flex-1 min-w-[200px] px-3 py-2 border rounded text-sm" placeholder="Question">
-                            <input type="text" id="faqs_answer" required class="flex-1 min-w-[200px] px-3 py-2 border rounded text-sm" placeholder="Answer">
-                            <button class="bg-indigo-600 text-white py-2 px-6 rounded text-sm">Add</button>
+
+                <!-- STAFF -->
+                <div id="tab-staff" class="tab-content fade-in space-y-6">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+                        <h3 class="font-bold text-gray-800 mb-4">Add Teacher / Staff</h3>
+                        <form id="staffForm" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <input type="text" id="stName" required class="px-4 py-2 border rounded-xl outline-none focus:border-blue-500" placeholder="Teacher Name">
+                            <input type="text" id="stRole" required class="px-4 py-2 border rounded-xl outline-none focus:border-blue-500" placeholder="Subject / Designation">
+                            <input type="text" id="stPhoto" class="px-4 py-2 border rounded-xl outline-none focus:border-blue-500" placeholder="Photo URL (Optional)">
+                            <button class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-8 rounded-xl font-bold shadow-md md:col-span-3">Add to Faculty</button>
                         </form>
                     </div>
-                    <div class="bg-white rounded-2xl shadow-sm border overflow-hidden">
-                        <div class="bg-slate-100 px-4 py-3 font-bold text-sm border-b">Manage FAQs</div>
-                        <div id="list-faqs" class="p-2 space-y-2"></div>
-                    </div>
-                </div>
-                <div id="tab-fee_structures" class="tab-content  space-y-6">
-                    <div class="bg-white p-4 rounded-2xl shadow-sm border">
-                        <h3 class="font-bold text-sm mb-4">Add Fees</h3>
-                        <form id="form-fee_structures" class="flex flex-wrap gap-4">
-                            <input type="text" id="fee_structures_class_name" required class="flex-1 min-w-[200px] px-3 py-2 border rounded text-sm" placeholder="Class">
-                            <input type="number" id="fee_structures_total_fee" required class="flex-1 min-w-[200px] px-3 py-2 border rounded text-sm" placeholder="Total Fee">
-                            <button class="bg-indigo-600 text-white py-2 px-6 rounded text-sm">Add</button>
-                        </form>
-                    </div>
-                    <div class="bg-white rounded-2xl shadow-sm border overflow-hidden">
-                        <div class="bg-slate-100 px-4 py-3 font-bold text-sm border-b">Manage Fees</div>
-                        <div id="list-fee_structures" class="p-2 space-y-2"></div>
-                    </div>
-                </div>
-                <div id="tab-timetables" class="tab-content  space-y-6">
-                    <div class="bg-white p-4 rounded-2xl shadow-sm border">
-                        <h3 class="font-bold text-sm mb-4">Add Timetables</h3>
-                        <form id="form-timetables" class="flex flex-wrap gap-4">
-                            <input type="text" id="timetables_class_name" required class="flex-1 min-w-[200px] px-3 py-2 border rounded text-sm" placeholder="Class">
-                            <input type="text" id="timetables_file_url" required class="flex-1 min-w-[200px] px-3 py-2 border rounded text-sm" placeholder="PDF URL">
-                            <button class="bg-indigo-600 text-white py-2 px-6 rounded text-sm">Add</button>
-                        </form>
-                    </div>
-                    <div class="bg-white rounded-2xl shadow-sm border overflow-hidden">
-                        <div class="bg-slate-100 px-4 py-3 font-bold text-sm border-b">Manage Timetables</div>
-                        <div id="list-timetables" class="p-2 space-y-2"></div>
-                    </div>
-                </div>
-                <div id="tab-holidays" class="tab-content  space-y-6">
-                    <div class="bg-white p-4 rounded-2xl shadow-sm border">
-                        <h3 class="font-bold text-sm mb-4">Add Holidays</h3>
-                        <form id="form-holidays" class="flex flex-wrap gap-4">
-                            <input type="text" id="holidays_holiday_name" required class="flex-1 min-w-[200px] px-3 py-2 border rounded text-sm" placeholder="Name">
-                            <input type="date" id="holidays_start_date" required class="flex-1 min-w-[200px] px-3 py-2 border rounded text-sm" placeholder="Start Date">
-                            <input type="date" id="holidays_end_date" required class="flex-1 min-w-[200px] px-3 py-2 border rounded text-sm" placeholder="End Date">
-                            <button class="bg-indigo-600 text-white py-2 px-6 rounded text-sm">Add</button>
-                        </form>
-                    </div>
-                    <div class="bg-white rounded-2xl shadow-sm border overflow-hidden">
-                        <div class="bg-slate-100 px-4 py-3 font-bold text-sm border-b">Manage Holidays</div>
-                        <div id="list-holidays" class="p-2 space-y-2"></div>
-                    </div>
-                </div>
-                <div id="tab-toppers" class="tab-content  space-y-6">
-                    <div class="bg-white p-4 rounded-2xl shadow-sm border">
-                        <h3 class="font-bold text-sm mb-4">Add Toppers</h3>
-                        <form id="form-toppers" class="flex flex-wrap gap-4">
-                            <input type="text" id="toppers_student_name" required class="flex-1 min-w-[200px] px-3 py-2 border rounded text-sm" placeholder="Name">
-                            <input type="text" id="toppers_percentage_or_grade" required class="flex-1 min-w-[200px] px-3 py-2 border rounded text-sm" placeholder="Grade/Percentage">
-                            <button class="bg-indigo-600 text-white py-2 px-6 rounded text-sm">Add</button>
-                        </form>
-                    </div>
-                    <div class="bg-white rounded-2xl shadow-sm border overflow-hidden">
-                        <div class="bg-slate-100 px-4 py-3 font-bold text-sm border-b">Manage Toppers</div>
-                        <div id="list-toppers" class="p-2 space-y-2"></div>
-                    </div>
-                </div>
-                <div id="tab-testimonials" class="tab-content  space-y-6">
-                    <div class="bg-white p-4 rounded-2xl shadow-sm border">
-                        <h3 class="font-bold text-sm mb-4">Add Testimonials</h3>
-                        <form id="form-testimonials" class="flex flex-wrap gap-4">
-                            <input type="text" id="testimonials_reviewer_name" required class="flex-1 min-w-[200px] px-3 py-2 border rounded text-sm" placeholder="Name">
-                            <input type="text" id="testimonials_review_text" required class="flex-1 min-w-[200px] px-3 py-2 border rounded text-sm" placeholder="Review">
-                            <button class="bg-indigo-600 text-white py-2 px-6 rounded text-sm">Add</button>
-                        </form>
-                    </div>
-                    <div class="bg-white rounded-2xl shadow-sm border overflow-hidden">
-                        <div class="bg-slate-100 px-4 py-3 font-bold text-sm border-b">Manage Testimonials</div>
-                        <div id="list-testimonials" class="p-2 space-y-2"></div>
-                    </div>
-                </div>
-                <div id="tab-alumni" class="tab-content  space-y-6">
-                    <div class="bg-white p-4 rounded-2xl shadow-sm border">
-                        <h3 class="font-bold text-sm mb-4">Add Alumni</h3>
-                        <form id="form-alumni" class="flex flex-wrap gap-4">
-                            <input type="text" id="alumni_name" required class="flex-1 min-w-[200px] px-3 py-2 border rounded text-sm" placeholder="Name">
-                            <input type="text" id="alumni_success_story" required class="flex-1 min-w-[200px] px-3 py-2 border rounded text-sm" placeholder="Story">
-                            <button class="bg-indigo-600 text-white py-2 px-6 rounded text-sm">Add</button>
-                        </form>
-                    </div>
-                    <div class="bg-white rounded-2xl shadow-sm border overflow-hidden">
-                        <div class="bg-slate-100 px-4 py-3 font-bold text-sm border-b">Manage Alumni</div>
-                        <div id="list-alumni" class="p-2 space-y-2"></div>
-                    </div>
-                </div>
-                <div id="tab-careers" class="tab-content  space-y-6">
-                    <div class="bg-white p-4 rounded-2xl shadow-sm border">
-                        <h3 class="font-bold text-sm mb-4">Add Careers</h3>
-                        <form id="form-careers" class="flex flex-wrap gap-4">
-                            <input type="text" id="careers_job_title" required class="flex-1 min-w-[200px] px-3 py-2 border rounded text-sm" placeholder="Job Title">
-                            <input type="date" id="careers_last_date_to_apply" required class="flex-1 min-w-[200px] px-3 py-2 border rounded text-sm" placeholder="Last Date">
-                            <button class="bg-indigo-600 text-white py-2 px-6 rounded text-sm">Add</button>
-                        </form>
-                    </div>
-                    <div class="bg-white rounded-2xl shadow-sm border overflow-hidden">
-                        <div class="bg-slate-100 px-4 py-3 font-bold text-sm border-b">Manage Careers</div>
-                        <div id="list-careers" class="p-2 space-y-2"></div>
-                    </div>
-                </div>
-                <div id="tab-blogs" class="tab-content  space-y-6">
-                    <div class="bg-white p-4 rounded-2xl shadow-sm border">
-                        <h3 class="font-bold text-sm mb-4">Add Blogs</h3>
-                        <form id="form-blogs" class="flex flex-wrap gap-4">
-                            <input type="text" id="blogs_title" required class="flex-1 min-w-[200px] px-3 py-2 border rounded text-sm" placeholder="Title">
-                            <input type="text" id="blogs_author_name" required class="flex-1 min-w-[200px] px-3 py-2 border rounded text-sm" placeholder="Author">
-                            <button class="bg-indigo-600 text-white py-2 px-6 rounded text-sm">Add</button>
-                        </form>
-                    </div>
-                    <div class="bg-white rounded-2xl shadow-sm border overflow-hidden">
-                        <div class="bg-slate-100 px-4 py-3 font-bold text-sm border-b">Manage Blogs</div>
-                        <div id="list-blogs" class="p-2 space-y-2"></div>
-                    </div>
-                </div>
-                <div id="tab-downloads" class="tab-content  space-y-6">
-                    <div class="bg-white p-4 rounded-2xl shadow-sm border">
-                        <h3 class="font-bold text-sm mb-4">Add Downloads</h3>
-                        <form id="form-downloads" class="flex flex-wrap gap-4">
-                            <input type="text" id="downloads_document_title" required class="flex-1 min-w-[200px] px-3 py-2 border rounded text-sm" placeholder="Title">
-                            <input type="text" id="downloads_file_url" required class="flex-1 min-w-[200px] px-3 py-2 border rounded text-sm" placeholder="File URL">
-                            <button class="bg-indigo-600 text-white py-2 px-6 rounded text-sm">Add</button>
-                        </form>
-                    </div>
-                    <div class="bg-white rounded-2xl shadow-sm border overflow-hidden">
-                        <div class="bg-slate-100 px-4 py-3 font-bold text-sm border-b">Manage Downloads</div>
-                        <div id="list-downloads" class="p-2 space-y-2"></div>
-                    </div>
-                </div>
-                <div id="tab-alerts" class="tab-content  space-y-6">
-                    <div class="bg-white p-4 rounded-2xl shadow-sm border">
-                        <h3 class="font-bold text-sm mb-4">Add Alerts</h3>
-                        <form id="form-alerts" class="flex flex-wrap gap-4">
-                            <input type="text" id="alerts_alert_message" required class="flex-1 min-w-[200px] px-3 py-2 border rounded text-sm" placeholder="Message">
-                            <input type="text" id="alerts_link_url" required class="flex-1 min-w-[200px] px-3 py-2 border rounded text-sm" placeholder="Link">
-                            <button class="bg-indigo-600 text-white py-2 px-6 rounded text-sm">Add</button>
-                        </form>
-                    </div>
-                    <div class="bg-white rounded-2xl shadow-sm border overflow-hidden">
-                        <div class="bg-slate-100 px-4 py-3 font-bold text-sm border-b">Manage Alerts</div>
-                        <div id="list-alerts" class="p-2 space-y-2"></div>
-                    </div>
-                </div>
-                <div id="tab-custom_pages" class="tab-content  space-y-6">
-                    <div class="bg-white p-4 rounded-2xl shadow-sm border">
-                        <h3 class="font-bold text-sm mb-4">Add Pages</h3>
-                        <form id="form-custom_pages" class="flex flex-wrap gap-4">
-                            <input type="text" id="custom_pages_page_title" required class="flex-1 min-w-[200px] px-3 py-2 border rounded text-sm" placeholder="Title">
-                            <input type="text" id="custom_pages_page_slug" required class="flex-1 min-w-[200px] px-3 py-2 border rounded text-sm" placeholder="Slug">
-                            <button class="bg-indigo-600 text-white py-2 px-6 rounded text-sm">Add</button>
-                        </form>
-                    </div>
-                    <div class="bg-white rounded-2xl shadow-sm border overflow-hidden">
-                        <div class="bg-slate-100 px-4 py-3 font-bold text-sm border-b">Manage Pages</div>
-                        <div id="list-custom_pages" class="p-2 space-y-2"></div>
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+                        <div class="bg-gray-100 px-6 py-4 font-bold text-gray-700 border-b">Faculty Directory</div>
+                        <div id="list-staff" class="p-4 grid grid-cols-1 md:grid-cols-2 gap-4"></div>
                     </div>
                 </div>
 
                 <!-- INQUIRIES -->
-                <div id="tab-inquiries" class="tab-content space-y-6">
-                    <div class="bg-white rounded-2xl shadow-sm border overflow-hidden">
-                        <div class="bg-slate-100 px-4 py-3 font-bold text-sm border-b">Inquiries Inbox</div>
-                        <div id="list-inquiries" class="p-2 space-y-2"></div>
-                    </div>
-                </div>
-                
-                <!-- SUBSCRIBERS -->
-                <div id="tab-subscribers" class="tab-content space-y-6">
-                    <div class="bg-white rounded-2xl shadow-sm border overflow-hidden">
-                        <div class="bg-slate-100 px-4 py-3 font-bold text-sm border-b">Newsletter Subscribers</div>
-                        <div id="list-subscribers" class="p-2 space-y-2"></div>
+                <div id="tab-inquiries" class="tab-content fade-in space-y-6">
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+                        <div class="bg-indigo-50 px-6 py-4 font-bold text-indigo-800 border-b border-indigo-100 flex justify-between items-center">
+                            Admissions & General Inquiries 
+                            <button onclick="loadList('inquiries')" class="text-indigo-600 hover:text-indigo-800 bg-white px-3 py-1 rounded shadow-sm text-sm"><i class="fa-solid fa-rotate mr-1"></i> Refresh</button>
+                        </div>
+                        <div id="list-inquiries" class="p-4 space-y-4 max-h-[600px] overflow-y-auto bg-gray-50"></div>
                     </div>
                 </div>
 
                 <!-- SETTINGS -->
-                <div id="tab-settings" class="tab-content">
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border">
-                        <h3 class="font-bold text-sm mb-4">Branding</h3>
-                        <form id="settingsForm" class="space-y-4">
-                            <input type="color" id="setCol" class="w-full h-10">
-                            <input type="text" id="setLog" placeholder="Logo URL" class="w-full px-3 py-2 border rounded text-sm">
-                            <textarea id="setAbt" placeholder="About Text" class="w-full px-3 py-2 border rounded text-sm"></textarea>
-                            <input type="text" id="setFb" placeholder="Facebook URL" class="w-full px-3 py-2 border rounded text-sm">
-                            <input type="text" id="setTw" placeholder="Twitter URL" class="w-full px-3 py-2 border rounded text-sm">
-                            <input type="text" id="setYt" placeholder="YouTube URL" class="w-full px-3 py-2 border rounded text-sm">
-                            <button class="bg-green-600 text-white py-2 px-6 rounded font-bold">Save</button>
+                <div id="tab-settings" class="tab-content fade-in">
+                    <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-200">
+                        <h3 class="text-xl font-bold text-gray-800 mb-6 border-b pb-4">School Profile & Branding</h3>
+                        <form id="settingsForm" class="space-y-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-bold text-gray-600 mb-2">School Brand Color</label>
+                                    <div class="flex items-center gap-3">
+                                        <input type="color" id="setCol" class="w-12 h-12 rounded cursor-pointer border-0 p-0 shadow-sm">
+                                        <span class="text-xs text-gray-500">This changes the website's main theme.</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold text-gray-600 mb-2">School Logo URL</label>
+                                    <input type="text" id="setLog" placeholder="https://..." class="w-full px-4 py-2 border rounded-xl outline-none focus:border-blue-500">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-gray-600 mb-2">Principal's Welcome / About Us</label>
+                                <textarea id="setAbt" rows="4" placeholder="Write a welcoming message..." class="w-full px-4 py-3 border rounded-xl outline-none focus:border-blue-500"></textarea>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div><label class="block text-xs font-bold text-gray-500 mb-1">Facebook URL</label><input type="text" id="setFb" class="w-full px-3 py-2 border rounded-lg text-sm"></div>
+                                <div><label class="block text-xs font-bold text-gray-500 mb-1">YouTube URL</label><input type="text" id="setYt" class="w-full px-3 py-2 border rounded-lg text-sm"></div>
+                                <div><label class="block text-xs font-bold text-gray-500 mb-1">Instagram URL</label><input type="text" id="setIg" class="w-full px-3 py-2 border rounded-lg text-sm"></div>
+                            </div>
+                            <button id="setBtn" class="w-full bg-blue-900 text-white py-4 rounded-xl font-bold shadow-lg text-lg hover:bg-black transition-colors">Save School Profile</button>
                         </form>
                     </div>
                 </div>
+
             </div>
         </main>
     </div>
-    
+
+    <!-- JS LOGIC -->
     <script>
         const SUPABASE_URL = "https://xlmsgtxyrlovjobwvdom.supabase.co";
         const SUPABASE_ANON_KEY = "sb_publishable_iLRrB73mPbgH0FtPvMOVbg_eoNyCtd3"; 
         const headers = { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` };
 
-        document.addEventListener('DOMContentLoaded', () => { if(localStorage.getItem('sid')) showDashboard(localStorage.getItem('sname')); });
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('noticeDate').valueAsDate = new Date();
+            if(localStorage.getItem('sid')) showDashboard(localStorage.getItem('sname'));
+        });
 
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const res = await fetch(`${SUPABASE_URL}/rest/v1/schools?username=eq.${document.getElementById('loginUser').value}&password=eq.${document.getElementById('loginPass').value}&select=*`, { headers });
-            const data = await res.json();
-            if(!data.length) return document.getElementById('loginError').classList.remove('hidden');
-            localStorage.setItem('sid', data[0].id); localStorage.setItem('sname', data[0].school_name);
-            showDashboard(data[0].school_name);
+            const btn = document.querySelector('#loginForm button'); btn.innerHTML = '<div class="loader mx-auto"></div>';
+            try {
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/schools?username=eq.${document.getElementById('loginUser').value}&password=eq.${document.getElementById('loginPass').value}&select=*`, { headers });
+                const data = await res.json();
+                if(!data.length) throw new Error("Incorrect Username or Password");
+                localStorage.setItem('sid', data[0].id); localStorage.setItem('sname', data[0].school_name);
+                showDashboard(data[0].school_name);
+                btn.innerHTML = 'Secure Login';
+            } catch (err) {
+                document.getElementById('loginError').innerText = err.message;
+                document.getElementById('loginError').classList.remove('hidden');
+                btn.innerHTML = 'Secure Login';
+            }
         });
 
         function showDashboard(name) {
-            document.getElementById('loginScreen').classList.add('hidden'); document.getElementById('dashboardScreen').classList.remove('hidden');
-            document.getElementById('headerName').innerText = name + ' Admin';
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('dashboardScreen').classList.remove('hidden');
+            document.getElementById('headerName').innerText = name;
+            document.getElementById('headerInitials').innerText = name.charAt(0);
             
-            const tables = ['notices', 'events', 'staff_members', 'galleries', 'facilities', 'achievements', 'faqs', 'fee_structures', 'timetables', 'holidays', 'toppers', 'testimonials', 'alumni', 'careers', 'blogs', 'downloads', 'alerts', 'custom_pages', 'inquiries', 'subscribers'];
+            const tables = ['notices', 'toppers', 'galleries', 'facilities', 'downloads', 'fee_structures', 'staff_members', 'inquiries'];
             tables.forEach(t => loadList(t));
             loadSettings();
         }
-        
+
         function logout() { localStorage.clear(); window.location.reload(); }
-        
+
         function switchTab(id) {
             document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
@@ -390,130 +285,69 @@
         async function loadList(table) {
             const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?school_id=eq.${localStorage.getItem('sid')}&order=created_at.desc`, { headers });
             const data = await res.json();
-            const el = document.getElementById(`list-${table}`);
-            if(!data.length) return el.innerHTML = '<p class="p-4 text-sm text-gray-500">No data.</p>';
             
-            el.innerHTML = data.map(i => {
-                let text = Object.keys(i).filter(k => k !== 'id' && k !== 'school_id' && k !== 'created_at' && k !== 'updated_at').map(k => i[k]).join(' | ');
-                return `<div class="p-3 border-b flex justify-between"><p class="text-sm truncate mr-4">${text}</p><button onclick="del('${table}','${i.id}')" class="text-red-500"><i class="fa-solid fa-trash"></i></button></div>`;
-            }).join('');
+            let elId = `list-${table}`;
+            if(table === 'staff_members') elId = 'list-staff';
+            if(table === 'fee_structures') elId = 'list-fees';
+
+            const el = document.getElementById(elId);
+            if(!el) return;
+            
+            if(!data.length) return el.innerHTML = '<p class="p-6 text-sm text-gray-400 text-center italic">No records found.</p>';
+
+            // Custom renders for premium feel
+            if(table === 'notices') {
+                el.innerHTML = data.map(i => `<div class="p-4 border-b hover:bg-gray-50 flex justify-between items-center transition"><div class="flex items-center gap-4"><div class="bg-blue-100 text-blue-800 px-3 py-1 rounded text-xs font-bold">${i.notice_date}</div><p class="font-bold text-gray-800">${i.title}</p></div><button onclick="del('${table}','${i.id}')" class="text-red-400 hover:text-red-600 p-2"><i class="fa-solid fa-trash"></i></button></div>`).join('');
+            } else if(table === 'toppers') {
+                el.innerHTML = data.map(i => `<div class="bg-white border border-yellow-200 rounded-xl p-4 text-center shadow-sm relative"><button onclick="del('${table}','${i.id}')" class="absolute top-2 right-2 text-red-400 hover:text-red-600"><i class="fa-solid fa-times"></i></button><img src="${i.photo_url || 'https://via.placeholder.com/100'}" class="w-16 h-16 mx-auto rounded-full object-cover border-2 border-yellow-400 mb-2"><h4 class="font-bold text-gray-800">${i.student_name}</h4><p class="text-xs text-gray-500">${i.exam_name}</p><div class="mt-2 bg-yellow-100 text-yellow-800 font-black text-lg py-1 rounded">${i.percentage_or_grade}</div></div>`).join('');
+            } else if(table === 'galleries') {
+                el.innerHTML = data.map(i => `<div class="relative group rounded-xl overflow-hidden shadow-sm border border-gray-200"><img src="${i.image_url}" class="w-full h-32 object-cover"><div class="absolute bottom-0 w-full bg-black/70 text-white text-[10px] p-2 truncate">${i.caption||''}</div><button onclick="del('${table}','${i.id}')" class="absolute top-2 right-2 bg-red-600 text-white w-7 h-7 rounded-full opacity-0 group-hover:opacity-100 transition"><i class="fa-solid fa-trash text-xs"></i></button></div>`).join('');
+            } else if(table === 'facilities') {
+                el.innerHTML = data.map(i => `<div class="p-4 border-b hover:bg-gray-50 flex justify-between items-center"><div class="flex items-center gap-3"><i class="fa-solid fa-building-circle-check text-green-500 text-xl"></i><div><p class="font-bold text-gray-800">${i.facility_name}</p><p class="text-xs text-gray-500">${i.description||''}</p></div></div><button onclick="del('${table}','${i.id}')" class="text-red-400 p-2"><i class="fa-solid fa-trash"></i></button></div>`).join('');
+            } else if(table === 'downloads') {
+                el.innerHTML = data.map(i => `<div class="p-4 border-b hover:bg-gray-50 flex justify-between items-center"><div class="flex items-center gap-3"><i class="fa-solid fa-file-pdf text-red-500 text-2xl"></i><div><p class="font-bold text-gray-800">${i.document_title}</p><a href="${i.file_url}" target="_blank" class="text-xs text-blue-600 hover:underline">View File</a></div></div><button onclick="del('${table}','${i.id}')" class="text-red-400 p-2"><i class="fa-solid fa-trash"></i></button></div>`).join('');
+            } else if(table === 'fee_structures') {
+                el.innerHTML = data.map(i => `<div class="p-4 border-b flex justify-between items-center"><div class="flex items-center gap-3"><div class="bg-green-100 text-green-800 px-3 py-1 rounded font-bold">${i.class_name}</div><p class="font-black text-gray-800">₹${i.total_fee} <span class="font-normal text-xs text-gray-500">/mo</span></p></div><button onclick="del('${table}','${i.id}')" class="text-red-400 p-2"><i class="fa-solid fa-trash"></i></button></div>`).join('');
+            } else if(table === 'staff_members') {
+                el.innerHTML = data.map(i => `<div class="flex items-center gap-4 bg-white border border-gray-100 p-4 rounded-xl shadow-sm"><img src="${i.photo_url||'https://via.placeholder.com/60'}" class="w-12 h-12 rounded-full object-cover bg-gray-100 border border-gray-200"><div><p class="font-bold text-gray-800">${i.name}</p><p class="text-xs text-indigo-600 font-medium">${i.designation || 'Teacher'}</p></div><button onclick="del('${table}','${i.id}')" class="ml-auto text-red-400"><i class="fa-solid fa-trash"></i></button></div>`).join('');
+            } else if(table === 'inquiries') {
+                el.innerHTML = data.map(i => `<div class="bg-white p-5 rounded-xl border-l-4 border-l-blue-500 shadow-sm"><div class="flex justify-between items-start mb-2"><div><p class="font-bold text-gray-900">${i.student_name || i.parent_name || 'Inquiry'}</p><p class="text-xs text-gray-500"><i class="fa-solid fa-phone mr-1"></i>${i.phone_number || 'N/A'} &nbsp;|&nbsp; <i class="fa-solid fa-envelope mr-1"></i>${i.email || 'N/A'}</p></div><span class="text-xs text-gray-400">${new Date(i.created_at).toLocaleDateString()}</span></div><div class="bg-gray-50 p-3 rounded text-sm text-gray-700 italic border border-gray-100">"${i.message}"</div><button onclick="del('${table}','${i.id}')" class="mt-3 text-xs text-red-500 font-bold hover:underline"><i class="fa-solid fa-trash mr-1"></i>Delete</button></div>`).join('');
+            }
         }
 
+        function setupForm(formId, table, getPayload) {
+            document.getElementById(formId).addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const btn = e.target.querySelector('button');
+                const originalText = btn.innerText;
+                btn.innerText = "Saving...";
+                
+                await fetch(`${SUPABASE_URL}/rest/v1/${table}`, { method: 'POST', headers, body: JSON.stringify({ school_id: localStorage.getItem('sid'), ...getPayload() }) });
+                
+                e.target.reset();
+                if(formId==='noticeForm') document.getElementById('noticeDate').valueAsDate = new Date();
+                
+                btn.innerText = "Saved!";
+                setTimeout(() => { btn.innerText = originalText; }, 1500);
+                loadList(table);
+            });
+        }
+        
+        setupForm('noticeForm', 'notices', () => ({ title: document.getElementById('noticeTitle').value, notice_date: document.getElementById('noticeDate').value }));
+        setupForm('topperForm', 'toppers', () => ({ student_name: document.getElementById('topName').value, exam_name: document.getElementById('topExam').value, percentage_or_grade: document.getElementById('topScore').value, photo_url: document.getElementById('topPhoto').value }));
+        setupForm('galleryForm', 'galleries', () => ({ image_url: document.getElementById('galUrl').value, caption: document.getElementById('galCap').value }));
+        setupForm('facilityForm', 'facilities', () => ({ facility_name: document.getElementById('facName').value, description: document.getElementById('facDesc').value }));
+        setupForm('downloadForm', 'downloads', () => ({ document_title: document.getElementById('dlTitle').value, file_url: document.getElementById('dlUrl').value }));
+        setupForm('feeForm', 'fee_structures', () => ({ class_name: document.getElementById('feeClass').value, total_fee: document.getElementById('feeTotal').value }));
+        setupForm('staffForm', 'staff_members', () => ({ name: document.getElementById('stName').value, designation: document.getElementById('stRole').value, photo_url: document.getElementById('stPhoto').value }));
+
         async function del(table, id) {
-            if(!confirm('Delete?')) return;
+            if(!confirm('Permanently delete this record?')) return;
             await fetch(`${SUPABASE_URL}/rest/v1/${table}?id=eq.${id}`, { method: 'DELETE', headers });
             loadList(table);
         }
 
-        document.getElementById('form-notices').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            await fetch(`${SUPABASE_URL}/rest/v1/notices`, { method: 'POST', headers, body: JSON.stringify({ school_id: localStorage.getItem('sid'), title: document.getElementById('notices_title').value, notice_date: document.getElementById('notices_notice_date').value }) });
-            document.getElementById('form-notices').reset();
-            loadList('notices');
-        });
-        document.getElementById('form-events').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            await fetch(`${SUPABASE_URL}/rest/v1/events`, { method: 'POST', headers, body: JSON.stringify({ school_id: localStorage.getItem('sid'), title: document.getElementById('events_title').value, event_date: document.getElementById('events_event_date').value, location: document.getElementById('events_location').value }) });
-            document.getElementById('form-events').reset();
-            loadList('events');
-        });
-        document.getElementById('form-staff_members').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            await fetch(`${SUPABASE_URL}/rest/v1/staff_members`, { method: 'POST', headers, body: JSON.stringify({ school_id: localStorage.getItem('sid'), name: document.getElementById('staff_members_name').value, designation: document.getElementById('staff_members_designation').value, photo_url: document.getElementById('staff_members_photo_url').value }) });
-            document.getElementById('form-staff_members').reset();
-            loadList('staff_members');
-        });
-        document.getElementById('form-galleries').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            await fetch(`${SUPABASE_URL}/rest/v1/galleries`, { method: 'POST', headers, body: JSON.stringify({ school_id: localStorage.getItem('sid'), image_url: document.getElementById('galleries_image_url').value, caption: document.getElementById('galleries_caption').value }) });
-            document.getElementById('form-galleries').reset();
-            loadList('galleries');
-        });
-        document.getElementById('form-facilities').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            await fetch(`${SUPABASE_URL}/rest/v1/facilities`, { method: 'POST', headers, body: JSON.stringify({ school_id: localStorage.getItem('sid'), facility_name: document.getElementById('facilities_facility_name').value, description: document.getElementById('facilities_description').value }) });
-            document.getElementById('form-facilities').reset();
-            loadList('facilities');
-        });
-        document.getElementById('form-achievements').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            await fetch(`${SUPABASE_URL}/rest/v1/achievements`, { method: 'POST', headers, body: JSON.stringify({ school_id: localStorage.getItem('sid'), title: document.getElementById('achievements_title').value, description: document.getElementById('achievements_description').value }) });
-            document.getElementById('form-achievements').reset();
-            loadList('achievements');
-        });
-        document.getElementById('form-faqs').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            await fetch(`${SUPABASE_URL}/rest/v1/faqs`, { method: 'POST', headers, body: JSON.stringify({ school_id: localStorage.getItem('sid'), question: document.getElementById('faqs_question').value, answer: document.getElementById('faqs_answer').value }) });
-            document.getElementById('form-faqs').reset();
-            loadList('faqs');
-        });
-        document.getElementById('form-fee_structures').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            await fetch(`${SUPABASE_URL}/rest/v1/fee_structures`, { method: 'POST', headers, body: JSON.stringify({ school_id: localStorage.getItem('sid'), class_name: document.getElementById('fee_structures_class_name').value, total_fee: document.getElementById('fee_structures_total_fee').value }) });
-            document.getElementById('form-fee_structures').reset();
-            loadList('fee_structures');
-        });
-        document.getElementById('form-timetables').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            await fetch(`${SUPABASE_URL}/rest/v1/timetables`, { method: 'POST', headers, body: JSON.stringify({ school_id: localStorage.getItem('sid'), class_name: document.getElementById('timetables_class_name').value, file_url: document.getElementById('timetables_file_url').value }) });
-            document.getElementById('form-timetables').reset();
-            loadList('timetables');
-        });
-        document.getElementById('form-holidays').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            await fetch(`${SUPABASE_URL}/rest/v1/holidays`, { method: 'POST', headers, body: JSON.stringify({ school_id: localStorage.getItem('sid'), holiday_name: document.getElementById('holidays_holiday_name').value, start_date: document.getElementById('holidays_start_date').value, end_date: document.getElementById('holidays_end_date').value }) });
-            document.getElementById('form-holidays').reset();
-            loadList('holidays');
-        });
-        document.getElementById('form-toppers').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            await fetch(`${SUPABASE_URL}/rest/v1/toppers`, { method: 'POST', headers, body: JSON.stringify({ school_id: localStorage.getItem('sid'), student_name: document.getElementById('toppers_student_name').value, percentage_or_grade: document.getElementById('toppers_percentage_or_grade').value }) });
-            document.getElementById('form-toppers').reset();
-            loadList('toppers');
-        });
-        document.getElementById('form-testimonials').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            await fetch(`${SUPABASE_URL}/rest/v1/testimonials`, { method: 'POST', headers, body: JSON.stringify({ school_id: localStorage.getItem('sid'), reviewer_name: document.getElementById('testimonials_reviewer_name').value, review_text: document.getElementById('testimonials_review_text').value }) });
-            document.getElementById('form-testimonials').reset();
-            loadList('testimonials');
-        });
-        document.getElementById('form-alumni').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            await fetch(`${SUPABASE_URL}/rest/v1/alumni`, { method: 'POST', headers, body: JSON.stringify({ school_id: localStorage.getItem('sid'), name: document.getElementById('alumni_name').value, success_story: document.getElementById('alumni_success_story').value }) });
-            document.getElementById('form-alumni').reset();
-            loadList('alumni');
-        });
-        document.getElementById('form-careers').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            await fetch(`${SUPABASE_URL}/rest/v1/careers`, { method: 'POST', headers, body: JSON.stringify({ school_id: localStorage.getItem('sid'), job_title: document.getElementById('careers_job_title').value, last_date_to_apply: document.getElementById('careers_last_date_to_apply').value }) });
-            document.getElementById('form-careers').reset();
-            loadList('careers');
-        });
-        document.getElementById('form-blogs').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            await fetch(`${SUPABASE_URL}/rest/v1/blogs`, { method: 'POST', headers, body: JSON.stringify({ school_id: localStorage.getItem('sid'), title: document.getElementById('blogs_title').value, author_name: document.getElementById('blogs_author_name').value }) });
-            document.getElementById('form-blogs').reset();
-            loadList('blogs');
-        });
-        document.getElementById('form-downloads').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            await fetch(`${SUPABASE_URL}/rest/v1/downloads`, { method: 'POST', headers, body: JSON.stringify({ school_id: localStorage.getItem('sid'), document_title: document.getElementById('downloads_document_title').value, file_url: document.getElementById('downloads_file_url').value }) });
-            document.getElementById('form-downloads').reset();
-            loadList('downloads');
-        });
-        document.getElementById('form-alerts').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            await fetch(`${SUPABASE_URL}/rest/v1/alerts`, { method: 'POST', headers, body: JSON.stringify({ school_id: localStorage.getItem('sid'), alert_message: document.getElementById('alerts_alert_message').value, link_url: document.getElementById('alerts_link_url').value }) });
-            document.getElementById('form-alerts').reset();
-            loadList('alerts');
-        });
-        document.getElementById('form-custom_pages').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            await fetch(`${SUPABASE_URL}/rest/v1/custom_pages`, { method: 'POST', headers, body: JSON.stringify({ school_id: localStorage.getItem('sid'), page_title: document.getElementById('custom_pages_page_title').value, page_slug: document.getElementById('custom_pages_page_slug').value }) });
-            document.getElementById('form-custom_pages').reset();
-            loadList('custom_pages');
-        });
-
+        // Settings
         async function loadSettings() {
             const res = await fetch(`${SUPABASE_URL}/rest/v1/schools?id=eq.${localStorage.getItem('sid')}`, { headers });
             const d = await res.json();
@@ -522,20 +356,22 @@
                 if(d[0].logo_url) document.getElementById('setLog').value = d[0].logo_url;
                 if(d[0].about_us_text) document.getElementById('setAbt').value = d[0].about_us_text;
                 if(d[0].facebook_url) document.getElementById('setFb').value = d[0].facebook_url;
-                if(d[0].twitter_url) document.getElementById('setTw').value = d[0].twitter_url;
                 if(d[0].youtube_url) document.getElementById('setYt').value = d[0].youtube_url;
+                if(d[0].instagram_url) document.getElementById('setIg').value = d[0].instagram_url;
             }
         }
         document.getElementById('settingsForm').addEventListener('submit', async (e) => {
             e.preventDefault();
+            const btn = document.getElementById('setBtn'); btn.innerText = "Saving Profile...";
             await fetch(`${SUPABASE_URL}/rest/v1/schools?id=eq.${localStorage.getItem('sid')}`, {
                 method: 'PATCH', headers, body: JSON.stringify({ 
                     primary_color: document.getElementById('setCol').value, logo_url: document.getElementById('setLog').value, 
                     about_us_text: document.getElementById('setAbt').value, facebook_url: document.getElementById('setFb').value,
-                    twitter_url: document.getElementById('setTw').value, youtube_url: document.getElementById('setYt').value
+                    youtube_url: document.getElementById('setYt').value, instagram_url: document.getElementById('setIg').value
                 })
             });
-            alert('Saved!');
+            btn.innerText = "Profile Saved!";
+            setTimeout(()=> { btn.innerText = "Save School Profile"; }, 2000);
         });
     </script>
 </body>
