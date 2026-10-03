@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Official Website</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = { theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'] } } } }
+    </script>
+    <style>
+        .skeleton { background: #e2e8f0; animation: pulse 1.5s infinite ease-in-out; border-radius: 4px; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans antialiased flex flex-col min-h-screen">
+
+    <!-- ========================================== -->
+    <!-- ⚙️ THE ONLY CONFIGURATION NEEDED (WHITE-LABEL) -->
+    <!-- ========================================== -->
+    <script>
+        // AAP YAHAN APNI WAHI API KEY PASTE KARENGE JO MASTER PANEL SE MILI THI
+        const SCHOOL_API_KEY = "bc1dd513-5915-49b7-8b07-4d346e1e0445"; // <-- PASTE HERE
+        
+        // Central Backend System (Aapka Supabase)
+        const SUPABASE_URL = "https://xlmsgtxyrlovjobwvdom.supabase.co";
+        const SUPABASE_ANON_KEY = "sb_publishable_iLRrB73mPbgH0FtPvMOVbg_eoNyCtd3"; 
+        
+        const headers = {
+            'Content-Type': 'application/json',
+            'apikey': SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+        };
+    </script>
+
+    <!-- HEADER SECTION -->
+    <header class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xl shadow-md" id="schoolLogo">
+                    <i class="fa-solid fa-school"></i>
+                </div>
+                <div>
+                    <!-- School Name Auto-Loads Here -->
+                    <h1 id="publicSchoolName" class="text-xl md:text-2xl font-bold text-gray-900 skeleton w-48 h-6 mb-1"></h1>
+                    <p class="text-xs md:text-sm text-gray-500 font-medium">Welcome to our official portal</p>
+                </div>
+            </div>
+            <nav class="hidden md:flex gap-6 font-medium text-gray-600">
+                <a href="#" class="hover:text-blue-600">Home</a>
+                <a href="#" class="hover:text-blue-600">About</a>
+                <a href="#notice-board" class="hover:text-blue-600">Notices</a>
+                <a href="#" class="hover:text-blue-600">Contact</a>
+            </nav>
+            <button class="md:hidden text-gray-600 text-2xl"><i class="fa-solid fa-bars"></i></button>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="bg-blue-900 text-white py-16 md:py-24 px-4 text-center">
+        <div class="max-w-3xl mx-auto">
+            <h2 class="text-3xl md:text-5xl font-bold mb-4 leading-tight">Empowering Students for a Better Tomorrow</h2>
+            <p class="text-blue-200 text-lg md:text-xl mb-8">Stay updated with the latest announcements, events, and academic notices.</p>
+        </div>
+    </section>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 max-w-7xl mx-auto px-4 py-12 w-full grid grid-cols-1 md:grid-cols-3 gap-8">
+        
+        <!-- LEFT: About Placeholder -->
+        <div class="md:col-span-2 space-y-6">
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">Welcome Message</h3>
+                <p class="text-gray-600 leading-relaxed mb-4">
+                    Welcome to our school's digital portal. This platform is designed to keep parents, students, and staff connected seamlessly. 
+                    All official updates and notices will be published directly to this website by the school administration.
+                </p>
+                <div class="bg-blue-50 border-l-4 border-blue-600 p-4 rounded-r-lg">
+                    <p class="text-blue-800 font-medium text-sm"><i class="fa-solid fa-circle-info mr-2"></i> This is a white-label template connected to your central SaaS architecture.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT: Live Notice Board -->
+        <div class="md:col-span-1" id="notice-board">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="bg-red-50 border-b border-red-100 px-6 py-4 flex items-center justify-between">
+                    <h3 class="font-bold text-red-700"><i class="fa-solid fa-bell mr-2 animate-bounce"></i> Notice Board</h3>
+                </div>
+                
+                <div id="noticeContainer" class="divide-y divide-gray-100 max-h-[400px] overflow-y-auto">
+                    <!-- Skeletons for Loading -->
+                    <div class="p-4 flex gap-3">
+                        <div class="skeleton w-12 h-12 rounded"></div>
+                        <div class="flex-1"><div class="skeleton w-full h-4 mb-2"></div><div class="skeleton w-2/3 h-3"></div></div>
+                    </div>
+                    <div class="p-4 flex gap-3">
+                        <div class="skeleton w-12 h-12 rounded"></div>
+                        <div class="flex-1"><div class="skeleton w-full h-4 mb-2"></div><div class="skeleton w-2/3 h-3"></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-gray-900 text-gray-400 py-8 text-center text-sm">
+        <p>&copy; <span id="year">2026</span> <span id="footerSchoolName">School</span>. All Rights Reserved.</p>
+    </footer>
+
+    <!-- LOGIC: FETCHING DATA MAGIC -->
+    <script>
+        document.getElementById('year').innerText = new Date().getFullYear();
+
+        async function loadSchoolWebsite() {
+            try {
+                // STEP 1: VERIFY API KEY & GET SCHOOL ID
+                // Hum database se pooch rahe hain ki "Ye API Key kis school ki hai?"
+                const schoolRes = await fetch(`${SUPABASE_URL}/rest/v1/schools?api_key=eq.${SCHOOL_API_KEY}&select=id,school_name`, { headers });
+                const schoolData = await schoolRes.json();
+
+                if (schoolData.length === 0) {
+                    throw new Error("Invalid API Key! This website is not registered.");
+                }
+
+                const schoolId = schoolData[0].id;
+                const schoolName = schoolData[0].school_name;
+
+                // Update UI with School Name (Removing Skeletons)
+                const nameEl = document.getElementById('publicSchoolName');
+                nameEl.classList.remove('skeleton', 'w-48', 'h-6');
+                nameEl.innerText = schoolName;
+                document.getElementById('footerSchoolName').innerText = schoolName;
+                document.getElementById('schoolLogo').innerText = schoolName.charAt(0);
+
+                // STEP 2: FETCH ONLY THIS SCHOOL'S NOTICES
+                // Ab hume schoolId mil gaya, to hum sirf uske notices fetch karenge
+                const noticeRes = await fetch(`${SUPABASE_URL}/rest/v1/notices?school_id=eq.${schoolId}&order=created_at.desc&limit=5`, { headers });
+                const notices = await noticeRes.json();
+
+                const noticeContainer = document.getElementById('noticeContainer');
+                
+                if (notices.length === 0) {
+                    noticeContainer.innerHTML = `<div class="p-6 text-center text-gray-500 text-sm">No new notices at the moment.</div>`;
+                    return;
+                }
+
+                // Render Notices
+                noticeContainer.innerHTML = '';
+                notices.forEach(notice => {
+                    const d = new Date(notice.notice_date);
+                    noticeContainer.innerHTML += `
+                        <div class="p-4 hover:bg-gray-50 transition-colors flex gap-4">
+                            <div class="bg-red-50 text-red-600 rounded-lg p-2 text-center min-w-[50px] border border-red-100 flex flex-col justify-center">
+                                <span class="text-lg font-bold leading-none">${d.getDate()}</span>
+                                <span class="text-[10px] font-semibold uppercase mt-1">${d.toLocaleString('en-IN', { month: 'short' })}</span>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-800 text-sm">${notice.title}</h4>
+                                ${notice.description ? `<p class="text-xs text-gray-500 mt-1 line-clamp-2">${notice.description}</p>` : ''}
+                            </div>
+                        </div>
+                    `;
+                });
+
+            } catch (error) {
+                console.error("Website Load Error:", error);
+                document.getElementById('publicSchoolName').innerText = "System Error";
+                document.getElementById('noticeContainer').innerHTML = `<div class="p-4 text-red-500 text-sm text-center">Failed to load system. Please check API Key.</div>`;
+            }
+        }
+
+        // Start the Magic!
+        loadSchoolWebsite();
+    </script>
+</body>
+</html>
