@@ -3,345 +3,362 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Official School Website</title>
+    <title id="pageTitle">School Website</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    <script>tailwind.config = { theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'] } } } }</script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script>tailwind.config={theme:{extend:{fontFamily:{sans:['Inter','sans-serif']}}}}</script>
     <style>
-        .skeleton { background: #e2e8f0; animation: pulse 1.5s infinite ease-in-out; border-radius: 4px; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
-        html { scroll-behavior: smooth; }
-        .hero-pattern { background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); }
+        html{scroll-behavior:smooth}
+        .skeleton{background:#e2e8f0;animation:pulse 1.5s infinite}@keyframes pulse{50%{opacity:.5}}
+        .marquee{animation:scroll 20s linear infinite}@keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+        .marquee:hover{animation-play-state:paused}
+        .section-hidden{display:none}
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800 font-sans antialiased flex flex-col min-h-screen">
-    <script>
-        const SCHOOL_API_KEY = "bc1dd513-5915-49b7-8b07-4d346e1e0445"; 
-        const SUPABASE_URL = "https://xlmsgtxyrlovjobwvdom.supabase.co";
-        const SUPABASE_ANON_KEY = "sb_publishable_iLRrB73mPbgH0FtPvMOVbg_eoNyCtd3"; 
-        const headers = { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` };
-    </script>
+<body class="bg-white text-gray-800 font-sans antialiased flex flex-col min-h-screen">
+<script>
+    const SCHOOL_API_KEY="bc1dd513-5915-49b7-8b07-4d346e1e0445";
+    const SB="https://xlmsgtxyrlovjobwvdom.supabase.co",AK="sb_publishable_iLRrB73mPbgH0FtPvMOVbg_eoNyCtd3";
+    const H={'Content-Type':'application/json',apikey:AK,Authorization:`Bearer ${AK}`};
+    let S=null; // school data object
+</script>
 
-    <!-- HEADER -->
-    <header class="bg-white shadow-md sticky top-0 z-50 border-t-4 border-blue-600" id="headerTopBar">
-        <div class="max-w-7xl mx-auto px-4 lg:px-8 py-3 flex justify-between items-center">
-            <div class="flex items-center gap-4">
-                <div class="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-2xl shadow-inner overflow-hidden" id="logoContainer">
-                    <i class="fa-solid fa-graduation-cap"></i>
-                </div>
-                <div>
-                    <h1 id="publicSchoolName" class="text-xl md:text-2xl font-extrabold text-gray-900 tracking-tight skeleton w-48 h-6 mb-1"></h1>
-                    <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Excellence in Education</p>
-                </div>
-            </div>
-            <nav class="hidden lg:flex gap-8 font-bold text-gray-700 text-sm">
-                <a href="#heroSection" class="hover:text-blue-600 transition-colors">Home</a>
-                <a href="#aboutSection" class="hover:text-blue-600 transition-colors">About Us</a>
-                <a href="#academicsSection" class="hover:text-blue-600 transition-colors">Academics</a>
-                <a href="#admissionSection" class="bg-blue-600 text-white px-5 py-2 rounded-full hover:bg-blue-700 transition transform hover:-translate-y-0.5 shadow-md" id="navAdmissionsBtn">Admissions</a>
-            </nav>
+<!-- ═══════════ 1. TOP INFO BAR ═══════════ -->
+<div class="bg-gray-900 text-gray-300 text-xs py-2 border-b border-gray-800" id="topBar">
+    <div class="max-w-7xl mx-auto px-4 flex justify-between items-center flex-wrap gap-2">
+        <div class="flex gap-6">
+            <span id="topPhone" class="hidden"><i class="fa-solid fa-phone mr-1 text-green-400"></i><span></span></span>
+            <span id="topEmail" class="hidden"><i class="fa-solid fa-envelope mr-1 text-blue-400"></i><span></span></span>
+            <span id="topTiming" class="hidden"><i class="fa-regular fa-clock mr-1 text-yellow-400"></i><span></span></span>
         </div>
-    </header>
+        <div class="flex gap-3" id="topSocial"></div>
+    </div>
+</div>
 
-    <!-- HERO -->
-    <section id="heroSection" class="bg-blue-800 hero-pattern text-white py-20 md:py-32 px-4 text-center transition-colors duration-500 relative overflow-hidden">
-        <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/40"></div>
-        <div class="max-w-4xl mx-auto relative z-10">
-            <h2 class="text-4xl md:text-6xl font-extrabold mb-6 leading-tight drop-shadow-lg">Shaping the Leaders of Tomorrow</h2>
-            <p id="aboutText" class="text-blue-50 text-lg md:text-xl mb-10 max-w-3xl mx-auto drop-shadow-md font-medium">Providing a world-class educational environment to nurture intellect, character, and holistic development.</p>
-            <div class="flex flex-col sm:flex-row justify-center gap-4">
-                <a href="#admissionSection" class="bg-white text-blue-900 font-bold py-4 px-10 rounded-full shadow-xl hover:bg-gray-100 transition transform hover:scale-105" id="heroBtnPrimary">Apply Now</a>
-                <a href="#noticeBoard" class="bg-blue-700 border-2 border-blue-400 text-white font-bold py-4 px-10 rounded-full shadow-lg hover:bg-blue-600 transition" id="heroBtnSecondary">Latest Updates</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- MAIN NOTICES & HIGHLIGHTS -->
-    <section class="py-12 bg-gray-50 border-b border-gray-200 -mt-10 relative z-20">
-        <div class="max-w-7xl mx-auto px-4 lg:px-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
-            
-            <!-- Notices (Crucial) -->
-            <div id="noticeBoard" class="lg:col-span-1 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden transform transition hover:shadow-2xl">
-                <div class="bg-red-600 text-white px-6 py-4 flex justify-between items-center">
-                    <h3 class="font-bold text-lg"><i class="fa-regular fa-bell animate-bounce mr-2"></i> Notice Board</h3>
-                </div>
-                <div id="noticeContainer" class="p-2 space-y-2 max-h-[400px] overflow-y-auto bg-gray-50">
-                    <div class="p-4 flex gap-3"><div class="skeleton w-12 h-12 rounded"></div><div class="flex-1"><div class="skeleton w-full h-4 mb-2"></div><div class="skeleton w-2/3 h-3"></div></div></div>
-                </div>
-            </div>
-
-            <!-- Toppers (Crucial for Bihar) -->
-            <div class="lg:col-span-2 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden hidden" id="toppersSection">
-                <div class="bg-yellow-500 text-white px-6 py-4 flex justify-between items-center">
-                    <h3 class="font-bold text-lg"><i class="fa-solid fa-trophy mr-2"></i> Our Pride - Board Toppers</h3>
-                </div>
-                <div id="topperContainer" class="p-6 grid grid-cols-2 md:grid-cols-4 gap-6 bg-yellow-50/30"></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ACADEMICS & INFRASTRUCTURE -->
-    <section id="academicsSection" class="py-16 bg-white">
-        <div class="max-w-7xl mx-auto px-4 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-extrabold text-gray-900">Academics & Infrastructure</h2>
-                <div class="w-24 h-1 bg-blue-600 mx-auto mt-4 rounded-full" id="divider1"></div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Facilities -->
-                <div class="bg-blue-50 rounded-2xl p-6 border border-blue-100 hidden" id="facilitiesSection">
-                    <h3 class="text-xl font-bold text-blue-900 mb-6 flex items-center"><i class="fa-solid fa-building-circle-check text-3xl mr-3 opacity-80"></i> Campus Facilities</h3>
-                    <ul id="facilityContainer" class="space-y-4"></ul>
-                </div>
-
-                <!-- Downloads / Syllabus -->
-                <div class="bg-purple-50 rounded-2xl p-6 border border-purple-100 hidden" id="downloadsSection">
-                    <h3 class="text-xl font-bold text-purple-900 mb-6 flex items-center"><i class="fa-solid fa-file-pdf text-3xl mr-3 opacity-80"></i> Important Downloads</h3>
-                    <div id="downloadContainer" class="space-y-3"></div>
-                </div>
-
-                <!-- Fee Structure -->
-                <div class="bg-green-50 rounded-2xl p-6 border border-green-100 hidden" id="feesSection">
-                    <h3 class="text-xl font-bold text-green-900 mb-6 flex items-center"><i class="fa-solid fa-indian-rupee-sign text-3xl mr-3 opacity-80"></i> Fee Structure</h3>
-                    <div id="feeContainer" class="space-y-3"></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- FACULTY & GALLERY -->
-    <section class="py-16 bg-gray-900 text-white border-y border-gray-800">
-        <div class="max-w-7xl mx-auto px-4 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-16">
-            
-            <!-- Staff -->
-            <div id="staffSection" class="hidden">
-                <h2 class="text-3xl font-extrabold mb-8 flex items-center"><i class="fa-solid fa-chalkboard-user mr-4 text-blue-400"></i> Our Expert Faculty</h2>
-                <div id="staffContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-6"></div>
-            </div>
-
-            <!-- Gallery -->
-            <div id="gallerySection" class="hidden">
-                <h2 class="text-3xl font-extrabold mb-8 flex items-center"><i class="fa-regular fa-images mr-4 text-blue-400"></i> Campus Gallery</h2>
-                <div id="galleryContainer" class="grid grid-cols-2 gap-4"></div>
-            </div>
-
-        </div>
-    </section>
-
-    <!-- ADMISSIONS / CONTACT -->
-    <section id="admissionSection" class="py-20 bg-gray-50 relative">
-        <div class="max-w-4xl mx-auto px-4">
-            <div class="bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-100">
-                <div class="bg-blue-600 text-white p-8 text-center" id="contactHeader">
-                    <h2 class="text-3xl font-extrabold mb-2">Admissions Open</h2>
-                    <p class="text-blue-100">Send us an inquiry and our administration team will contact you shortly.</p>
-                </div>
-                <div class="p-8 md:p-12">
-                    <form id="inquiryForm" class="space-y-6">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-sm font-bold text-gray-700 mb-1">Student/Parent Name *</label>
-                                <input type="text" id="inqName" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-bold text-gray-700 mb-1">Phone Number *</label>
-                                <input type="text" id="inqPhone" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-1">Email Address</label>
-                            <input type="email" id="inqEmail" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-1">Your Message / Inquiry *</label>
-                            <textarea id="inqMessage" required rows="4" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Which class are you seeking admission for?"></textarea>
-                        </div>
-                        <button type="submit" id="inqBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg transition-all text-lg transform hover:scale-[1.02]">Submit Inquiry</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- FOOTER -->
-    <footer class="bg-gray-950 text-gray-400 py-12 border-t border-gray-900">
-        <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
+<!-- ═══════════ 2. HEADER ═══════════ -->
+<header class="bg-white shadow-md sticky top-0 z-50 border-t-4 border-blue-700" id="siteHeader">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+        <div class="flex items-center gap-4">
+            <div class="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-2xl shadow-inner overflow-hidden" id="logoBox"><i class="fa-solid fa-graduation-cap"></i></div>
             <div>
-                <p class="font-bold text-gray-300 text-lg mb-1">&copy; <span id="year">2026</span> <span id="footerSchoolName">School</span>.</p>
-                <p class="text-sm">Excellence in Education. All Rights Reserved.</p>
-            </div>
-            <div class="flex gap-4" id="socialLinks">
-                <!-- Injected via JS if they exist -->
+                <h1 id="siteName" class="text-xl md:text-2xl font-black text-gray-900 tracking-tight skeleton w-48 h-6 mb-1"></h1>
+                <p id="siteTagline" class="text-xs font-bold text-gray-500 uppercase tracking-wider"></p>
             </div>
         </div>
-    </footer>
+        <nav class="hidden lg:flex gap-6 font-bold text-gray-700 text-sm">
+            <a href="#about" class="hover:text-blue-600">About</a>
+            <a href="#toppers" class="hover:text-blue-600">Results</a>
+            <a href="#faculty" class="hover:text-blue-600">Faculty</a>
+            <a href="#gallery" class="hover:text-blue-600">Gallery</a>
+            <a href="#contact" class="bg-blue-700 text-white px-5 py-2 rounded-full hover:bg-blue-800 shadow-md" id="navCTA">Admissions</a>
+        </nav>
+    </div>
+</header>
 
-    <!-- LOGIC -->
-    <script>
-        document.getElementById('year').innerText = new Date().getFullYear();
-        let globalSchoolId = null;
+<!-- ═══════════ 3. HERO BANNER ═══════════ -->
+<section id="hero" class="relative bg-blue-900 text-white py-24 md:py-36 px-4 text-center overflow-hidden">
+    <div class="absolute inset-0 bg-cover bg-center opacity-30" id="heroBg"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-blue-900/80 to-blue-900/95"></div>
+    <div class="max-w-4xl mx-auto relative z-10">
+        <div id="admBadge" class="hidden inline-block bg-green-500 text-white text-sm font-black px-6 py-2 rounded-full mb-6 shadow-lg animate-pulse"><i class="fa-solid fa-circle-check mr-2"></i>ADMISSIONS OPEN FOR 2027-28</div>
+        <h2 id="heroTitle" class="text-4xl md:text-6xl font-black mb-6 leading-tight drop-shadow-lg">Shaping the Leaders of Tomorrow</h2>
+        <div id="heroMeta" class="flex justify-center gap-6 text-blue-200 font-bold text-sm mb-10 flex-wrap">
+            <span id="heroEst" class="hidden"><i class="fa-solid fa-landmark mr-1"></i><span></span></span>
+            <span id="heroBoard" class="hidden"><i class="fa-solid fa-certificate mr-1"></i><span></span></span>
+            <span id="heroAff" class="hidden"><i class="fa-solid fa-hashtag mr-1"></i>Aff. No: <span></span></span>
+        </div>
+        <div class="flex flex-col sm:flex-row justify-center gap-4">
+            <a href="#contact" class="bg-white text-blue-900 font-black py-4 px-10 rounded-full shadow-xl hover:bg-gray-100 transition transform hover:scale-105" id="heroBtn1">Apply Now →</a>
+            <a href="#downloads" class="border-2 border-white/50 text-white font-bold py-4 px-10 rounded-full hover:bg-white/10 transition">Download Prospectus</a>
+        </div>
+    </div>
+</section>
 
-        async function loadSchoolWebsite() {
-            try {
-                // 1. Fetch School Branding
-                const schoolRes = await fetch(`${SUPABASE_URL}/rest/v1/schools?api_key=eq.${SCHOOL_API_KEY}&select=*`, { headers });
-                const schoolData = await schoolRes.json();
-                if (schoolData.length === 0) throw new Error("Invalid API Key!");
-                
-                const s = schoolData[0];
-                globalSchoolId = s.id;
-                
-                // Branding Text
-                document.getElementById('publicSchoolName').classList.remove('skeleton', 'w-48', 'h-6');
-                document.getElementById('publicSchoolName').innerText = s.school_name;
-                document.getElementById('footerSchoolName').innerText = s.school_name;
-                if (s.about_us_text) document.getElementById('aboutText').innerText = s.about_us_text;
-                
-                // Branding Colors
-                if (s.primary_color) {
-                    document.getElementById('headerTopBar').style.borderTopColor = s.primary_color;
-                    document.getElementById('heroSection').style.backgroundColor = s.primary_color;
-                    document.getElementById('contactHeader').style.backgroundColor = s.primary_color;
-                    document.getElementById('divider1').style.backgroundColor = s.primary_color;
-                    
-                    const btns = [document.getElementById('navAdmissionsBtn'), document.getElementById('inqBtn')];
-                    btns.forEach(b => { if(b) b.style.backgroundColor = s.primary_color; });
-                    
-                    const heroBtn = document.getElementById('heroBtnPrimary');
-                    if(heroBtn) heroBtn.style.color = s.primary_color;
-                }
-                
-                // Branding Logo
-                if (s.logo_url) {
-                    document.getElementById('logoContainer').innerHTML = `<img src="${s.logo_url}" class="w-full h-full object-cover">`;
-                    document.getElementById('logoContainer').classList.remove('bg-blue-100', 'text-blue-600');
-                }
+<!-- ═══════════ 4. MARQUEE TICKER ═══════════ -->
+<div class="bg-red-700 text-white py-2 overflow-hidden section-hidden" id="marqueeSec">
+    <div class="flex items-center max-w-7xl mx-auto px-4">
+        <span class="bg-white text-red-700 font-black text-xs px-4 py-1 rounded mr-4 flex-shrink-0">LATEST</span>
+        <div class="overflow-hidden flex-1"><div class="marquee whitespace-nowrap" id="marqueeText"></div></div>
+    </div>
+</div>
 
-                // Social Links
-                let socials = '';
-                if(s.facebook_url) socials += `<a href="${s.facebook_url}" target="_blank" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-blue-600 text-white transition"><i class="fa-brands fa-facebook-f"></i></a>`;
-                if(s.youtube_url) socials += `<a href="${s.youtube_url}" target="_blank" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-red-600 text-white transition"><i class="fa-brands fa-youtube"></i></a>`;
-                if(s.instagram_url) socials += `<a href="${s.instagram_url}" target="_blank" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-pink-600 text-white transition"><i class="fa-brands fa-instagram"></i></a>`;
-                document.getElementById('socialLinks').innerHTML = socials;
+<!-- ═══════════ 5. ABOUT + VISION/MISSION ═══════════ -->
+<section id="about" class="py-20 bg-gray-50 border-b">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="text-center mb-12"><h2 class="text-3xl font-black text-gray-900">About Our Institution</h2><div class="w-20 h-1 bg-blue-700 mx-auto mt-4 rounded-full" id="div1"></div></div>
+        <div class="max-w-4xl mx-auto">
+            <p id="aboutText" class="text-gray-600 text-lg leading-relaxed text-center mb-12">Welcome to our school.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 section-hidden" id="vmSection">
+                <div class="bg-white p-8 rounded-2xl shadow-sm border-l-4 border-blue-600"><h3 class="font-black text-blue-900 text-lg mb-3"><i class="fa-solid fa-eye mr-2"></i>Our Vision</h3><p id="visionText" class="text-gray-600 text-sm leading-relaxed"></p></div>
+                <div class="bg-white p-8 rounded-2xl shadow-sm border-l-4 border-yellow-500"><h3 class="font-black text-yellow-800 text-lg mb-3"><i class="fa-solid fa-bullseye mr-2"></i>Our Mission</h3><p id="missionText" class="text-gray-600 text-sm leading-relaxed"></p></div>
+            </div>
+        </div>
+    </div>
+</section>
 
-                // 2. Fetch Data Modules
-                
-                // NOTICES
-                fetchData('notices', 'noticeContainer', (n) => {
-                    const d = new Date(n.notice_date);
-                    return `<div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex gap-4 hover:shadow-md transition">
-                                <div class="bg-red-50 text-red-600 rounded-lg p-2 text-center min-w-[50px] flex flex-col justify-center border border-red-100">
-                                    <span class="text-xl font-black leading-none">${d.getDate()}</span>
-                                    <span class="text-[10px] font-bold uppercase mt-1">${d.toLocaleString('en', {month:'short'})}</span>
-                                </div>
-                                <div class="flex-1 self-center"><h4 class="font-bold text-sm text-gray-900">${n.title}</h4></div>
-                            </div>`;
-                });
+<!-- ═══════════ 6. PRINCIPAL & DIRECTOR ═══════════ -->
+<section class="py-20 bg-white border-b section-hidden" id="leadersSec">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="text-center mb-12"><h2 class="text-3xl font-black text-gray-900">Leadership</h2><div class="w-20 h-1 bg-blue-700 mx-auto mt-4 rounded-full" id="div2"></div></div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-10" id="leadersGrid"></div>
+    </div>
+</section>
 
-                // TOPPERS
-                fetchData('toppers', 'topperContainer', (t) => `
-                    <div class="text-center group">
-                        <div class="relative inline-block">
-                            <img src="${t.photo_url || 'https://via.placeholder.com/100'}" class="w-20 h-20 md:w-24 md:h-24 rounded-full object-cover border-4 border-white shadow-lg mx-auto group-hover:scale-110 transition duration-300">
-                            <div class="absolute -bottom-2 -right-2 bg-yellow-400 text-yellow-900 font-black text-xs px-2 py-1 rounded-full shadow-sm">${t.percentage_or_grade}</div>
-                        </div>
-                        <h4 class="font-bold text-gray-800 mt-3 text-sm">${t.student_name}</h4>
-                        <p class="text-xs text-gray-500 font-medium">${t.exam_name}</p>
-                    </div>
-                `, 'toppersSection');
+<!-- ═══════════ 7. BOARD TOPPERS ═══════════ -->
+<section id="toppers" class="py-20 bg-gradient-to-b from-yellow-50 to-white border-b section-hidden" id2="toppersSec">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="text-center mb-12"><h2 class="text-3xl font-black text-gray-900"><i class="fa-solid fa-trophy text-yellow-500 mr-3"></i>Board Toppers — Wall of Fame</h2><div class="w-20 h-1 bg-yellow-500 mx-auto mt-4 rounded-full"></div></div>
+        <div id="topperGrid" class="grid grid-cols-2 md:grid-cols-4 gap-8"></div>
+    </div>
+</section>
 
-                // FACILITIES
-                fetchData('facilities', 'facilityContainer', (f) => `
-                    <li class="flex items-start bg-white p-3 rounded-xl shadow-sm border border-blue-50">
-                        <div class="bg-blue-100 p-2 rounded-lg text-blue-600 mr-3 mt-0.5"><i class="fa-solid fa-check"></i></div>
-                        <div><p class="font-bold text-gray-800 text-sm">${f.facility_name}</p><p class="text-xs text-gray-500 mt-1 leading-relaxed">${f.description||''}</p></div>
-                    </li>
-                `, 'facilitiesSection');
+<!-- ═══════════ 8. FACILITIES ═══════════ -->
+<section class="py-20 bg-blue-900 text-white border-b section-hidden" id="facilitiesSec">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="text-center mb-12"><h2 class="text-3xl font-black">Our Campus Facilities</h2><div class="w-20 h-1 bg-yellow-400 mx-auto mt-4 rounded-full"></div></div>
+        <div id="facilityGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
+    </div>
+</section>
 
-                // DOWNLOADS
-                fetchData('downloads', 'downloadContainer', (d) => `
-                    <a href="${d.file_url}" target="_blank" class="flex items-center justify-between bg-white p-3 rounded-xl shadow-sm border border-purple-50 hover:bg-purple-50 transition group">
-                        <div class="flex items-center gap-3"><i class="fa-solid fa-file-pdf text-purple-400 text-xl group-hover:text-purple-600 transition"></i><span class="font-bold text-sm text-gray-700">${d.document_title}</span></div>
-                        <i class="fa-solid fa-download text-gray-300 group-hover:text-purple-500"></i>
-                    </a>
-                `, 'downloadsSection');
+<!-- ═══════════ 9. FACULTY ═══════════ -->
+<section id="faculty" class="py-20 bg-gray-50 border-b section-hidden" id2="staffSec">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="text-center mb-12"><h2 class="text-3xl font-black text-gray-900">Our Expert Faculty</h2><div class="w-20 h-1 bg-blue-700 mx-auto mt-4 rounded-full" id="div3"></div></div>
+        <div id="staffGrid" class="grid grid-cols-2 md:grid-cols-4 gap-6"></div>
+    </div>
+</section>
 
-                // FEES
-                fetchData('fee_structures', 'feeContainer', (f) => `
-                    <div class="flex justify-between items-center bg-white p-4 rounded-xl shadow-sm border border-green-50">
-                        <span class="font-bold text-gray-700">${f.class_name}</span>
-                        <span class="font-black text-green-700 text-lg">₹${f.total_fee} <span class="text-xs font-medium text-gray-400">/ mo</span></span>
-                    </div>
-                `, 'feesSection');
+<!-- ═══════════ 10. FEE STRUCTURE ═══════════ -->
+<section class="py-20 bg-white border-b section-hidden" id="feesSec">
+    <div class="max-w-6xl mx-auto px-4">
+        <div class="text-center mb-12"><h2 class="text-3xl font-black text-gray-900">Fee Structure</h2><div class="w-20 h-1 bg-green-600 mx-auto mt-4 rounded-full"></div></div>
+        <div class="bg-white rounded-2xl shadow-lg border overflow-hidden">
+            <table class="w-full text-left"><thead><tr class="bg-green-700 text-white text-sm"><th class="px-6 py-4">Class</th><th class="px-6 py-4">Session</th><th class="px-6 py-4 text-right">Monthly Fee</th></tr></thead>
+            <tbody id="feeTable" class="divide-y text-sm"></tbody></table>
+        </div>
+    </div>
+</section>
 
-                // STAFF
-                fetchData('staff_members', 'staffContainer', (s) => `
-                    <div class="flex items-center gap-4 bg-gray-800 p-4 rounded-2xl border border-gray-700">
-                        <img src="${s.photo_url || 'https://via.placeholder.com/60'}" class="w-14 h-14 rounded-full object-cover border-2 border-gray-600">
-                        <div><h4 class="font-bold text-white">${s.name}</h4><p class="text-xs text-blue-400 font-medium tracking-wide uppercase">${s.designation}</p></div>
-                    </div>
-                `, 'staffSection');
+<!-- ═══════════ 11. ACHIEVEMENTS ═══════════ -->
+<section class="py-20 bg-gray-50 border-b section-hidden" id="achieveSec">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="text-center mb-12"><h2 class="text-3xl font-black text-gray-900">Our Achievements</h2><div class="w-20 h-1 bg-yellow-500 mx-auto mt-4 rounded-full"></div></div>
+        <div id="achieveGrid" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+    </div>
+</section>
 
-                // GALLERY
-                fetchData('galleries', 'galleryContainer', (g) => `
-                    <div class="rounded-2xl overflow-hidden group relative">
-                        <img src="${g.image_url}" class="w-full h-32 md:h-48 object-cover group-hover:scale-110 transition duration-500">
-                        ${g.caption ? `<div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-4 opacity-0 group-hover:opacity-100 transition"><p class="text-white text-sm font-medium">${g.caption}</p></div>`:''}
-                    </div>
-                `, 'gallerySection');
+<!-- ═══════════ 12. TESTIMONIALS ═══════════ -->
+<section class="py-20 bg-white border-b section-hidden" id="testSec">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="text-center mb-12"><h2 class="text-3xl font-black text-gray-900">What Parents Say</h2><div class="w-20 h-1 bg-blue-700 mx-auto mt-4 rounded-full" id="div4"></div></div>
+        <div id="testGrid" class="grid grid-cols-1 md:grid-cols-3 gap-8"></div>
+    </div>
+</section>
 
-            } catch (err) {
-                console.error(err);
-                document.getElementById('noticeContainer').innerHTML = `<div class="p-4 text-red-500 text-sm font-bold text-center">System Error: Unable to connect to server.</div>`;
-            }
-        }
+<!-- ═══════════ 13. GALLERY ═══════════ -->
+<section id="gallery" class="py-20 bg-gray-900 text-white section-hidden" id2="gallerySec">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="text-center mb-12"><h2 class="text-3xl font-black">Campus Gallery</h2><p class="text-gray-400 mt-2">Glimpses of life at our institution</p></div>
+        <div id="galleryGrid" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
+    </div>
+</section>
 
-        async function fetchData(table, containerId, templateFn, sectionId = null) {
-            const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?school_id=eq.${globalSchoolId}&order=created_at.desc&limit=6`, { headers });
-            const data = await res.json();
-            const container = document.getElementById(containerId);
-            if(data.length > 0) {
-                if(sectionId) document.getElementById(sectionId).classList.remove('hidden');
-                container.innerHTML = data.map(templateFn).join('');
-            } else if (!sectionId) {
-                container.innerHTML = `<p class="p-4 text-sm text-gray-500 text-center font-medium">No records found.</p>`;
-            }
-        }
+<!-- ═══════════ 14. DOWNLOADS ═══════════ -->
+<section id="downloads" class="py-16 bg-gray-50 border-b section-hidden" id2="dlSec">
+    <div class="max-w-4xl mx-auto px-4">
+        <div class="text-center mb-10"><h2 class="text-3xl font-black text-gray-900">Important Downloads</h2></div>
+        <div id="dlGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+    </div>
+</section>
 
-        // INQUIRY FORM
-        document.getElementById('inquiryForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('inqBtn');
-            const originalText = btn.innerText;
-            btn.innerText = "Sending securely...";
-            
-            await fetch(`${SUPABASE_URL}/rest/v1/inquiries`, {
-                method: 'POST', headers,
-                body: JSON.stringify({
-                    school_id: globalSchoolId,
-                    student_name: document.getElementById('inqName').value,
-                    phone_number: document.getElementById('inqPhone').value,
-                    email: document.getElementById('inqEmail').value,
-                    message: document.getElementById('inqMessage').value,
-                    status: 'new'
-                })
-            });
-            
-            document.getElementById('inquiryForm').reset();
-            btn.innerText = "Inquiry Sent Successfully!";
-            btn.classList.replace('bg-blue-600', 'bg-green-500');
-            btn.classList.replace('hover:bg-blue-700', 'hover:bg-green-600');
-            
-            setTimeout(() => { 
-                btn.innerText = originalText; 
-                btn.classList.replace('bg-green-500', 'bg-blue-600');
-                btn.classList.replace('hover:bg-green-600', 'hover:bg-blue-700');
-            }, 3000);
-        });
+<!-- ═══════════ 15. ADMISSION INQUIRY ═══════════ -->
+<section id="contact" class="py-20 bg-gray-50 relative">
+    <div class="max-w-5xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div>
+            <h2 class="text-3xl font-black text-gray-900 mb-6">Admission Inquiry</h2>
+            <p class="text-gray-600 mb-8">Fill out this form and our team will contact you within 24 hours.</p>
+            <div class="space-y-4 text-gray-600 text-sm">
+                <p id="footAddr" class="hidden"><i class="fa-solid fa-location-dot w-6 text-blue-600"></i><span></span></p>
+                <p id="footPh1" class="hidden"><i class="fa-solid fa-phone w-6 text-green-600"></i><span></span></p>
+                <p id="footPh2" class="hidden"><i class="fa-solid fa-phone w-6 text-green-600"></i><span></span></p>
+                <p id="footEm" class="hidden"><i class="fa-solid fa-envelope w-6 text-blue-600"></i><span></span></p>
+            </div>
+        </div>
+        <div class="bg-white p-8 rounded-2xl shadow-xl border">
+            <form id="inquiryForm" class="space-y-5">
+                <div class="grid grid-cols-2 gap-4">
+                    <div><label class="block text-xs font-bold text-gray-600 mb-1">Student Name *</label><input type="text" id="iq_sname" required class="w-full px-4 py-3 bg-gray-50 border rounded-xl outline-none focus:border-blue-500"></div>
+                    <div><label class="block text-xs font-bold text-gray-600 mb-1">Parent/Guardian *</label><input type="text" id="iq_pname" required class="w-full px-4 py-3 bg-gray-50 border rounded-xl outline-none focus:border-blue-500"></div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div><label class="block text-xs font-bold text-gray-600 mb-1">Phone (WhatsApp) *</label><input type="tel" id="iq_phone" required class="w-full px-4 py-3 bg-gray-50 border rounded-xl outline-none focus:border-blue-500"></div>
+                    <div><label class="block text-xs font-bold text-gray-600 mb-1">Email</label><input type="email" id="iq_email" class="w-full px-4 py-3 bg-gray-50 border rounded-xl outline-none focus:border-blue-500"></div>
+                </div>
+                <div><label class="block text-xs font-bold text-gray-600 mb-1">Class Seeking Admission For</label>
+                    <select id="iq_class" class="w-full px-4 py-3 bg-gray-50 border rounded-xl outline-none focus:border-blue-500">
+                        <option value="">Select Class</option><option>Pre-Nursery</option><option>Nursery</option><option>LKG</option><option>UKG</option>
+                        <option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option>
+                        <option>Class 6</option><option>Class 7</option><option>Class 8</option><option>Class 9</option><option>Class 10</option>
+                        <option>Class 11 (Science)</option><option>Class 11 (Commerce)</option><option>Class 12</option>
+                    </select>
+                </div>
+                <div><label class="block text-xs font-bold text-gray-600 mb-1">Message</label><textarea id="iq_msg" rows="3" class="w-full px-4 py-3 bg-gray-50 border rounded-xl outline-none focus:border-blue-500" placeholder="Any questions about admission, fees, transport..."></textarea></div>
+                <button type="submit" id="iqBtn" class="w-full bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg text-lg hover:bg-blue-800">Submit Inquiry</button>
+            </form>
+        </div>
+    </div>
+</section>
 
-        loadSchoolWebsite();
-    </script>
+<!-- ═══════════ 16. FOOTER ═══════════ -->
+<footer class="bg-gray-950 text-gray-400 py-16 border-t border-gray-900">
+    <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-12">
+        <div>
+            <h3 id="footName" class="font-black text-white text-xl mb-4">School</h3>
+            <p id="footAbout" class="text-sm leading-relaxed mb-4"></p>
+            <div class="flex gap-3" id="footSocial"></div>
+        </div>
+        <div>
+            <h3 class="font-bold text-white mb-4">Quick Links</h3>
+            <ul class="space-y-2 text-sm">
+                <li><a href="#about" class="hover:text-white">About Us</a></li>
+                <li><a href="#toppers" class="hover:text-white">Board Results</a></li>
+                <li><a href="#faculty" class="hover:text-white">Our Faculty</a></li>
+                <li><a href="#gallery" class="hover:text-white">Campus Gallery</a></li>
+                <li><a href="#contact" class="hover:text-white">Admissions</a></li>
+                <li><a href="#downloads" class="hover:text-white">Downloads</a></li>
+            </ul>
+        </div>
+        <div>
+            <h3 class="font-bold text-white mb-4">Reach Us</h3>
+            <div class="space-y-3 text-sm" id="footContact"></div>
+            <div id="mapContainer" class="mt-4 rounded-xl overflow-hidden hidden"><iframe id="mapFrame" width="100%" height="200" style="border:0" allowfullscreen loading="lazy"></iframe></div>
+        </div>
+    </div>
+    <div class="max-w-7xl mx-auto px-4 mt-12 pt-8 border-t border-gray-800 text-center text-xs text-gray-600">
+        <p>&copy; <span id="yr">2026</span> <span id="footNameCopy">School</span>. All Rights Reserved.</p>
+    </div>
+</footer>
+
+<!-- ═══════════ JAVASCRIPT ═══════════ -->
+<script>
+document.getElementById('yr').innerText=new Date().getFullYear();
+let schoolId=null;
+
+async function boot(){
+    try{
+        const r=await fetch(`${SB}/rest/v1/schools?api_key=eq.${SCHOOL_API_KEY}&select=*`,{headers:H});
+        const d=await r.json();if(!d.length)throw new Error("Invalid API Key");
+        S=d[0];schoolId=S.id;
+        
+        // ── PAGE TITLE & HEADER ──
+        document.getElementById('pageTitle').innerText=S.school_name+(S.tagline?' — '+S.tagline:'');
+        document.getElementById('siteName').classList.remove('skeleton','w-48','h-6');
+        document.getElementById('siteName').innerText=S.school_name;
+        if(S.tagline)document.getElementById('siteTagline').innerText=S.tagline;
+        document.getElementById('footName').innerText=S.school_name;
+        document.getElementById('footNameCopy').innerText=S.school_name;
+        if(S.about_us_text){document.getElementById('aboutText').innerText=S.about_us_text;document.getElementById('footAbout').innerText=S.about_us_text.substring(0,150)+'...'}
+
+        // ── COLORS ──
+        const pc=S.primary_color||'#1e3a8a';
+        document.getElementById('siteHeader').style.borderTopColor=pc;
+        document.getElementById('hero').style.backgroundColor=pc;
+        document.getElementById('navCTA').style.backgroundColor=pc;
+        document.getElementById('iqBtn').style.backgroundColor=pc;
+        document.getElementById('heroBtn1').style.color=pc;
+        document.querySelectorAll('[id^="div"]').forEach(d=>d.style.backgroundColor=pc);
+
+        // ── LOGO ──
+        if(S.logo_url){document.getElementById('logoBox').innerHTML=`<img src="${S.logo_url}" class="w-full h-full object-cover">`;document.getElementById('logoBox').classList.remove('bg-blue-100','text-blue-600')}
+
+        // ── BANNER ──
+        if(S.banner_image_url)document.getElementById('heroBg').style.backgroundImage=`url(${S.banner_image_url})`;
+
+        // ── TOP BAR ──
+        if(S.phone_primary){const e=document.getElementById('topPhone');e.classList.remove('hidden');e.querySelector('span').innerText=S.phone_primary}
+        if(S.email_primary){const e=document.getElementById('topEmail');e.classList.remove('hidden');e.querySelector('span').innerText=S.email_primary}
+        if(S.school_timing){const e=document.getElementById('topTiming');e.classList.remove('hidden');e.querySelector('span').innerText=S.school_timing}
+
+        // ── TOP SOCIAL ──
+        let ts='';
+        if(S.facebook_url)ts+=`<a href="${S.facebook_url}" target="_blank" class="hover:text-white"><i class="fa-brands fa-facebook-f"></i></a>`;
+        if(S.youtube_url)ts+=`<a href="${S.youtube_url}" target="_blank" class="hover:text-white"><i class="fa-brands fa-youtube"></i></a>`;
+        if(S.instagram_url)ts+=`<a href="${S.instagram_url}" target="_blank" class="hover:text-white"><i class="fa-brands fa-instagram"></i></a>`;
+        document.getElementById('topSocial').innerHTML=ts;
+        document.getElementById('footSocial').innerHTML=ts.replace(/text-xs/g,'').replace(/hover:text-white/g,'bg-gray-800 w-10 h-10 rounded-full flex items-center justify-center hover:bg-blue-600 text-white transition');
+
+        // ── HERO META ──
+        if(S.established_year){const e=document.getElementById('heroEst');e.classList.remove('hidden');e.querySelector('span').innerText='Est. '+S.established_year}
+        if(S.affiliation_board){const e=document.getElementById('heroBoard');e.classList.remove('hidden');e.querySelector('span').innerText=S.affiliation_board+' Affiliated'}
+        if(S.affiliation_number){const e=document.getElementById('heroAff');e.classList.remove('hidden');e.querySelector('span').innerText=S.affiliation_number}
+        if(S.admission_status)document.getElementById('admBadge').classList.remove('hidden');
+
+        // ── VISION / MISSION ──
+        if(S.vision_text||S.mission_text){document.getElementById('vmSection').classList.remove('section-hidden');
+            if(S.vision_text)document.getElementById('visionText').innerText=S.vision_text;
+            if(S.mission_text)document.getElementById('missionText').innerText=S.mission_text}
+
+        // ── PRINCIPAL / DIRECTOR ──
+        let leaders='';
+        if(S.principal_name){leaders+=leaderCard(S.principal_name,S.principal_qualification,S.principal_photo_url,S.principal_message,'Principal')}
+        if(S.director_name){leaders+=leaderCard(S.director_name,S.director_qualification,S.director_photo_url,S.director_message,'Director')}
+        if(leaders){document.getElementById('leadersSec').classList.remove('section-hidden');document.getElementById('leadersGrid').innerHTML=leaders}
+
+        // ── FOOTER CONTACT ──
+        if(S.address){document.getElementById('footAddr').classList.remove('hidden');document.getElementById('footAddr').querySelector('span').innerText=`${S.address}, ${S.city||''} ${S.state||''} ${S.pincode||''}`}
+        if(S.phone_primary){document.getElementById('footPh1').classList.remove('hidden');document.getElementById('footPh1').querySelector('span').innerText=S.phone_primary}
+        if(S.phone_secondary){document.getElementById('footPh2').classList.remove('hidden');document.getElementById('footPh2').querySelector('span').innerText=S.phone_secondary}
+        if(S.email_primary){document.getElementById('footEm').classList.remove('hidden');document.getElementById('footEm').querySelector('span').innerText=S.email_primary}
+        
+        let fc='';
+        if(S.address)fc+=`<p><i class="fa-solid fa-location-dot mr-2 text-blue-500"></i>${S.address}, ${S.city||''} ${S.pincode||''}</p>`;
+        if(S.phone_primary)fc+=`<p><i class="fa-solid fa-phone mr-2 text-green-500"></i>${S.phone_primary}</p>`;
+        if(S.email_primary)fc+=`<p><i class="fa-solid fa-envelope mr-2 text-blue-500"></i>${S.email_primary}</p>`;
+        document.getElementById('footContact').innerHTML=fc;
+
+        if(S.google_maps_url){document.getElementById('mapContainer').classList.remove('hidden');document.getElementById('mapFrame').src=S.google_maps_url}
+
+        // ── LOAD DATA SECTIONS ──
+        loadSection('notices','marqueeText',n=>`<span class="inline-block mx-8">📢 ${n.title} (${n.notice_date})</span>`,{show:'marqueeSec',join:true,double:true});
+        loadSection('toppers','topperGrid',t=>`<div class="text-center group"><div class="relative inline-block"><img src="${t.photo_url||'https://via.placeholder.com/120'}" class="w-24 h-24 md:w-28 md:h-28 rounded-full object-cover border-4 border-yellow-400 shadow-xl mx-auto group-hover:scale-110 transition duration-300"><div class="absolute -bottom-2 -right-2 bg-yellow-400 text-yellow-900 font-black text-sm px-3 py-1 rounded-full shadow">${t.percentage_or_grade}</div></div><h4 class="font-bold text-gray-900 mt-4">${t.student_name}</h4><p class="text-xs text-gray-500 font-medium">${t.exam_name} · ${t.passing_year}</p></div>`,{show:'toppers'});
+        loadSection('facilities','facilityGrid',f=>`<div class="bg-blue-800 p-6 rounded-2xl border border-blue-700 text-center hover:bg-blue-700 transition"><i class="fa-solid fa-building-circle-check text-4xl text-yellow-400 mb-4"></i><h4 class="font-bold text-lg mb-2">${f.facility_name}</h4><p class="text-blue-200 text-sm">${f.description||''}</p></div>`,{show:'facilitiesSec'});
+        loadSection('staff_members','staffGrid',s=>`<div class="text-center"><img src="${s.photo_url||'https://via.placeholder.com/120'}" class="w-24 h-24 rounded-full object-cover mx-auto border-4 border-white shadow-lg mb-3"><h4 class="font-bold text-gray-900">${s.name}</h4><p class="text-blue-600 text-sm font-bold">${s.designation}</p><p class="text-gray-500 text-xs">${s.qualification||''}</p></div>`,{show:'faculty'});
+        loadSection('fee_structures','feeTable',f=>`<tr class="hover:bg-gray-50"><td class="px-6 py-4 font-bold text-gray-800">${f.class_name}</td><td class="px-6 py-4 text-gray-500">${f.academic_session||''}</td><td class="px-6 py-4 text-right font-black text-green-700 text-lg">₹${f.total_fee}</td></tr>`,{show:'feesSec'});
+        loadSection('achievements','achieveGrid',a=>`<div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100"><i class="fa-solid fa-award text-3xl text-yellow-500 mb-3"></i><h4 class="font-bold text-gray-900 mb-2">${a.title}</h4><p class="text-gray-500 text-sm">${a.description||''}</p></div>`,{show:'achieveSec'});
+        loadSection('testimonials','testGrid',t=>`<div class="bg-gray-50 p-8 rounded-2xl border border-gray-100 relative"><div class="text-yellow-400 text-lg mb-3">${'★'.repeat(t.rating||5)}<span class="text-gray-300">${'★'.repeat(5-(t.rating||5))}</span></div><p class="text-gray-700 italic mb-4">"${t.review_text}"</p><div class="flex items-center gap-3"><div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center font-bold">${(t.reviewer_name||'A').charAt(0)}</div><div><p class="font-bold text-gray-900 text-sm">${t.reviewer_name}</p><p class="text-xs text-gray-500">${t.reviewer_relation||''}</p></div></div></div>`,{show:'testSec'});
+        loadSection('galleries','galleryGrid',g=>`<div class="rounded-2xl overflow-hidden group relative"><img src="${g.image_url}" class="w-full h-40 md:h-52 object-cover group-hover:scale-110 transition duration-500"><div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-4 opacity-0 group-hover:opacity-100 transition"><p class="text-white text-sm font-medium">${g.caption||''}</p></div></div>`,{show:'gallery'});
+        loadSection('downloads','dlGrid',d=>`<a href="${d.file_url}" target="_blank" class="flex items-center justify-between bg-white p-5 rounded-xl shadow-sm border hover:shadow-md transition group"><div class="flex items-center gap-4"><div class="bg-red-100 p-3 rounded-xl text-red-600"><i class="fa-solid fa-file-pdf text-2xl"></i></div><div><p class="font-bold text-gray-800">${d.document_title}</p><p class="text-xs text-gray-500">${d.document_category||''}</p></div></div><i class="fa-solid fa-download text-gray-300 group-hover:text-blue-600 text-xl"></i></a>`,{show:'downloads'});
+
+    }catch(err){console.error(err)}
+}
+
+function leaderCard(name,qual,photo,msg,role){
+    return `<div class="bg-gray-50 rounded-2xl p-8 border shadow-sm"><div class="flex items-center gap-5 mb-6"><img src="${photo||'https://via.placeholder.com/100'}" class="w-20 h-20 rounded-full object-cover border-4 border-white shadow-lg"><div><p class="text-xs text-blue-600 font-black uppercase tracking-wider">${role}</p><h3 class="text-xl font-black text-gray-900">${name}</h3><p class="text-sm text-gray-500">${qual||''}</p></div></div><p class="text-gray-600 text-sm leading-relaxed italic">"${msg||'Welcome to our institution.'}"</p></div>`}
+
+async function loadSection(table,containerId,templateFn,opts={}){
+    const r=await fetch(`${SB}/rest/v1/${table}?school_id=eq.${schoolId}&order=created_at.desc&limit=8`,{headers:H});
+    const d=await r.json();
+    if(d.length>0){
+        if(opts.show)document.getElementById(opts.show).classList.remove('section-hidden');
+        const html=d.map(templateFn).join('');
+        document.getElementById(containerId).innerHTML=opts.double?html+html:html;
+    }
+}
+
+// ── INQUIRY FORM ──
+document.getElementById('inquiryForm').addEventListener('submit',async e=>{e.preventDefault();
+    const btn=document.getElementById('iqBtn');btn.innerText='Sending...';
+    await fetch(`${SB}/rest/v1/inquiries`,{method:'POST',headers:H,body:JSON.stringify({
+        school_id:schoolId,student_name:document.getElementById('iq_sname').value,parent_name:document.getElementById('iq_pname').value,
+        phone_number:document.getElementById('iq_phone').value,email:document.getElementById('iq_email').value,
+        class_applied_for:document.getElementById('iq_class').value,message:document.getElementById('iq_msg').value,status:'new'
+    })});
+    document.getElementById('inquiryForm').reset();
+    btn.innerText='✓ Inquiry Sent Successfully!';btn.style.backgroundColor='#16a34a';
+    setTimeout(()=>{btn.innerText='Submit Inquiry';btn.style.backgroundColor=S.primary_color||'#1e3a8a'},3000)});
+
+boot();
+</script>
 </body>
 </html>

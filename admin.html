@@ -3,376 +3,348 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>School Admin Portal - Premium Edition</title>
+    <title>School Admin Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        .fade-in { animation: fadeIn 0.3s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .tab-btn.active { border-bottom: 3px solid #2563eb; color: #1e3a8a; font-weight: 700; background-color: #eff6ff; }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-        .tabs-scroll::-webkit-scrollbar { height: 4px; }
-        .tabs-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        body{font-family:'Inter',sans-serif}
+        .tab-btn.active{border-bottom:3px solid #2563eb;color:#1e3a8a;font-weight:700;background:#eff6ff}
+        .tab-content{display:none}.tab-content.active{display:block}
+        .tabs-scroll::-webkit-scrollbar{height:4px}.tabs-scroll::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:4px}
+        .fade{animation:fadeIn .25s ease}@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+        fieldset{border:1px solid #e2e8f0;border-radius:12px;padding:20px;margin-bottom:16px}
+        legend{font-weight:700;font-size:14px;color:#1e3a8a;padding:0 8px}
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 h-screen overflow-hidden flex flex-col">
-    <!-- LOGIN -->
-    <div id="loginScreen" class="h-full flex items-center justify-center p-4 bg-gradient-to-br from-blue-900 to-indigo-900">
-        <div class="bg-white p-10 rounded-3xl shadow-2xl w-full max-w-md text-center fade-in">
-            <div class="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 text-blue-600 text-3xl shadow-inner">
-                <i class="fa-solid fa-user-shield"></i>
+
+<!-- ═══════════ LOGIN ═══════════ -->
+<div id="loginScreen" class="h-full flex items-center justify-center bg-gradient-to-br from-blue-950 to-indigo-900 p-4">
+    <div class="bg-white p-10 rounded-3xl shadow-2xl w-full max-w-md text-center fade">
+        <div class="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 text-blue-600 text-3xl shadow-inner"><i class="fa-solid fa-user-shield"></i></div>
+        <h2 class="text-2xl font-extrabold text-gray-900 mb-1">Admin Login</h2>
+        <p class="text-gray-500 text-sm mb-8">School Management System</p>
+        <form id="loginForm" class="space-y-5 text-left">
+            <div><label class="block text-xs font-bold text-gray-600 uppercase mb-1">Username</label><input type="text" id="loginUser" required class="w-full px-4 py-3 bg-gray-50 border rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"></div>
+            <div><label class="block text-xs font-bold text-gray-600 uppercase mb-1">Password</label><input type="password" id="loginPass" required class="w-full px-4 py-3 bg-gray-50 border rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"></div>
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-bold shadow-lg">Secure Login</button>
+            <div id="loginError" class="hidden text-red-500 text-sm text-center font-bold"></div>
+        </form>
+    </div>
+</div>
+
+<!-- ═══════════ DASHBOARD ═══════════ -->
+<div id="dashboardScreen" class="hidden h-full flex flex-col">
+    <header class="bg-white border-b shadow-sm z-20">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-blue-600 text-white rounded-lg flex items-center justify-center font-bold text-xl shadow" id="hdrI">S</div>
+                <div><h1 id="hdrN" class="font-extrabold text-gray-900 text-lg leading-tight">School</h1><p class="text-xs text-blue-600 font-bold uppercase tracking-wider">Admin Panel</p></div>
             </div>
-            <h2 class="text-2xl font-bold text-gray-800 mb-1">Admin Portal</h2>
-            <p class="text-gray-500 text-sm mb-8">Premium School Management System</p>
-            
-            <form id="loginForm" class="space-y-5 text-left">
-                <div>
-                    <label class="block text-xs font-bold text-gray-600 uppercase mb-1">Username</label>
-                    <input type="text" id="loginUser" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-gray-600 uppercase mb-1">Password</label>
-                    <input type="password" id="loginPass" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all">
-                </div>
-                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-bold shadow-lg transition-all transform hover:scale-[1.02]">Secure Login</button>
-                <div id="loginError" class="hidden text-red-500 text-sm text-center font-medium mt-2"></div>
-            </form>
+            <button onclick="logout()" class="text-gray-400 hover:text-red-500 font-medium text-sm"><i class="fa-solid fa-power-off mr-1"></i> Logout</button>
         </div>
+        <div class="max-w-7xl mx-auto px-4 flex overflow-x-auto tabs-scroll border-t border-gray-100">
+            <button onclick="sw('notices')" class="tab-btn active px-4 py-3 text-sm whitespace-nowrap"><i class="fa-regular fa-bell mr-1"></i>Notices</button>
+            <button onclick="sw('toppers')" class="tab-btn px-4 py-3 text-sm whitespace-nowrap"><i class="fa-solid fa-medal mr-1"></i>Toppers</button>
+            <button onclick="sw('gallery')" class="tab-btn px-4 py-3 text-sm whitespace-nowrap"><i class="fa-regular fa-images mr-1"></i>Gallery</button>
+            <button onclick="sw('facilities')" class="tab-btn px-4 py-3 text-sm whitespace-nowrap"><i class="fa-solid fa-building mr-1"></i>Facilities</button>
+            <button onclick="sw('downloads')" class="tab-btn px-4 py-3 text-sm whitespace-nowrap"><i class="fa-solid fa-download mr-1"></i>Downloads</button>
+            <button onclick="sw('fees')" class="tab-btn px-4 py-3 text-sm whitespace-nowrap"><i class="fa-solid fa-indian-rupee-sign mr-1"></i>Fees</button>
+            <button onclick="sw('staff')" class="tab-btn px-4 py-3 text-sm whitespace-nowrap"><i class="fa-solid fa-chalkboard-user mr-1"></i>Faculty</button>
+            <button onclick="sw('achievements')" class="tab-btn px-4 py-3 text-sm whitespace-nowrap"><i class="fa-solid fa-trophy mr-1"></i>Achievements</button>
+            <button onclick="sw('testimonials')" class="tab-btn px-4 py-3 text-sm whitespace-nowrap"><i class="fa-solid fa-star mr-1"></i>Testimonials</button>
+            <button onclick="sw('inquiries')" class="tab-btn px-4 py-3 text-sm whitespace-nowrap"><i class="fa-regular fa-envelope mr-1"></i>Inquiries</button>
+            <button onclick="sw('profile')" class="tab-btn px-4 py-3 text-sm whitespace-nowrap"><i class="fa-solid fa-gear mr-1"></i>School Profile</button>
+        </div>
+    </header>
+
+    <main class="flex-1 overflow-y-auto bg-gray-50 p-4 md:p-8">
+        <div class="max-w-5xl mx-auto space-y-6">
+
+<!-- ── NOTICES ── -->
+<div id="tab-notices" class="tab-content active fade space-y-6">
+    <div class="bg-white p-6 rounded-2xl shadow-sm border"><h3 class="font-bold mb-4">Post Notice</h3>
+        <form id="f-notices" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <input type="text" id="n_title" required class="md:col-span-2 px-4 py-2 border rounded-xl" placeholder="Notice Title">
+            <input type="date" id="n_date" required class="px-4 py-2 border rounded-xl">
+            <button class="bg-blue-600 text-white py-2 px-6 rounded-xl font-bold">Publish</button>
+        </form>
     </div>
+    <div class="bg-white rounded-2xl shadow-sm border overflow-hidden"><div class="bg-gray-100 px-6 py-4 font-bold border-b">Active Notices</div><div id="l-notices" class="p-2"></div></div>
+</div>
 
-    <!-- DASHBOARD -->
-    <div id="dashboardScreen" class="hidden h-full flex flex-col">
-        <header class="bg-white border-b border-gray-200 shadow-sm z-20">
-            <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-blue-600 text-white rounded-lg flex items-center justify-center font-bold text-xl shadow-md" id="headerInitials">S</div>
-                    <div>
-                        <h1 id="headerName" class="font-bold text-gray-900 text-lg leading-tight">School</h1>
-                        <p class="text-xs text-blue-600 font-bold uppercase tracking-wider">Premium Admin</p>
-                    </div>
-                </div>
-                <button onclick="logout()" class="text-gray-400 hover:text-red-500 transition-colors font-medium text-sm"><i class="fa-solid fa-power-off mr-1"></i> Logout</button>
-            </div>
-            <div class="max-w-7xl mx-auto px-4 flex overflow-x-auto tabs-scroll border-t border-gray-100">
-                <button onclick="switchTab('notices')" class="tab-btn active px-4 py-3 text-sm whitespace-nowrap"><i class="fa-regular fa-bell mr-2"></i>Notices & Updates</button>
-                <button onclick="switchTab('toppers')" class="tab-btn px-4 py-3 text-sm whitespace-nowrap"><i class="fa-solid fa-medal mr-2"></i>Board Toppers</button>
-                <button onclick="switchTab('gallery')" class="tab-btn px-4 py-3 text-sm whitespace-nowrap"><i class="fa-regular fa-images mr-2"></i>Gallery</button>
-                <button onclick="switchTab('facilities')" class="tab-btn px-4 py-3 text-sm whitespace-nowrap"><i class="fa-solid fa-building mr-2"></i>Facilities</button>
-                <button onclick="switchTab('downloads')" class="tab-btn px-4 py-3 text-sm whitespace-nowrap"><i class="fa-solid fa-download mr-2"></i>Downloads / Syllabus</button>
-                <button onclick="switchTab('fees')" class="tab-btn px-4 py-3 text-sm whitespace-nowrap"><i class="fa-solid fa-indian-rupee-sign mr-2"></i>Fee Structure</button>
-                <button onclick="switchTab('staff')" class="tab-btn px-4 py-3 text-sm whitespace-nowrap"><i class="fa-solid fa-chalkboard-user mr-2"></i>Teachers</button>
-                <button onclick="switchTab('inquiries')" class="tab-btn px-4 py-3 text-sm whitespace-nowrap"><i class="fa-regular fa-envelope mr-2"></i>Admissions Inbox</button>
-                <button onclick="switchTab('settings')" class="tab-btn px-4 py-3 text-sm whitespace-nowrap"><i class="fa-solid fa-gear mr-2"></i>Branding Setup</button>
-            </div>
-        </header>
-
-        <main class="flex-1 overflow-y-auto bg-gray-50 p-4 md:p-8">
-            <div class="max-w-5xl mx-auto space-y-6">
-                
-                <!-- NOTICES -->
-                <div id="tab-notices" class="tab-content active fade-in space-y-6">
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
-                        <h3 class="font-bold text-gray-800 mb-4">Post a New Notice</h3>
-                        <form id="noticeForm" class="flex flex-col md:flex-row gap-4">
-                            <input type="text" id="noticeTitle" required class="flex-1 px-4 py-2 border rounded-xl outline-none focus:border-blue-500" placeholder="e.g., Summer Holiday Announcement">
-                            <input type="date" id="noticeDate" required class="px-4 py-2 border rounded-xl outline-none focus:border-blue-500 w-full md:w-auto">
-                            <button class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-8 rounded-xl font-bold shadow-md transition-all">Publish</button>
-                        </form>
-                    </div>
-                    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-                        <div class="bg-gray-100 px-6 py-4 font-bold text-gray-700 border-b">Active Notices</div>
-                        <div id="list-notices" class="p-2"></div>
-                    </div>
-                </div>
-
-                <!-- TOPPERS (Crucial for Bihar Schools) -->
-                <div id="tab-toppers" class="tab-content fade-in space-y-6">
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
-                        <h3 class="font-bold text-gray-800 mb-4">Add Student Topper</h3>
-                        <form id="topperForm" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                            <input type="text" id="topName" required class="px-4 py-2 border rounded-xl outline-none focus:border-blue-500" placeholder="Student Name">
-                            <input type="text" id="topExam" required class="px-4 py-2 border rounded-xl outline-none focus:border-blue-500" placeholder="Exam (e.g., CBSE 10th)">
-                            <input type="text" id="topScore" required class="px-4 py-2 border rounded-xl outline-none focus:border-blue-500" placeholder="Score (e.g., 98.5%)">
-                            <input type="text" id="topPhoto" class="px-4 py-2 border rounded-xl outline-none focus:border-blue-500" placeholder="Photo URL">
-                            <button class="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-6 rounded-xl font-bold shadow-md lg:col-span-4">Add Topper to Wall of Fame</button>
-                        </form>
-                    </div>
-                    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-                        <div class="bg-yellow-50 px-6 py-4 font-bold text-yellow-800 border-b border-yellow-100">Wall of Fame</div>
-                        <div id="list-toppers" class="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-                    </div>
-                </div>
-
-                <!-- GALLERY -->
-                <div id="tab-gallery" class="tab-content fade-in space-y-6">
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
-                        <h3 class="font-bold text-gray-800 mb-4">Upload Campus Photo</h3>
-                        <form id="galleryForm" class="flex flex-col md:flex-row gap-4">
-                            <input type="text" id="galUrl" required class="flex-1 px-4 py-2 border rounded-xl outline-none focus:border-blue-500" placeholder="Image URL (Upload to imgbb.com and paste direct link)">
-                            <input type="text" id="galCap" class="flex-1 px-4 py-2 border rounded-xl outline-none focus:border-blue-500" placeholder="Caption (e.g., Annual Sports Day)">
-                            <button class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-8 rounded-xl font-bold shadow-md">Add to Gallery</button>
-                        </form>
-                    </div>
-                    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-                        <div class="bg-gray-100 px-6 py-4 font-bold text-gray-700 border-b">Live Gallery</div>
-                        <div id="list-galleries" class="p-4 grid grid-cols-2 md:grid-cols-4 gap-4"></div>
-                    </div>
-                </div>
-
-                <!-- FACILITIES -->
-                <div id="tab-facilities" class="tab-content fade-in space-y-6">
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
-                        <h3 class="font-bold text-gray-800 mb-4">Add Campus Facility</h3>
-                        <form id="facilityForm" class="flex flex-col gap-4">
-                            <input type="text" id="facName" required class="px-4 py-2 border rounded-xl outline-none focus:border-blue-500" placeholder="Facility (e.g., Smart Classrooms, AC Transport)">
-                            <textarea id="facDesc" class="px-4 py-2 border rounded-xl outline-none focus:border-blue-500" rows="2" placeholder="Short description for parents..."></textarea>
-                            <button class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-8 rounded-xl font-bold shadow-md w-full md:w-auto self-start">Add Facility</button>
-                        </form>
-                    </div>
-                    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-                        <div class="bg-gray-100 px-6 py-4 font-bold text-gray-700 border-b">Our Facilities</div>
-                        <div id="list-facilities" class="p-2"></div>
-                    </div>
-                </div>
-
-                <!-- DOWNLOADS / SYLLABUS -->
-                <div id="tab-downloads" class="tab-content fade-in space-y-6">
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
-                        <h3 class="font-bold text-gray-800 mb-4">Upload Document (Syllabus, Forms, Booklist)</h3>
-                        <form id="downloadForm" class="flex flex-col md:flex-row gap-4">
-                            <input type="text" id="dlTitle" required class="flex-1 px-4 py-2 border rounded-xl outline-none focus:border-blue-500" placeholder="Title (e.g., Class 10 Syllabus 2026)">
-                            <input type="text" id="dlUrl" required class="flex-1 px-4 py-2 border rounded-xl outline-none focus:border-blue-500" placeholder="PDF/Google Drive Link">
-                            <button class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-8 rounded-xl font-bold shadow-md">Add Link</button>
-                        </form>
-                    </div>
-                    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-                        <div class="bg-gray-100 px-6 py-4 font-bold text-gray-700 border-b">Public Downloads</div>
-                        <div id="list-downloads" class="p-2"></div>
-                    </div>
-                </div>
-
-                <!-- FEES -->
-                <div id="tab-fees" class="tab-content fade-in space-y-6">
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
-                        <h3 class="font-bold text-gray-800 mb-4">Add Class Fee Structure</h3>
-                        <form id="feeForm" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <input type="text" id="feeClass" required class="px-4 py-2 border rounded-xl outline-none focus:border-blue-500" placeholder="Class (e.g., Class 1 to 5)">
-                            <input type="number" id="feeTotal" required class="px-4 py-2 border rounded-xl outline-none focus:border-blue-500" placeholder="Monthly Fee (₹)">
-                            <button class="bg-green-600 hover:bg-green-700 text-white py-2 px-8 rounded-xl font-bold shadow-md">Add Fee Record</button>
-                        </form>
-                    </div>
-                    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-                        <div class="bg-green-50 px-6 py-4 font-bold text-green-800 border-b border-green-100">Fee Structure Table</div>
-                        <div id="list-fees" class="p-2"></div>
-                    </div>
-                </div>
-
-                <!-- STAFF -->
-                <div id="tab-staff" class="tab-content fade-in space-y-6">
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
-                        <h3 class="font-bold text-gray-800 mb-4">Add Teacher / Staff</h3>
-                        <form id="staffForm" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <input type="text" id="stName" required class="px-4 py-2 border rounded-xl outline-none focus:border-blue-500" placeholder="Teacher Name">
-                            <input type="text" id="stRole" required class="px-4 py-2 border rounded-xl outline-none focus:border-blue-500" placeholder="Subject / Designation">
-                            <input type="text" id="stPhoto" class="px-4 py-2 border rounded-xl outline-none focus:border-blue-500" placeholder="Photo URL (Optional)">
-                            <button class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-8 rounded-xl font-bold shadow-md md:col-span-3">Add to Faculty</button>
-                        </form>
-                    </div>
-                    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-                        <div class="bg-gray-100 px-6 py-4 font-bold text-gray-700 border-b">Faculty Directory</div>
-                        <div id="list-staff" class="p-4 grid grid-cols-1 md:grid-cols-2 gap-4"></div>
-                    </div>
-                </div>
-
-                <!-- INQUIRIES -->
-                <div id="tab-inquiries" class="tab-content fade-in space-y-6">
-                    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-                        <div class="bg-indigo-50 px-6 py-4 font-bold text-indigo-800 border-b border-indigo-100 flex justify-between items-center">
-                            Admissions & General Inquiries 
-                            <button onclick="loadList('inquiries')" class="text-indigo-600 hover:text-indigo-800 bg-white px-3 py-1 rounded shadow-sm text-sm"><i class="fa-solid fa-rotate mr-1"></i> Refresh</button>
-                        </div>
-                        <div id="list-inquiries" class="p-4 space-y-4 max-h-[600px] overflow-y-auto bg-gray-50"></div>
-                    </div>
-                </div>
-
-                <!-- SETTINGS -->
-                <div id="tab-settings" class="tab-content fade-in">
-                    <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-200">
-                        <h3 class="text-xl font-bold text-gray-800 mb-6 border-b pb-4">School Profile & Branding</h3>
-                        <form id="settingsForm" class="space-y-6">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <label class="block text-sm font-bold text-gray-600 mb-2">School Brand Color</label>
-                                    <div class="flex items-center gap-3">
-                                        <input type="color" id="setCol" class="w-12 h-12 rounded cursor-pointer border-0 p-0 shadow-sm">
-                                        <span class="text-xs text-gray-500">This changes the website's main theme.</span>
-                                    </div>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-bold text-gray-600 mb-2">School Logo URL</label>
-                                    <input type="text" id="setLog" placeholder="https://..." class="w-full px-4 py-2 border rounded-xl outline-none focus:border-blue-500">
-                                </div>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-bold text-gray-600 mb-2">Principal's Welcome / About Us</label>
-                                <textarea id="setAbt" rows="4" placeholder="Write a welcoming message..." class="w-full px-4 py-3 border rounded-xl outline-none focus:border-blue-500"></textarea>
-                            </div>
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <div><label class="block text-xs font-bold text-gray-500 mb-1">Facebook URL</label><input type="text" id="setFb" class="w-full px-3 py-2 border rounded-lg text-sm"></div>
-                                <div><label class="block text-xs font-bold text-gray-500 mb-1">YouTube URL</label><input type="text" id="setYt" class="w-full px-3 py-2 border rounded-lg text-sm"></div>
-                                <div><label class="block text-xs font-bold text-gray-500 mb-1">Instagram URL</label><input type="text" id="setIg" class="w-full px-3 py-2 border rounded-lg text-sm"></div>
-                            </div>
-                            <button id="setBtn" class="w-full bg-blue-900 text-white py-4 rounded-xl font-bold shadow-lg text-lg hover:bg-black transition-colors">Save School Profile</button>
-                        </form>
-                    </div>
-                </div>
-
-            </div>
-        </main>
+<!-- ── TOPPERS ── -->
+<div id="tab-toppers" class="tab-content fade space-y-6">
+    <div class="bg-white p-6 rounded-2xl shadow-sm border"><h3 class="font-bold mb-4">Add Board Topper</h3>
+        <form id="f-toppers" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <input type="text" id="t_name" required class="px-4 py-2 border rounded-xl" placeholder="Student Name">
+            <input type="text" id="t_exam" required class="px-4 py-2 border rounded-xl" placeholder="Exam (e.g., CBSE 10th)">
+            <input type="text" id="t_score" required class="px-4 py-2 border rounded-xl" placeholder="Score (e.g., 98.4%)">
+            <input type="text" id="t_year" required class="px-4 py-2 border rounded-xl" placeholder="Passing Year (e.g., 2026)">
+            <input type="text" id="t_photo" class="px-4 py-2 border rounded-xl" placeholder="Photo URL">
+            <button class="bg-yellow-500 text-white py-2 px-6 rounded-xl font-bold">Add Topper</button>
+        </form>
     </div>
+    <div class="bg-white rounded-2xl shadow-sm border overflow-hidden"><div class="bg-yellow-50 px-6 py-4 font-bold text-yellow-800 border-b">Wall of Fame</div><div id="l-toppers" class="p-4 grid grid-cols-1 md:grid-cols-3 gap-4"></div></div>
+</div>
 
-    <!-- JS LOGIC -->
-    <script>
-        const SUPABASE_URL = "https://xlmsgtxyrlovjobwvdom.supabase.co";
-        const SUPABASE_ANON_KEY = "sb_publishable_iLRrB73mPbgH0FtPvMOVbg_eoNyCtd3"; 
-        const headers = { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` };
+<!-- ── GALLERY ── -->
+<div id="tab-gallery" class="tab-content fade space-y-6">
+    <div class="bg-white p-6 rounded-2xl shadow-sm border"><h3 class="font-bold mb-4">Upload Photo</h3>
+        <form id="f-galleries" class="flex flex-wrap gap-4">
+            <input type="text" id="g_url" required class="flex-1 min-w-[200px] px-4 py-2 border rounded-xl" placeholder="Image URL">
+            <input type="text" id="g_cap" class="flex-1 min-w-[200px] px-4 py-2 border rounded-xl" placeholder="Caption">
+            <button class="bg-blue-600 text-white py-2 px-6 rounded-xl font-bold">Add</button>
+        </form>
+    </div>
+    <div class="bg-white rounded-2xl shadow-sm border overflow-hidden"><div class="bg-gray-100 px-6 py-4 font-bold border-b">Gallery</div><div id="l-galleries" class="p-4 grid grid-cols-2 md:grid-cols-4 gap-4"></div></div>
+</div>
 
-        document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('noticeDate').valueAsDate = new Date();
-            if(localStorage.getItem('sid')) showDashboard(localStorage.getItem('sname'));
-        });
+<!-- ── FACILITIES ── -->
+<div id="tab-facilities" class="tab-content fade space-y-6">
+    <div class="bg-white p-6 rounded-2xl shadow-sm border"><h3 class="font-bold mb-4">Add Facility</h3>
+        <form id="f-facilities" class="flex flex-col gap-4">
+            <input type="text" id="fc_name" required class="px-4 py-2 border rounded-xl" placeholder="Facility Name (e.g., Smart Classrooms)">
+            <textarea id="fc_desc" class="px-4 py-2 border rounded-xl" rows="2" placeholder="Short description..."></textarea>
+            <button class="bg-blue-600 text-white py-2 px-6 rounded-xl font-bold self-start">Add</button>
+        </form>
+    </div>
+    <div class="bg-white rounded-2xl shadow-sm border overflow-hidden"><div class="bg-gray-100 px-6 py-4 font-bold border-b">Facilities</div><div id="l-facilities" class="p-2"></div></div>
+</div>
 
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = document.querySelector('#loginForm button'); btn.innerHTML = '<div class="loader mx-auto"></div>';
-            try {
-                const res = await fetch(`${SUPABASE_URL}/rest/v1/schools?username=eq.${document.getElementById('loginUser').value}&password=eq.${document.getElementById('loginPass').value}&select=*`, { headers });
-                const data = await res.json();
-                if(!data.length) throw new Error("Incorrect Username or Password");
-                localStorage.setItem('sid', data[0].id); localStorage.setItem('sname', data[0].school_name);
-                showDashboard(data[0].school_name);
-                btn.innerHTML = 'Secure Login';
-            } catch (err) {
-                document.getElementById('loginError').innerText = err.message;
-                document.getElementById('loginError').classList.remove('hidden');
-                btn.innerHTML = 'Secure Login';
-            }
-        });
+<!-- ── DOWNLOADS ── -->
+<div id="tab-downloads" class="tab-content fade space-y-6">
+    <div class="bg-white p-6 rounded-2xl shadow-sm border"><h3 class="font-bold mb-4">Upload Document</h3>
+        <form id="f-downloads" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <input type="text" id="dl_title" required class="px-4 py-2 border rounded-xl" placeholder="Title (e.g., Class 10 Syllabus)">
+            <input type="text" id="dl_cat" required class="px-4 py-2 border rounded-xl" placeholder="Category (e.g., Syllabus)">
+            <input type="text" id="dl_url" required class="px-4 py-2 border rounded-xl" placeholder="File/PDF URL">
+            <button class="bg-blue-600 text-white py-2 px-6 rounded-xl font-bold">Add</button>
+        </form>
+    </div>
+    <div class="bg-white rounded-2xl shadow-sm border overflow-hidden"><div class="bg-gray-100 px-6 py-4 font-bold border-b">Public Downloads</div><div id="l-downloads" class="p-2"></div></div>
+</div>
 
-        function showDashboard(name) {
-            document.getElementById('loginScreen').classList.add('hidden');
-            document.getElementById('dashboardScreen').classList.remove('hidden');
-            document.getElementById('headerName').innerText = name;
-            document.getElementById('headerInitials').innerText = name.charAt(0);
-            
-            const tables = ['notices', 'toppers', 'galleries', 'facilities', 'downloads', 'fee_structures', 'staff_members', 'inquiries'];
-            tables.forEach(t => loadList(t));
-            loadSettings();
-        }
+<!-- ── FEES ── -->
+<div id="tab-fees" class="tab-content fade space-y-6">
+    <div class="bg-white p-6 rounded-2xl shadow-sm border"><h3 class="font-bold mb-4">Add Fee Record</h3>
+        <form id="f-fee_structures" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <input type="text" id="fe_class" required class="px-4 py-2 border rounded-xl" placeholder="Class (e.g., Class 1 to 5)">
+            <input type="text" id="fe_session" class="px-4 py-2 border rounded-xl" placeholder="Session (e.g., 2026-27)">
+            <input type="number" id="fe_total" required class="px-4 py-2 border rounded-xl" placeholder="Monthly Fee (₹)">
+            <button class="bg-green-600 text-white py-2 px-6 rounded-xl font-bold">Add</button>
+        </form>
+    </div>
+    <div class="bg-white rounded-2xl shadow-sm border overflow-hidden"><div class="bg-green-50 px-6 py-4 font-bold text-green-800 border-b">Fee Structure</div><div id="l-fee_structures" class="p-2"></div></div>
+</div>
 
-        function logout() { localStorage.clear(); window.location.reload(); }
+<!-- ── STAFF ── -->
+<div id="tab-staff" class="tab-content fade space-y-6">
+    <div class="bg-white p-6 rounded-2xl shadow-sm border"><h3 class="font-bold mb-4">Add Faculty Member</h3>
+        <form id="f-staff_members" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <input type="text" id="st_name" required class="px-4 py-2 border rounded-xl" placeholder="Name">
+            <input type="text" id="st_desg" required class="px-4 py-2 border rounded-xl" placeholder="Designation (e.g., HOD Science)">
+            <input type="text" id="st_qual" class="px-4 py-2 border rounded-xl" placeholder="Qualification (e.g., M.Sc, B.Ed)">
+            <input type="text" id="st_photo" class="px-4 py-2 border rounded-xl" placeholder="Photo URL">
+            <button class="bg-blue-600 text-white py-2 px-6 rounded-xl font-bold md:col-span-2">Add to Faculty</button>
+        </form>
+    </div>
+    <div class="bg-white rounded-2xl shadow-sm border overflow-hidden"><div class="bg-gray-100 px-6 py-4 font-bold border-b">Faculty Directory</div><div id="l-staff_members" class="p-4 grid grid-cols-1 md:grid-cols-2 gap-4"></div></div>
+</div>
 
-        function switchTab(id) {
-            document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
-            event.currentTarget.classList.add('active');
-            document.getElementById(`tab-${id}`).classList.add('active');
-        }
+<!-- ── ACHIEVEMENTS ── -->
+<div id="tab-achievements" class="tab-content fade space-y-6">
+    <div class="bg-white p-6 rounded-2xl shadow-sm border"><h3 class="font-bold mb-4">Add Achievement</h3>
+        <form id="f-achievements" class="flex flex-col gap-4">
+            <input type="text" id="ach_title" required class="px-4 py-2 border rounded-xl" placeholder="Achievement Title">
+            <textarea id="ach_desc" class="px-4 py-2 border rounded-xl" rows="2" placeholder="Description..."></textarea>
+            <button class="bg-yellow-600 text-white py-2 px-6 rounded-xl font-bold self-start">Post</button>
+        </form>
+    </div>
+    <div class="bg-white rounded-2xl shadow-sm border overflow-hidden"><div class="bg-gray-100 px-6 py-4 font-bold border-b">Achievements</div><div id="l-achievements" class="p-2"></div></div>
+</div>
 
-        async function loadList(table) {
-            const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?school_id=eq.${localStorage.getItem('sid')}&order=created_at.desc`, { headers });
-            const data = await res.json();
-            
-            let elId = `list-${table}`;
-            if(table === 'staff_members') elId = 'list-staff';
-            if(table === 'fee_structures') elId = 'list-fees';
+<!-- ── TESTIMONIALS ── -->
+<div id="tab-testimonials" class="tab-content fade space-y-6">
+    <div class="bg-white p-6 rounded-2xl shadow-sm border"><h3 class="font-bold mb-4">Add Testimonial</h3>
+        <form id="f-testimonials" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input type="text" id="tm_name" required class="px-4 py-2 border rounded-xl" placeholder="Parent/Student Name">
+            <input type="text" id="tm_rel" class="px-4 py-2 border rounded-xl" placeholder="Relation (e.g., Parent of Class 10)">
+            <textarea id="tm_text" required class="md:col-span-2 px-4 py-2 border rounded-xl" rows="2" placeholder="Their review..."></textarea>
+            <select id="tm_rat" class="px-4 py-2 border rounded-xl"><option value="5">⭐⭐⭐⭐⭐ (5)</option><option value="4">⭐⭐⭐⭐ (4)</option><option value="3">⭐⭐⭐ (3)</option></select>
+            <button class="bg-blue-600 text-white py-2 px-6 rounded-xl font-bold">Add Review</button>
+        </form>
+    </div>
+    <div class="bg-white rounded-2xl shadow-sm border overflow-hidden"><div class="bg-gray-100 px-6 py-4 font-bold border-b">Reviews</div><div id="l-testimonials" class="p-2"></div></div>
+</div>
 
-            const el = document.getElementById(elId);
-            if(!el) return;
-            
-            if(!data.length) return el.innerHTML = '<p class="p-6 text-sm text-gray-400 text-center italic">No records found.</p>';
+<!-- ── INQUIRIES ── -->
+<div id="tab-inquiries" class="tab-content fade space-y-6">
+    <div class="bg-white rounded-2xl shadow-sm border overflow-hidden">
+        <div class="bg-indigo-50 px-6 py-4 font-bold text-indigo-800 border-b flex justify-between">Admissions Inbox <button onclick="loadList('inquiries')" class="text-indigo-600 bg-white px-3 py-1 rounded shadow-sm text-sm"><i class="fa-solid fa-rotate mr-1"></i>Refresh</button></div>
+        <div id="l-inquiries" class="p-4 space-y-4 max-h-[600px] overflow-y-auto bg-gray-50"></div>
+    </div>
+</div>
 
-            // Custom renders for premium feel
-            if(table === 'notices') {
-                el.innerHTML = data.map(i => `<div class="p-4 border-b hover:bg-gray-50 flex justify-between items-center transition"><div class="flex items-center gap-4"><div class="bg-blue-100 text-blue-800 px-3 py-1 rounded text-xs font-bold">${i.notice_date}</div><p class="font-bold text-gray-800">${i.title}</p></div><button onclick="del('${table}','${i.id}')" class="text-red-400 hover:text-red-600 p-2"><i class="fa-solid fa-trash"></i></button></div>`).join('');
-            } else if(table === 'toppers') {
-                el.innerHTML = data.map(i => `<div class="bg-white border border-yellow-200 rounded-xl p-4 text-center shadow-sm relative"><button onclick="del('${table}','${i.id}')" class="absolute top-2 right-2 text-red-400 hover:text-red-600"><i class="fa-solid fa-times"></i></button><img src="${i.photo_url || 'https://via.placeholder.com/100'}" class="w-16 h-16 mx-auto rounded-full object-cover border-2 border-yellow-400 mb-2"><h4 class="font-bold text-gray-800">${i.student_name}</h4><p class="text-xs text-gray-500">${i.exam_name}</p><div class="mt-2 bg-yellow-100 text-yellow-800 font-black text-lg py-1 rounded">${i.percentage_or_grade}</div></div>`).join('');
-            } else if(table === 'galleries') {
-                el.innerHTML = data.map(i => `<div class="relative group rounded-xl overflow-hidden shadow-sm border border-gray-200"><img src="${i.image_url}" class="w-full h-32 object-cover"><div class="absolute bottom-0 w-full bg-black/70 text-white text-[10px] p-2 truncate">${i.caption||''}</div><button onclick="del('${table}','${i.id}')" class="absolute top-2 right-2 bg-red-600 text-white w-7 h-7 rounded-full opacity-0 group-hover:opacity-100 transition"><i class="fa-solid fa-trash text-xs"></i></button></div>`).join('');
-            } else if(table === 'facilities') {
-                el.innerHTML = data.map(i => `<div class="p-4 border-b hover:bg-gray-50 flex justify-between items-center"><div class="flex items-center gap-3"><i class="fa-solid fa-building-circle-check text-green-500 text-xl"></i><div><p class="font-bold text-gray-800">${i.facility_name}</p><p class="text-xs text-gray-500">${i.description||''}</p></div></div><button onclick="del('${table}','${i.id}')" class="text-red-400 p-2"><i class="fa-solid fa-trash"></i></button></div>`).join('');
-            } else if(table === 'downloads') {
-                el.innerHTML = data.map(i => `<div class="p-4 border-b hover:bg-gray-50 flex justify-between items-center"><div class="flex items-center gap-3"><i class="fa-solid fa-file-pdf text-red-500 text-2xl"></i><div><p class="font-bold text-gray-800">${i.document_title}</p><a href="${i.file_url}" target="_blank" class="text-xs text-blue-600 hover:underline">View File</a></div></div><button onclick="del('${table}','${i.id}')" class="text-red-400 p-2"><i class="fa-solid fa-trash"></i></button></div>`).join('');
-            } else if(table === 'fee_structures') {
-                el.innerHTML = data.map(i => `<div class="p-4 border-b flex justify-between items-center"><div class="flex items-center gap-3"><div class="bg-green-100 text-green-800 px-3 py-1 rounded font-bold">${i.class_name}</div><p class="font-black text-gray-800">₹${i.total_fee} <span class="font-normal text-xs text-gray-500">/mo</span></p></div><button onclick="del('${table}','${i.id}')" class="text-red-400 p-2"><i class="fa-solid fa-trash"></i></button></div>`).join('');
-            } else if(table === 'staff_members') {
-                el.innerHTML = data.map(i => `<div class="flex items-center gap-4 bg-white border border-gray-100 p-4 rounded-xl shadow-sm"><img src="${i.photo_url||'https://via.placeholder.com/60'}" class="w-12 h-12 rounded-full object-cover bg-gray-100 border border-gray-200"><div><p class="font-bold text-gray-800">${i.name}</p><p class="text-xs text-indigo-600 font-medium">${i.designation || 'Teacher'}</p></div><button onclick="del('${table}','${i.id}')" class="ml-auto text-red-400"><i class="fa-solid fa-trash"></i></button></div>`).join('');
-            } else if(table === 'inquiries') {
-                el.innerHTML = data.map(i => `<div class="bg-white p-5 rounded-xl border-l-4 border-l-blue-500 shadow-sm"><div class="flex justify-between items-start mb-2"><div><p class="font-bold text-gray-900">${i.student_name || i.parent_name || 'Inquiry'}</p><p class="text-xs text-gray-500"><i class="fa-solid fa-phone mr-1"></i>${i.phone_number || 'N/A'} &nbsp;|&nbsp; <i class="fa-solid fa-envelope mr-1"></i>${i.email || 'N/A'}</p></div><span class="text-xs text-gray-400">${new Date(i.created_at).toLocaleDateString()}</span></div><div class="bg-gray-50 p-3 rounded text-sm text-gray-700 italic border border-gray-100">"${i.message}"</div><button onclick="del('${table}','${i.id}')" class="mt-3 text-xs text-red-500 font-bold hover:underline"><i class="fa-solid fa-trash mr-1"></i>Delete</button></div>`).join('');
-            }
-        }
+<!-- ═══════════ SCHOOL PROFILE ═══════════ -->
+<div id="tab-profile" class="tab-content fade">
+    <div class="bg-white p-8 rounded-2xl shadow-sm border">
+        <h3 class="text-xl font-extrabold text-gray-900 mb-6 pb-4 border-b">Complete School Profile</h3>
+        <form id="profileForm" class="space-y-2">
 
-        function setupForm(formId, table, getPayload) {
-            document.getElementById(formId).addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const btn = e.target.querySelector('button');
-                const originalText = btn.innerText;
-                btn.innerText = "Saving...";
-                
-                await fetch(`${SUPABASE_URL}/rest/v1/${table}`, { method: 'POST', headers, body: JSON.stringify({ school_id: localStorage.getItem('sid'), ...getPayload() }) });
-                
-                e.target.reset();
-                if(formId==='noticeForm') document.getElementById('noticeDate').valueAsDate = new Date();
-                
-                btn.innerText = "Saved!";
-                setTimeout(() => { btn.innerText = originalText; }, 1500);
-                loadList(table);
-            });
-        }
-        
-        setupForm('noticeForm', 'notices', () => ({ title: document.getElementById('noticeTitle').value, notice_date: document.getElementById('noticeDate').value }));
-        setupForm('topperForm', 'toppers', () => ({ student_name: document.getElementById('topName').value, exam_name: document.getElementById('topExam').value, percentage_or_grade: document.getElementById('topScore').value, photo_url: document.getElementById('topPhoto').value }));
-        setupForm('galleryForm', 'galleries', () => ({ image_url: document.getElementById('galUrl').value, caption: document.getElementById('galCap').value }));
-        setupForm('facilityForm', 'facilities', () => ({ facility_name: document.getElementById('facName').value, description: document.getElementById('facDesc').value }));
-        setupForm('downloadForm', 'downloads', () => ({ document_title: document.getElementById('dlTitle').value, file_url: document.getElementById('dlUrl').value }));
-        setupForm('feeForm', 'fee_structures', () => ({ class_name: document.getElementById('feeClass').value, total_fee: document.getElementById('feeTotal').value }));
-        setupForm('staffForm', 'staff_members', () => ({ name: document.getElementById('stName').value, designation: document.getElementById('stRole').value, photo_url: document.getElementById('stPhoto').value }));
+            <fieldset><legend><i class="fa-solid fa-id-badge mr-1"></i> School Identity</legend>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div><label class="text-xs font-bold text-gray-500 mb-1 block">Tagline / Motto</label><input type="text" id="p_tagline" class="w-full px-3 py-2 border rounded-lg text-sm" placeholder="e.g., Excellence in Education Since 1995"></div>
+                    <div><label class="text-xs font-bold text-gray-500 mb-1 block">Established Year</label><input type="text" id="p_established_year" class="w-full px-3 py-2 border rounded-lg text-sm" placeholder="e.g., 1995"></div>
+                    <div><label class="text-xs font-bold text-gray-500 mb-1 block">School Timing</label><input type="text" id="p_school_timing" class="w-full px-3 py-2 border rounded-lg text-sm" placeholder="e.g., 7:30 AM — 2:00 PM"></div>
+                    <div><label class="text-xs font-bold text-gray-500 mb-1 block">Affiliation Board</label><input type="text" id="p_affiliation_board" class="w-full px-3 py-2 border rounded-lg text-sm" placeholder="e.g., CBSE / BSEB / ICSE"></div>
+                    <div><label class="text-xs font-bold text-gray-500 mb-1 block">Affiliation Number</label><input type="text" id="p_affiliation_number" class="w-full px-3 py-2 border rounded-lg text-sm" placeholder="e.g., 330456"></div>
+                    <div class="flex items-end gap-2"><label class="text-xs font-bold text-gray-500 mb-1 block">Admissions Open?</label><label class="relative inline-flex items-center cursor-pointer"><input type="checkbox" id="p_admission_status" class="sr-only peer"><div class="w-11 h-6 bg-gray-200 peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer peer-checked:bg-green-500 peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all"></div></label></div>
+                </div>
+            </fieldset>
 
-        async function del(table, id) {
-            if(!confirm('Permanently delete this record?')) return;
-            await fetch(`${SUPABASE_URL}/rest/v1/${table}?id=eq.${id}`, { method: 'DELETE', headers });
-            loadList(table);
-        }
+            <fieldset><legend><i class="fa-solid fa-map-location-dot mr-1"></i> Contact & Address</legend>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="md:col-span-3"><label class="text-xs font-bold text-gray-500 mb-1 block">Full Address</label><input type="text" id="p_address" class="w-full px-3 py-2 border rounded-lg text-sm" placeholder="e.g., Near Boring Road, Bailey Road"></div>
+                    <div><label class="text-xs font-bold text-gray-500 mb-1 block">City</label><input type="text" id="p_city" class="w-full px-3 py-2 border rounded-lg text-sm" placeholder="Patna"></div>
+                    <div><label class="text-xs font-bold text-gray-500 mb-1 block">State</label><input type="text" id="p_state" class="w-full px-3 py-2 border rounded-lg text-sm" placeholder="Bihar"></div>
+                    <div><label class="text-xs font-bold text-gray-500 mb-1 block">Pincode</label><input type="text" id="p_pincode" class="w-full px-3 py-2 border rounded-lg text-sm" placeholder="800001"></div>
+                    <div><label class="text-xs font-bold text-gray-500 mb-1 block">Primary Phone</label><input type="text" id="p_phone_primary" class="w-full px-3 py-2 border rounded-lg text-sm" placeholder="+91 98765 43210"></div>
+                    <div><label class="text-xs font-bold text-gray-500 mb-1 block">Secondary Phone</label><input type="text" id="p_phone_secondary" class="w-full px-3 py-2 border rounded-lg text-sm" placeholder="+91 12345 67890"></div>
+                    <div><label class="text-xs font-bold text-gray-500 mb-1 block">Email</label><input type="text" id="p_email_primary" class="w-full px-3 py-2 border rounded-lg text-sm" placeholder="info@school.com"></div>
+                </div>
+            </fieldset>
 
-        // Settings
-        async function loadSettings() {
-            const res = await fetch(`${SUPABASE_URL}/rest/v1/schools?id=eq.${localStorage.getItem('sid')}`, { headers });
-            const d = await res.json();
-            if(d.length) {
-                if(d[0].primary_color) document.getElementById('setCol').value = d[0].primary_color;
-                if(d[0].logo_url) document.getElementById('setLog').value = d[0].logo_url;
-                if(d[0].about_us_text) document.getElementById('setAbt').value = d[0].about_us_text;
-                if(d[0].facebook_url) document.getElementById('setFb').value = d[0].facebook_url;
-                if(d[0].youtube_url) document.getElementById('setYt').value = d[0].youtube_url;
-                if(d[0].instagram_url) document.getElementById('setIg').value = d[0].instagram_url;
-            }
-        }
-        document.getElementById('settingsForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('setBtn'); btn.innerText = "Saving Profile...";
-            await fetch(`${SUPABASE_URL}/rest/v1/schools?id=eq.${localStorage.getItem('sid')}`, {
-                method: 'PATCH', headers, body: JSON.stringify({ 
-                    primary_color: document.getElementById('setCol').value, logo_url: document.getElementById('setLog').value, 
-                    about_us_text: document.getElementById('setAbt').value, facebook_url: document.getElementById('setFb').value,
-                    youtube_url: document.getElementById('setYt').value, instagram_url: document.getElementById('setIg').value
-                })
-            });
-            btn.innerText = "Profile Saved!";
-            setTimeout(()=> { btn.innerText = "Save School Profile"; }, 2000);
-        });
-    </script>
+            <fieldset><legend><i class="fa-solid fa-user-tie mr-1"></i> Principal's Desk</legend>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div><label class="text-xs font-bold text-gray-500 mb-1 block">Name</label><input type="text" id="p_principal_name" class="w-full px-3 py-2 border rounded-lg text-sm" placeholder="Dr. Anita Verma"></div>
+                    <div><label class="text-xs font-bold text-gray-500 mb-1 block">Qualification</label><input type="text" id="p_principal_qualification" class="w-full px-3 py-2 border rounded-lg text-sm" placeholder="M.Ed, Ph.D Education"></div>
+                    <div><label class="text-xs font-bold text-gray-500 mb-1 block">Photo URL</label><input type="text" id="p_principal_photo_url" class="w-full px-3 py-2 border rounded-lg text-sm" placeholder="https://..."></div>
+                    <div class="md:col-span-3"><label class="text-xs font-bold text-gray-500 mb-1 block">Principal's Welcome Message</label><textarea id="p_principal_message" rows="3" class="w-full px-3 py-2 border rounded-lg text-sm" placeholder="A warm welcome to all parents and students..."></textarea></div>
+                </div>
+            </fieldset>
+
+            <fieldset><legend><i class="fa-solid fa-crown mr-1"></i> Director's Desk</legend>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div><label class="text-xs font-bold text-gray-500 mb-1 block">Name</label><input type="text" id="p_director_name" class="w-full px-3 py-2 border rounded-lg text-sm" placeholder="Mr. Rajesh Kumar"></div>
+                    <div><label class="text-xs font-bold text-gray-500 mb-1 block">Qualification</label><input type="text" id="p_director_qualification" class="w-full px-3 py-2 border rounded-lg text-sm" placeholder="MBA, B.Ed"></div>
+                    <div><label class="text-xs font-bold text-gray-500 mb-1 block">Photo URL</label><input type="text" id="p_director_photo_url" class="w-full px-3 py-2 border rounded-lg text-sm" placeholder="https://..."></div>
+                    <div class="md:col-span-3"><label class="text-xs font-bold text-gray-500 mb-1 block">Director's Message</label><textarea id="p_director_message" rows="3" class="w-full px-3 py-2 border rounded-lg text-sm" placeholder="Our school stands for..."></textarea></div>
+                </div>
+            </fieldset>
+
+            <fieldset><legend><i class="fa-solid fa-scroll mr-1"></i> About, Vision & Mission</legend>
+                <div class="space-y-4">
+                    <div><label class="text-xs font-bold text-gray-500 mb-1 block">About Us</label><textarea id="p_about_us_text" rows="3" class="w-full px-3 py-2 border rounded-lg text-sm" placeholder="Describe your school..."></textarea></div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div><label class="text-xs font-bold text-gray-500 mb-1 block">Vision</label><textarea id="p_vision_text" rows="2" class="w-full px-3 py-2 border rounded-lg text-sm" placeholder="Our vision is..."></textarea></div>
+                        <div><label class="text-xs font-bold text-gray-500 mb-1 block">Mission</label><textarea id="p_mission_text" rows="2" class="w-full px-3 py-2 border rounded-lg text-sm" placeholder="Our mission is to..."></textarea></div>
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset><legend><i class="fa-solid fa-palette mr-1"></i> Branding & Visuals</legend>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div><label class="text-xs font-bold text-gray-500 mb-1 block">Logo URL</label><input type="text" id="p_logo_url" class="w-full px-3 py-2 border rounded-lg text-sm" placeholder="https://..."></div>
+                    <div><label class="text-xs font-bold text-gray-500 mb-1 block">Banner Image URL</label><input type="text" id="p_banner_image_url" class="w-full px-3 py-2 border rounded-lg text-sm" placeholder="https://... (wide hero image)"></div>
+                    <div class="flex gap-4">
+                        <div><label class="text-xs font-bold text-gray-500 mb-1 block">Primary Color</label><input type="color" id="p_primary_color" value="#1e40af" class="w-full h-10 rounded cursor-pointer"></div>
+                        <div><label class="text-xs font-bold text-gray-500 mb-1 block">Accent Color</label><input type="color" id="p_secondary_color" value="#f59e0b" class="w-full h-10 rounded cursor-pointer"></div>
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset><legend><i class="fa-solid fa-share-nodes mr-1"></i> Social & Maps</legend>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div><label class="text-xs font-bold text-gray-500 mb-1 block">Facebook URL</label><input type="text" id="p_facebook_url" class="w-full px-3 py-2 border rounded-lg text-sm"></div>
+                    <div><label class="text-xs font-bold text-gray-500 mb-1 block">YouTube URL</label><input type="text" id="p_youtube_url" class="w-full px-3 py-2 border rounded-lg text-sm"></div>
+                    <div><label class="text-xs font-bold text-gray-500 mb-1 block">Instagram URL</label><input type="text" id="p_instagram_url" class="w-full px-3 py-2 border rounded-lg text-sm"></div>
+                    <div><label class="text-xs font-bold text-gray-500 mb-1 block">Google Maps Embed URL</label><input type="text" id="p_google_maps_url" class="w-full px-3 py-2 border rounded-lg text-sm" placeholder="https://www.google.com/maps/embed?..."></div>
+                </div>
+            </fieldset>
+
+            <button id="profileBtn" class="w-full bg-blue-900 text-white py-4 rounded-xl font-bold shadow-lg text-lg hover:bg-black transition mt-4">Save Entire School Profile</button>
+        </form>
+    </div>
+</div>
+
+        </div>
+    </main>
+</div>
+
+<!-- ═══════════ JAVASCRIPT ═══════════ -->
+<script>
+const SB="https://xlmsgtxyrlovjobwvdom.supabase.co",AK="sb_publishable_iLRrB73mPbgH0FtPvMOVbg_eoNyCtd3";
+const H={'Content-Type':'application/json',apikey:AK,Authorization:`Bearer ${AK}`};
+const sid=()=>localStorage.getItem('sid');
+
+document.addEventListener('DOMContentLoaded',()=>{document.getElementById('n_date').valueAsDate=new Date();if(sid())showDash(localStorage.getItem('sname'))});
+
+document.getElementById('loginForm').addEventListener('submit',async e=>{e.preventDefault();
+    const r=await fetch(`${SB}/rest/v1/schools?username=eq.${document.getElementById('loginUser').value}&password=eq.${document.getElementById('loginPass').value}&select=*`,{headers:H});
+    const d=await r.json();if(!d.length){document.getElementById('loginError').innerText="Invalid credentials";document.getElementById('loginError').classList.remove('hidden');return}
+    localStorage.setItem('sid',d[0].id);localStorage.setItem('sname',d[0].school_name);showDash(d[0].school_name)});
+
+function showDash(n){document.getElementById('loginScreen').classList.add('hidden');document.getElementById('dashboardScreen').classList.remove('hidden');
+    document.getElementById('hdrN').innerText=n;document.getElementById('hdrI').innerText=n.charAt(0);
+    ['notices','toppers','galleries','facilities','downloads','fee_structures','staff_members','achievements','testimonials','inquiries'].forEach(loadList);loadProfile()}
+function logout(){localStorage.clear();location.reload()}
+function sw(id){document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));event.currentTarget.classList.add('active');document.getElementById(`tab-${id}`).classList.add('active')}
+
+async function loadList(t){
+    const r=await fetch(`${SB}/rest/v1/${t}?school_id=eq.${sid()}&order=created_at.desc`,{headers:H});const d=await r.json();
+    let el=document.getElementById(`l-${t}`);if(!el)return;
+    if(!d.length)return el.innerHTML='<p class="p-6 text-sm text-gray-400 text-center italic">No records yet.</p>';
+    const renders={
+        notices:i=>`<div class="p-4 border-b hover:bg-gray-50 flex justify-between items-center"><div class="flex items-center gap-3"><div class="bg-blue-100 text-blue-800 px-3 py-1 rounded text-xs font-bold">${i.notice_date}</div><p class="font-bold text-gray-800">${i.title}</p></div><button onclick="del('${t}','${i.id}')" class="text-red-400 hover:text-red-600 p-2"><i class="fa-solid fa-trash"></i></button></div>`,
+        toppers:i=>`<div class="bg-yellow-50 border border-yellow-200 rounded-xl p-4 text-center relative"><button onclick="del('${t}','${i.id}')" class="absolute top-2 right-2 text-red-400"><i class="fa-solid fa-times"></i></button><img src="${i.photo_url||'https://via.placeholder.com/100'}" class="w-16 h-16 mx-auto rounded-full object-cover border-2 border-yellow-400 mb-2"><h4 class="font-bold text-gray-800">${i.student_name}</h4><p class="text-xs text-gray-500">${i.exam_name} (${i.passing_year})</p><div class="mt-2 bg-yellow-100 text-yellow-800 font-black text-lg py-1 rounded">${i.percentage_or_grade}</div></div>`,
+        galleries:i=>`<div class="relative group rounded-xl overflow-hidden shadow-sm border"><img src="${i.image_url}" class="w-full h-32 object-cover"><div class="absolute bottom-0 w-full bg-black/70 text-white text-[10px] p-2 truncate">${i.caption||''}</div><button onclick="del('${t}','${i.id}')" class="absolute top-2 right-2 bg-red-600 text-white w-7 h-7 rounded-full opacity-0 group-hover:opacity-100"><i class="fa-solid fa-trash text-xs"></i></button></div>`,
+        facilities:i=>`<div class="p-4 border-b flex justify-between items-center"><div class="flex items-center gap-3"><i class="fa-solid fa-check-circle text-green-500"></i><div><p class="font-bold">${i.facility_name}</p><p class="text-xs text-gray-500">${i.description||''}</p></div></div><button onclick="del('${t}','${i.id}')" class="text-red-400 p-2"><i class="fa-solid fa-trash"></i></button></div>`,
+        downloads:i=>`<div class="p-4 border-b flex justify-between items-center"><div class="flex items-center gap-3"><i class="fa-solid fa-file-pdf text-red-500 text-xl"></i><div><p class="font-bold">${i.document_title}</p><p class="text-xs text-gray-500">${i.document_category} · <a href="${i.file_url}" target="_blank" class="text-blue-600">View</a></p></div></div><button onclick="del('${t}','${i.id}')" class="text-red-400 p-2"><i class="fa-solid fa-trash"></i></button></div>`,
+        fee_structures:i=>`<div class="p-4 border-b flex justify-between items-center"><div class="flex items-center gap-3"><div class="bg-green-100 text-green-800 px-3 py-1 rounded font-bold text-sm">${i.class_name}</div><span class="text-xs text-gray-500">${i.academic_session||''}</span></div><div class="flex items-center gap-3"><span class="font-black text-gray-800 text-lg">₹${i.total_fee}</span><button onclick="del('${t}','${i.id}')" class="text-red-400 p-2"><i class="fa-solid fa-trash"></i></button></div></div>`,
+        staff_members:i=>`<div class="flex items-center gap-4 bg-white border p-4 rounded-xl shadow-sm"><img src="${i.photo_url||'https://via.placeholder.com/60'}" class="w-12 h-12 rounded-full object-cover border"><div><p class="font-bold">${i.name}</p><p class="text-xs text-indigo-600 font-medium">${i.designation}</p><p class="text-xs text-gray-500">${i.qualification||''}</p></div><button onclick="del('${t}','${i.id}')" class="ml-auto text-red-400"><i class="fa-solid fa-trash"></i></button></div>`,
+        achievements:i=>`<div class="p-4 border-b flex justify-between items-center"><div class="flex items-center gap-3"><i class="fa-solid fa-trophy text-yellow-500"></i><div><p class="font-bold">${i.title}</p><p class="text-xs text-gray-500">${i.description||''}</p></div></div><button onclick="del('${t}','${i.id}')" class="text-red-400 p-2"><i class="fa-solid fa-trash"></i></button></div>`,
+        testimonials:i=>`<div class="p-4 border-b"><div class="flex justify-between"><div><p class="font-bold">${i.reviewer_name} <span class="text-xs text-gray-500 font-normal">${i.reviewer_relation||''}</span></p><p class="text-yellow-500 text-sm">${'★'.repeat(i.rating||5)}</p></div><button onclick="del('${t}','${i.id}')" class="text-red-400"><i class="fa-solid fa-trash"></i></button></div><p class="text-sm text-gray-600 mt-2 italic">"${i.review_text}"</p></div>`,
+        inquiries:i=>`<div class="bg-white p-5 rounded-xl border-l-4 border-l-blue-500 shadow-sm"><div class="flex justify-between"><div><p class="font-bold">${i.student_name||i.parent_name||'Inquiry'}</p><p class="text-xs text-gray-500">${i.phone_number||''} · ${i.email||''} · Class: ${i.class_applied_for||'N/A'}</p></div><span class="text-xs text-gray-400">${new Date(i.created_at).toLocaleDateString()}</span></div><p class="text-sm mt-2 p-2 bg-gray-50 rounded italic">"${i.message}"</p></div>`
+    };
+    el.innerHTML=d.map(renders[t]).join('')}
+
+// ── FORM HANDLERS ──
+const forms=[
+    ['f-notices','notices',()=>({title:v('n_title'),notice_date:v('n_date')})],
+    ['f-toppers','toppers',()=>({student_name:v('t_name'),exam_name:v('t_exam'),percentage_or_grade:v('t_score'),passing_year:v('t_year'),photo_url:v('t_photo')})],
+    ['f-galleries','galleries',()=>({image_url:v('g_url'),caption:v('g_cap')})],
+    ['f-facilities','facilities',()=>({facility_name:v('fc_name'),description:v('fc_desc')})],
+    ['f-downloads','downloads',()=>({document_title:v('dl_title'),document_category:v('dl_cat'),file_url:v('dl_url')})],
+    ['f-fee_structures','fee_structures',()=>({class_name:v('fe_class'),academic_session:v('fe_session'),total_fee:v('fe_total')})],
+    ['f-staff_members','staff_members',()=>({name:v('st_name'),designation:v('st_desg'),qualification:v('st_qual'),photo_url:v('st_photo')})],
+    ['f-achievements','achievements',()=>({title:v('ach_title'),description:v('ach_desc')})],
+    ['f-testimonials','testimonials',()=>({reviewer_name:v('tm_name'),reviewer_relation:v('tm_rel'),review_text:v('tm_text'),rating:parseInt(v('tm_rat'))})]
+];
+function v(id){return document.getElementById(id).value}
+forms.forEach(([fid,table,payload])=>{document.getElementById(fid).addEventListener('submit',async e=>{e.preventDefault();
+    const btn=e.target.querySelector('button');const orig=btn.innerText;btn.innerText='Saving...';
+    await fetch(`${SB}/rest/v1/${table}`,{method:'POST',headers:H,body:JSON.stringify({school_id:sid(),...payload()})});
+    e.target.reset();if(fid==='f-notices')document.getElementById('n_date').valueAsDate=new Date();
+    btn.innerText='Saved!';setTimeout(()=>btn.innerText=orig,1500);loadList(table)})});
+
+async function del(t,id){if(!confirm('Delete?'))return;await fetch(`${SB}/rest/v1/${t}?id=eq.${id}`,{method:'DELETE',headers:H});loadList(t)}
+
+// ── PROFILE ──
+const profileFields=['tagline','established_year','school_timing','affiliation_board','affiliation_number','address','city','state','pincode','phone_primary','phone_secondary','email_primary','principal_name','principal_qualification','principal_photo_url','principal_message','director_name','director_qualification','director_photo_url','director_message','about_us_text','vision_text','mission_text','logo_url','banner_image_url','primary_color','secondary_color','facebook_url','youtube_url','instagram_url','google_maps_url'];
+
+async function loadProfile(){
+    const r=await fetch(`${SB}/rest/v1/schools?id=eq.${sid()}`,{headers:H});const d=await r.json();if(!d.length)return;const s=d[0];
+    profileFields.forEach(f=>{const el=document.getElementById(`p_${f}`);if(el&&s[f])el.type==='color'?el.value=s[f]:el.value=s[f]});
+    if(s.admission_status)document.getElementById('p_admission_status').checked=s.admission_status}
+
+document.getElementById('profileForm').addEventListener('submit',async e=>{e.preventDefault();
+    const btn=document.getElementById('profileBtn');btn.innerText='Saving Profile...';
+    const body={};profileFields.forEach(f=>{const el=document.getElementById(`p_${f}`);if(el)body[f]=el.value});
+    body.admission_status=document.getElementById('p_admission_status').checked;
+    await fetch(`${SB}/rest/v1/schools?id=eq.${sid()}`,{method:'PATCH',headers:H,body:JSON.stringify(body)});
+    btn.innerText='Profile Saved!';setTimeout(()=>btn.innerText='Save Entire School Profile',2000)});
+</script>
 </body>
 </html>
