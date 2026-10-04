@@ -280,11 +280,27 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
     try {
         const u = document.getElementById('loginUser').value;
         const p = document.getElementById('loginPass').value;
-        const r = await fetch(`${SB}/rest/v1/schools?username=eq.${u}&password=eq.${p}&select=*`, { headers: getH() });
+        
+        const authRes = await fetch(`${SB}/auth/v1/token?grant_type=password`, {
+            method: 'POST',
+            headers: { 'apikey': AK, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: u, password: p })
+        });
+        
+        if (!authRes.ok) {
+            document.getElementById('loginError').innerText = "Invalid email or password";
+            document.getElementById('loginError').classList.remove('hidden');
+            btn.innerHTML = `Sign In <i class="fa-solid fa-arrow-right ml-2"></i>`;
+            return;
+        }
+        const authData = await authRes.json();
+        localStorage.setItem('sb_token', authData.access_token);
+        
+        const r = await fetch(`${SB}/rest/v1/schools?select=*`, { headers: getH() });
         const d = await r.json();
         
         if (!d.length) {
-            document.getElementById('loginError').innerText = "Invalid credentials";
+            document.getElementById('loginError').innerText = "No school found for this account.";
             document.getElementById('loginError').classList.remove('hidden');
             btn.innerHTML = `Sign In <i class="fa-solid fa-arrow-right ml-2"></i>`;
             return;
