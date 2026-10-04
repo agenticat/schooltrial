@@ -259,7 +259,7 @@
 // --- Constants & Config ---
 const SB = "https://xlmsgtxyrlovjobwvdom.supabase.co";
 const AK = "sb_publishable_iLRrB73mPbgH0FtPvMOVbg_eoNyCtd3";
-const H = { 'Content-Type': 'application/json', apikey: AK, Authorization: `Bearer ${AK}` };
+const getH = () => ({ 'Content-Type': 'application/json', apikey: AK, Authorization: `Bearer ${localStorage.getItem('sb_token') || AK}` });
 const sid = () => localStorage.getItem('sid');
 
 // --- Global State ---
@@ -280,7 +280,7 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
     try {
         const u = document.getElementById('loginUser').value;
         const p = document.getElementById('loginPass').value;
-        const r = await fetch(`${SB}/rest/v1/schools?username=eq.${u}&password=eq.${p}&select=*`, { headers: H });
+        const r = await fetch(`${SB}/rest/v1/schools?username=eq.${u}&password=eq.${p}&select=*`, { headers: getH() });
         const d = await r.json();
         
         if (!d.length) {
@@ -326,7 +326,7 @@ function sw(id) {
 // --- Data Fetching & Rendering ---
 async function loadList(t) {
     try {
-        const r = await fetch(`${SB}/rest/v1/${t}?school_id=eq.${sid()}&order=created_at.desc`, { headers: H });
+        const r = await fetch(`${SB}/rest/v1/${t}?school_id=eq.${sid()}&order=created_at.desc`, { headers: getH() });
         const d = await r.json();
         const el = document.getElementById(`l-${t}`);
         if (!el) return;
@@ -400,7 +400,7 @@ function editItem(t, id) {
 
 async function delItem(t, id) {
     if (!confirm('Are you sure you want to delete this record?')) return;
-    await fetch(`${SB}/rest/v1/${t}?id=eq.${id}`, { method: 'DELETE', headers: H });
+    await fetch(`${SB}/rest/v1/${t}?id=eq.${id}`, { method: 'DELETE', headers: getH() });
     loadList(t);
 }
 
@@ -431,13 +431,13 @@ forms.forEach(([fid, table, payloadFn]) => {
         try {
             if (editingState.table === table && editingState.id) {
                 // UPDATE
-                await fetch(`${SB}/rest/v1/${table}?id=eq.${editingState.id}`, { method: 'PATCH', headers: H, body: JSON.stringify(payloadFn()) });
+                await fetch(`${SB}/rest/v1/${table}?id=eq.${editingState.id}`, { method: 'PATCH', headers: getH(), body: JSON.stringify(payloadFn()) });
                 editingState = { table: null, id: null };
                 btn.innerHTML = 'Updated!';
                 setTimeout(() => { btn.innerHTML = 'Add'; btn.classList.remove('ring-4', 'ring-purple-300', 'bg-purple-600'); }, 1500);
             } else {
                 // INSERT
-                await fetch(`${SB}/rest/v1/${table}`, { method: 'POST', headers: H, body: JSON.stringify({school_id: sid(), ...payloadFn()}) });
+                await fetch(`${SB}/rest/v1/${table}`, { method: 'POST', headers: getH(), body: JSON.stringify({school_id: sid(), ...payloadFn()}) });
                 btn.innerHTML = 'Saved!';
                 setTimeout(() => btn.innerHTML = origText, 1500);
             }
@@ -463,7 +463,7 @@ const profileFields = [
 
 async function loadProfile() {
     try {
-        const r = await fetch(`${SB}/rest/v1/schools?id=eq.${sid()}`, { headers: H });
+        const r = await fetch(`${SB}/rest/v1/schools?id=eq.${sid()}`, { headers: getH() });
         const d = await r.json();
         if (!d.length) return;
         const s = d[0];
@@ -491,7 +491,7 @@ document.getElementById('profileForm').addEventListener('submit', async (e) => {
         });
         body.admission_status = document.getElementById('p_admission_status').checked;
         
-        await fetch(`${SB}/rest/v1/schools?id=eq.${sid()}`, { method: 'PATCH', headers: H, body: JSON.stringify(body) });
+        await fetch(`${SB}/rest/v1/schools?id=eq.${sid()}`, { method: 'PATCH', headers: getH(), body: JSON.stringify(body) });
         btn.innerText = 'Profile Saved!';
     } catch(err) {
         btn.innerText = 'Error Saving!';
