@@ -296,7 +296,7 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
         const authData = await authRes.json();
         localStorage.setItem('sb_token', authData.access_token);
         
-        const r = await fetch(`${SB}/rest/v1/schools?select=*`, { headers: getH() });
+        const r = await fetch(`${SB}/rest/v1/schools?owner_id=eq.${authData.user.id}&select=*`, { headers: getH() });
         const d = await r.json();
         
         if (!d.length) {
