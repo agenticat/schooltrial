@@ -14,6 +14,7 @@
         .marquee{animation:scroll 20s linear infinite}@keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
         .marquee:hover{animation-play-state:paused}
         .section-hidden{display:none}
+        .hp-field{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
     </style>
 </head>
 <body class="bg-white text-gray-800 font-sans antialiased flex flex-col min-h-screen">
@@ -23,6 +24,11 @@
     const H={'Content-Type':'application/json',apikey:AK,Authorization:`Bearer ${AK}`};
     let S=null; // school data object
 </script>
+
+<!-- ═══════════ 0. LOAD FAILURE BANNER ═══════════ -->
+<div id="bootError" class="hidden bg-red-50 border-b border-red-200 text-red-700 text-sm font-bold text-center px-4 py-3">
+    <i class="fa-solid fa-triangle-exclamation mr-2"></i>We couldn't load this website's content right now. Please refresh in a moment.
+</div>
 
 <!-- ═══════════ 1. TOP INFO BAR ═══════════ -->
 <div class="bg-gray-900 text-gray-300 text-xs py-2 border-b border-gray-800" id="topBar">
@@ -61,7 +67,7 @@
     <div class="absolute inset-0 bg-cover bg-center opacity-30" id="heroBg"></div>
     <div class="absolute inset-0 bg-gradient-to-b from-blue-900/80 to-blue-900/95"></div>
     <div class="max-w-4xl mx-auto relative z-10">
-        <div id="admBadge" class="hidden inline-block bg-green-500 text-white text-sm font-black px-6 py-2 rounded-full mb-6 shadow-lg animate-pulse"><i class="fa-solid fa-circle-check mr-2"></i>ADMISSIONS OPEN FOR 2027-28</div>
+        <div id="admBadge" class="hidden inline-block bg-green-500 text-white text-sm font-black px-6 py-2 rounded-full mb-6 shadow-lg animate-pulse"><i class="fa-solid fa-circle-check mr-2"></i>ADMISSIONS OPEN</div>
         <h2 id="heroTitle" class="text-4xl md:text-6xl font-black mb-6 leading-tight drop-shadow-lg">Shaping the Leaders of Tomorrow</h2>
         <div id="heroMeta" class="flex justify-center gap-6 text-blue-200 font-bold text-sm mb-10 flex-wrap">
             <span id="heroEst" class="hidden"><i class="fa-solid fa-landmark mr-1"></i><span></span></span>
@@ -106,7 +112,7 @@
 </section>
 
 <!-- ═══════════ 7. BOARD TOPPERS ═══════════ -->
-<section id="toppers" class="py-20 bg-gradient-to-b from-yellow-50 to-white border-b section-hidden" id2="toppersSec">
+<section id="toppers" class="py-20 bg-gradient-to-b from-yellow-50 to-white border-b section-hidden">
     <div class="max-w-7xl mx-auto px-4">
         <div class="text-center mb-12"><h2 class="text-3xl font-black text-gray-900"><i class="fa-solid fa-trophy text-yellow-500 mr-3"></i>Board Toppers — Wall of Fame</h2><div class="w-20 h-1 bg-yellow-500 mx-auto mt-4 rounded-full"></div></div>
         <div id="topperGrid" class="grid grid-cols-2 md:grid-cols-4 gap-8"></div>
@@ -122,7 +128,7 @@
 </section>
 
 <!-- ═══════════ 9. FACULTY ═══════════ -->
-<section id="faculty" class="py-20 bg-gray-50 border-b section-hidden" id2="staffSec">
+<section id="faculty" class="py-20 bg-gray-50 border-b section-hidden">
     <div class="max-w-7xl mx-auto px-4">
         <div class="text-center mb-12"><h2 class="text-3xl font-black text-gray-900">Our Expert Faculty</h2><div class="w-20 h-1 bg-blue-700 mx-auto mt-4 rounded-full" id="div3"></div></div>
         <div id="staffGrid" class="grid grid-cols-2 md:grid-cols-4 gap-6"></div>
@@ -157,7 +163,7 @@
 </section>
 
 <!-- ═══════════ 13. GALLERY ═══════════ -->
-<section id="gallery" class="py-20 bg-gray-900 text-white section-hidden" id2="gallerySec">
+<section id="gallery" class="py-20 bg-gray-900 text-white section-hidden">
     <div class="max-w-7xl mx-auto px-4">
         <div class="text-center mb-12"><h2 class="text-3xl font-black">Campus Gallery</h2><p class="text-gray-400 mt-2">Glimpses of life at our institution</p></div>
         <div id="galleryGrid" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
@@ -165,7 +171,7 @@
 </section>
 
 <!-- ═══════════ 14. DOWNLOADS ═══════════ -->
-<section id="downloads" class="py-16 bg-gray-50 border-b section-hidden" id2="dlSec">
+<section id="downloads" class="py-16 bg-gray-50 border-b section-hidden">
     <div class="max-w-4xl mx-auto px-4">
         <div class="text-center mb-10"><h2 class="text-3xl font-black text-gray-900">Important Downloads</h2></div>
         <div id="dlGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
@@ -186,14 +192,15 @@
             </div>
         </div>
         <div class="bg-white p-8 rounded-2xl shadow-xl border">
+            <p id="iqStatus" class="hidden mb-5 p-3 rounded-lg font-bold text-sm" role="status" aria-live="polite"></p>
             <form id="inquiryForm" class="space-y-5">
                 <div class="grid grid-cols-2 gap-4">
-                    <div><label class="block text-xs font-bold text-gray-600 mb-1">Student Name *</label><input type="text" id="iq_sname" required class="w-full px-4 py-3 bg-gray-50 border rounded-xl outline-none focus:border-blue-500"></div>
-                    <div><label class="block text-xs font-bold text-gray-600 mb-1">Parent/Guardian *</label><input type="text" id="iq_pname" required class="w-full px-4 py-3 bg-gray-50 border rounded-xl outline-none focus:border-blue-500"></div>
+                    <div><label class="block text-xs font-bold text-gray-600 mb-1">Student Name *</label><input type="text" id="iq_sname" required maxlength="120" autocomplete="name" class="w-full px-4 py-3 bg-gray-50 border rounded-xl outline-none focus:border-blue-500"></div>
+                    <div><label class="block text-xs font-bold text-gray-600 mb-1">Parent/Guardian *</label><input type="text" id="iq_pname" required maxlength="120" class="w-full px-4 py-3 bg-gray-50 border rounded-xl outline-none focus:border-blue-500"></div>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
-                    <div><label class="block text-xs font-bold text-gray-600 mb-1">Phone (WhatsApp) *</label><input type="tel" id="iq_phone" required class="w-full px-4 py-3 bg-gray-50 border rounded-xl outline-none focus:border-blue-500"></div>
-                    <div><label class="block text-xs font-bold text-gray-600 mb-1">Email</label><input type="email" id="iq_email" class="w-full px-4 py-3 bg-gray-50 border rounded-xl outline-none focus:border-blue-500"></div>
+                    <div><label class="block text-xs font-bold text-gray-600 mb-1">Phone (WhatsApp) *</label><input type="tel" id="iq_phone" required maxlength="20" autocomplete="tel" class="w-full px-4 py-3 bg-gray-50 border rounded-xl outline-none focus:border-blue-500"></div>
+                    <div><label class="block text-xs font-bold text-gray-600 mb-1">Email</label><input type="email" id="iq_email" maxlength="160" autocomplete="email" class="w-full px-4 py-3 bg-gray-50 border rounded-xl outline-none focus:border-blue-500"></div>
                 </div>
                 <div><label class="block text-xs font-bold text-gray-600 mb-1">Class Seeking Admission For</label>
                     <select id="iq_class" class="w-full px-4 py-3 bg-gray-50 border rounded-xl outline-none focus:border-blue-500">
@@ -203,8 +210,10 @@
                         <option>Class 11 (Science)</option><option>Class 11 (Commerce)</option><option>Class 12</option>
                     </select>
                 </div>
-                <div><label class="block text-xs font-bold text-gray-600 mb-1">Message</label><textarea id="iq_msg" rows="3" class="w-full px-4 py-3 bg-gray-50 border rounded-xl outline-none focus:border-blue-500" placeholder="Any questions about admission, fees, transport..."></textarea></div>
-                <button type="submit" id="iqBtn" class="w-full bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg text-lg hover:bg-blue-800">Submit Inquiry</button>
+                <div><label class="block text-xs font-bold text-gray-600 mb-1">Message</label><textarea id="iq_msg" rows="3" maxlength="2000" class="w-full px-4 py-3 bg-gray-50 border rounded-xl outline-none focus:border-blue-500" placeholder="Any questions about admission, fees, transport..."></textarea></div>
+                <!-- honeypot: hidden from humans, irresistible to bots -->
+                <div class="hp-field" aria-hidden="true"><label for="iq_company">Company</label><input type="text" id="iq_company" name="company" tabindex="-1" autocomplete="off"></div>
+                <button type="submit" id="iqBtn" class="w-full bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg text-lg hover:bg-blue-800 disabled:opacity-60">Submit Inquiry</button>
             </form>
         </div>
     </div>
@@ -232,7 +241,7 @@
         <div>
             <h3 class="font-bold text-white mb-4">Reach Us</h3>
             <div class="space-y-3 text-sm" id="footContact"></div>
-            <div id="mapContainer" class="mt-4 rounded-xl overflow-hidden hidden"><iframe id="mapFrame" width="100%" height="200" style="border:0" allowfullscreen loading="lazy"></iframe></div>
+            <div id="mapContainer" class="mt-4 rounded-xl overflow-hidden hidden"><iframe id="mapFrame" width="100%" height="200" style="border:0" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
         </div>
     </div>
     <div class="max-w-7xl mx-auto px-4 mt-12 pt-8 border-t border-gray-800 text-center text-xs text-gray-600">
@@ -245,12 +254,62 @@
 document.getElementById('yr').innerText=new Date().getFullYear();
 let schoolId=null;
 
+// ── OUTPUT SAFETY ──────────────────────────────────────────────────────────
+// Every database value is escaped before it reaches innerHTML, and every URL is
+// protocol-checked, so a stored field can never inject markup or script here.
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+const safeUrl = u => { const s = String(u ?? '').trim(); if (!s) return ''; try { const x = new URL(s, location.href); return (x.protocol === 'http:' || x.protocol === 'https:') ? x.href : ''; } catch { return ''; } };
+// URLs that go into a CSS url() must not be able to break out of it
+const cssUrl = u => { const s = safeUrl(u); return (s && !/[()"'\\\s]/.test(s)) ? `url("${s}")` : ''; };
+const IMG_FALLBACK = 'data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="200" height="200" fill="#e2e8f0"/><text x="100" y="105" font-family="sans-serif" font-size="16" fill="#94a3b8" text-anchor="middle">No photo</text></svg>');
+const imgSrc = (u, fb = IMG_FALLBACK) => esc(safeUrl(u) || fb);
+const stars = r => { const n = (r === null || r === undefined || r === '') ? 5 : parseInt(r, 10); const f = Number.isFinite(n) ? Math.min(5, Math.max(0, n)) : 5; return '★'.repeat(f) + `<span class="text-gray-300">${'★'.repeat(5 - f)}</span>`; };
+// Broken images fall back to the inline placeholder (error events need the capture phase)
+document.addEventListener('error', e => {
+    const el = e.target;
+    if (el && el.tagName === 'IMG' && !el.dataset.fb) { el.dataset.fb = '1'; el.src = IMG_FALLBACK; }
+}, true);
+
+function bootFailed(err){
+    console.error(err);
+    document.getElementById('bootError').classList.remove('hidden');
+    const n = document.getElementById('siteName');
+    n.classList.remove('skeleton','w-48','h-6');
+    n.innerText = document.title;
+}
+
+// ── SCHOOL LOOKUP ──────────────────────────────────────────────────────────
+// Preferred: the security-definer RPC from supabase/schema.sql, which returns only
+// public columns. Fallback: the direct table read, so this page keeps working
+// until that SQL is applied.
+let rpcAvailable = true;
+async function loadSchoolByKey(){
+    if (rpcAvailable) {
+        try {
+            const r = await fetch(`${SB}/rest/v1/rpc/public_school_by_key`, { method:'POST', headers:H, body: JSON.stringify({ p_key: SCHOOL_API_KEY }) });
+            if (r.ok) {
+                const d = await r.json();
+                if (Array.isArray(d) && d.length) return d[0];
+                if (Array.isArray(d)) return null;                    // key not found — authoritative answer
+            } else if (r.status === 404) {
+                rpcAvailable = false;                                  // function not created yet
+            } else {
+                return null;                                           // refused: do not retry over an open table
+            }
+        } catch (e) { /* fall through to the direct read */ }
+    }
+    const r = await fetch(`${SB}/rest/v1/schools?api_key=eq.${encodeURIComponent(SCHOOL_API_KEY)}&select=*`, { headers:H });
+    if (!r.ok) throw new Error('school lookup failed (HTTP ' + r.status + ')');
+    const d = await r.json();
+    return Array.isArray(d) ? (d[0] || null) : null;
+}
+
 async function boot(){
     try{
-        const r=await fetch(`${SB}/rest/v1/schools?api_key=eq.${SCHOOL_API_KEY}&select=*`,{headers:H});
-        const d=await r.json();if(!d.length)throw new Error("Invalid API Key");
-        S=d[0];schoolId=S.id;
-        
+        S = await loadSchoolByKey();
+        if(!S) throw new Error("Invalid API Key");
+        schoolId=S.id;
+
         // ── PAGE TITLE & HEADER ──
         document.getElementById('pageTitle').innerText=S.school_name+(S.tagline?' — '+S.tagline:'');
         document.getElementById('siteName').classList.remove('skeleton','w-48','h-6');
@@ -261,7 +320,7 @@ async function boot(){
         if(S.about_us_text){document.getElementById('aboutText').innerText=S.about_us_text;document.getElementById('footAbout').innerText=S.about_us_text.substring(0,150)+'...'}
 
         // ── COLORS ──
-        const pc=S.primary_color||'#1e3a8a';
+        const pc=/^#[0-9a-fA-F]{3,8}$/.test(S.primary_color||'')?S.primary_color:'#1e3a8a';
         document.getElementById('siteHeader').style.borderTopColor=pc;
         document.getElementById('hero').style.backgroundColor=pc;
         document.getElementById('navCTA').style.backgroundColor=pc;
@@ -270,10 +329,12 @@ async function boot(){
         document.querySelectorAll('[id^="div"]').forEach(d=>d.style.backgroundColor=pc);
 
         // ── LOGO ──
-        if(S.logo_url){document.getElementById('logoBox').innerHTML=`<img src="${S.logo_url}" class="w-full h-full object-cover">`;document.getElementById('logoBox').classList.remove('bg-blue-100','text-blue-600')}
+        const logo=safeUrl(S.logo_url);
+        if(logo){const box=document.getElementById('logoBox');box.innerHTML='';const im=document.createElement('img');im.src=logo;im.className='w-full h-full object-cover';im.alt='';box.appendChild(im);box.classList.remove('bg-blue-100','text-blue-600')}
 
         // ── BANNER ──
-        if(S.banner_image_url)document.getElementById('heroBg').style.backgroundImage=`url(${S.banner_image_url})`;
+        const banner=cssUrl(S.banner_image_url);
+        if(banner)document.getElementById('heroBg').style.backgroundImage=banner;
 
         // ── TOP BAR ──
         if(S.phone_primary){const e=document.getElementById('topPhone');e.classList.remove('hidden');e.querySelector('span').innerText=S.phone_primary}
@@ -281,12 +342,10 @@ async function boot(){
         if(S.school_timing){const e=document.getElementById('topTiming');e.classList.remove('hidden');e.querySelector('span').innerText=S.school_timing}
 
         // ── TOP SOCIAL ──
-        let ts='';
-        if(S.facebook_url)ts+=`<a href="${S.facebook_url}" target="_blank" class="hover:text-white"><i class="fa-brands fa-facebook-f"></i></a>`;
-        if(S.youtube_url)ts+=`<a href="${S.youtube_url}" target="_blank" class="hover:text-white"><i class="fa-brands fa-youtube"></i></a>`;
-        if(S.instagram_url)ts+=`<a href="${S.instagram_url}" target="_blank" class="hover:text-white"><i class="fa-brands fa-instagram"></i></a>`;
-        document.getElementById('topSocial').innerHTML=ts;
-        document.getElementById('footSocial').innerHTML=ts.replace(/text-xs/g,'').replace(/hover:text-white/g,'bg-gray-800 w-10 h-10 rounded-full flex items-center justify-center hover:bg-blue-600 text-white transition');
+        const socialLinks=[['facebook_url','fa-facebook-f'],['youtube_url','fa-youtube'],['instagram_url','fa-instagram']]
+            .map(([k,icon])=>{const u=safeUrl(S[k]);return u?`<a href="${esc(u)}" target="_blank" rel="noopener noreferrer" class="hover:text-white"><i class="fa-brands ${icon}"></i></a>`:''}).join('');
+        document.getElementById('topSocial').innerHTML=socialLinks;
+        document.getElementById('footSocial').innerHTML=socialLinks.replace(/hover:text-white/g,'bg-gray-800 w-10 h-10 rounded-full flex items-center justify-center hover:bg-blue-600 text-white transition');
 
         // ── HERO META ──
         if(S.established_year){const e=document.getElementById('heroEst');e.classList.remove('hidden');e.querySelector('span').innerText='Est. '+S.established_year}
@@ -310,53 +369,88 @@ async function boot(){
         if(S.phone_primary){document.getElementById('footPh1').classList.remove('hidden');document.getElementById('footPh1').querySelector('span').innerText=S.phone_primary}
         if(S.phone_secondary){document.getElementById('footPh2').classList.remove('hidden');document.getElementById('footPh2').querySelector('span').innerText=S.phone_secondary}
         if(S.email_primary){document.getElementById('footEm').classList.remove('hidden');document.getElementById('footEm').querySelector('span').innerText=S.email_primary}
-        
+
         let fc='';
-        if(S.address)fc+=`<p><i class="fa-solid fa-location-dot mr-2 text-blue-500"></i>${S.address}, ${S.city||''} ${S.pincode||''}</p>`;
-        if(S.phone_primary)fc+=`<p><i class="fa-solid fa-phone mr-2 text-green-500"></i>${S.phone_primary}</p>`;
-        if(S.email_primary)fc+=`<p><i class="fa-solid fa-envelope mr-2 text-blue-500"></i>${S.email_primary}</p>`;
+        if(S.address)fc+=`<p><i class="fa-solid fa-location-dot mr-2 text-blue-500"></i>${esc(S.address)}, ${esc(S.city)}, ${esc(S.pincode)}</p>`;
+        if(S.phone_primary)fc+=`<p><i class="fa-solid fa-phone mr-2 text-green-500"></i>${esc(S.phone_primary)}</p>`;
+        if(S.email_primary)fc+=`<p><i class="fa-solid fa-envelope mr-2 text-blue-500"></i>${esc(S.email_primary)}</p>`;
         document.getElementById('footContact').innerHTML=fc;
 
-        if(S.google_maps_url){document.getElementById('mapContainer').classList.remove('hidden');document.getElementById('mapFrame').src=S.google_maps_url}
+        const map=safeUrl(S.google_maps_url);
+        if(map){document.getElementById('mapContainer').classList.remove('hidden');document.getElementById('mapFrame').src=map}
 
         // ── LOAD DATA SECTIONS ──
-        loadSection('notices','marqueeText',n=>`<span class="inline-block mx-8">📢 ${n.title} (${n.notice_date})</span>`,{show:'marqueeSec',join:true,double:true});
-        loadSection('toppers','topperGrid',t=>`<div class="text-center group"><div class="relative inline-block"><img src="${t.photo_url||'https://via.placeholder.com/120'}" class="w-24 h-24 md:w-28 md:h-28 rounded-full object-cover border-4 border-yellow-400 shadow-xl mx-auto group-hover:scale-110 transition duration-300"><div class="absolute -bottom-2 -right-2 bg-yellow-400 text-yellow-900 font-black text-sm px-3 py-1 rounded-full shadow">${t.percentage_or_grade}</div></div><h4 class="font-bold text-gray-900 mt-4">${t.student_name}</h4><p class="text-xs text-gray-500 font-medium">${t.exam_name} · ${t.passing_year}</p></div>`,{show:'toppers'});
-        loadSection('facilities','facilityGrid',f=>`<div class="bg-blue-800 p-6 rounded-2xl border border-blue-700 text-center hover:bg-blue-700 transition"><i class="fa-solid fa-building-circle-check text-4xl text-yellow-400 mb-4"></i><h4 class="font-bold text-lg mb-2">${f.facility_name}</h4><p class="text-blue-200 text-sm">${f.description||''}</p></div>`,{show:'facilitiesSec'});
-        loadSection('staff_members','staffGrid',s=>`<div class="text-center"><img src="${s.photo_url||'https://via.placeholder.com/120'}" class="w-24 h-24 rounded-full object-cover mx-auto border-4 border-white shadow-lg mb-3"><h4 class="font-bold text-gray-900">${s.name}</h4><p class="text-blue-600 text-sm font-bold">${s.designation}</p><p class="text-gray-500 text-xs">${s.qualification||''}</p></div>`,{show:'faculty'});
-        loadSection('fee_structures','feeTable',f=>`<tr class="hover:bg-gray-50"><td class="px-6 py-4 font-bold text-gray-800">${f.class_name}</td><td class="px-6 py-4 text-gray-500">${f.academic_session||''}</td><td class="px-6 py-4 text-right font-black text-green-700 text-lg">₹${f.total_fee}</td></tr>`,{show:'feesSec'});
-        loadSection('achievements','achieveGrid',a=>`<div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100"><i class="fa-solid fa-award text-3xl text-yellow-500 mb-3"></i><h4 class="font-bold text-gray-900 mb-2">${a.title}</h4><p class="text-gray-500 text-sm">${a.description||''}</p></div>`,{show:'achieveSec'});
-        loadSection('testimonials','testGrid',t=>`<div class="bg-gray-50 p-8 rounded-2xl border border-gray-100 relative"><div class="text-yellow-400 text-lg mb-3">${'★'.repeat(t.rating||5)}<span class="text-gray-300">${'★'.repeat(5-(t.rating||5))}</span></div><p class="text-gray-700 italic mb-4">"${t.review_text}"</p><div class="flex items-center gap-3"><div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center font-bold">${(t.reviewer_name||'A').charAt(0)}</div><div><p class="font-bold text-gray-900 text-sm">${t.reviewer_name}</p><p class="text-xs text-gray-500">${t.reviewer_relation||''}</p></div></div></div>`,{show:'testSec'});
-        loadSection('galleries','galleryGrid',g=>`<div class="rounded-2xl overflow-hidden group relative"><img src="${g.image_url}" class="w-full h-40 md:h-52 object-cover group-hover:scale-110 transition duration-500"><div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-4 opacity-0 group-hover:opacity-100 transition"><p class="text-white text-sm font-medium">${g.caption||''}</p></div></div>`,{show:'gallery'});
-        loadSection('downloads','dlGrid',d=>`<a href="${d.file_url}" target="_blank" class="flex items-center justify-between bg-white p-5 rounded-xl shadow-sm border hover:shadow-md transition group"><div class="flex items-center gap-4"><div class="bg-red-100 p-3 rounded-xl text-red-600"><i class="fa-solid fa-file-pdf text-2xl"></i></div><div><p class="font-bold text-gray-800">${d.document_title}</p><p class="text-xs text-gray-500">${d.document_category||''}</p></div></div><i class="fa-solid fa-download text-gray-300 group-hover:text-blue-600 text-xl"></i></a>`,{show:'downloads'});
+        loadSection('notices','marqueeText',n=>`<span class="inline-block mx-8">📢 ${esc(n.title)} (${esc(n.notice_date)})</span>`,{show:'marqueeSec',join:true,double:true});
+        loadSection('toppers','topperGrid',t=>`<div class="text-center group"><div class="relative inline-block"><img src="${imgSrc(t.photo_url)}" alt="" class="w-24 h-24 md:w-28 md:h-28 rounded-full object-cover border-4 border-yellow-400 shadow-xl mx-auto group-hover:scale-110 transition duration-300"><div class="absolute -bottom-2 -right-2 bg-yellow-400 text-yellow-900 font-black text-sm px-3 py-1 rounded-full shadow">${esc(t.percentage_or_grade)}</div></div><h4 class="font-bold text-gray-900 mt-4">${esc(t.student_name)}</h4><p class="text-xs text-gray-500 font-medium">${esc(t.exam_name)} · ${esc(t.passing_year)}</p></div>`,{show:'toppers'});
+        loadSection('facilities','facilityGrid',f=>`<div class="bg-blue-800 p-6 rounded-2xl border border-blue-700 text-center hover:bg-blue-700 transition"><i class="fa-solid fa-building-circle-check text-4xl text-yellow-400 mb-4"></i><h4 class="font-bold text-lg mb-2">${esc(f.facility_name)}</h4><p class="text-blue-200 text-sm">${esc(f.description)}</p></div>`,{show:'facilitiesSec'});
+        loadSection('staff_members','staffGrid',s=>`<div class="text-center"><img src="${imgSrc(s.photo_url)}" alt="" class="w-24 h-24 rounded-full object-cover mx-auto border-4 border-white shadow-lg mb-3"><h4 class="font-bold text-gray-900">${esc(s.name)}</h4><p class="text-blue-600 text-sm font-bold">${esc(s.designation)}</p><p class="text-gray-500 text-xs">${esc(s.qualification)}</p></div>`,{show:'faculty'});
+        loadSection('fee_structures','feeTable',f=>`<tr class="hover:bg-gray-50"><td class="px-6 py-4 font-bold text-gray-800">${esc(f.class_name)}</td><td class="px-6 py-4 text-gray-500">${esc(f.academic_session)}</td><td class="px-6 py-4 text-right font-black text-green-700 text-lg">₹${esc(f.total_fee)}</td></tr>`,{show:'feesSec'});
+        loadSection('achievements','achieveGrid',a=>`<div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100"><i class="fa-solid fa-award text-3xl text-yellow-500 mb-3"></i><h4 class="font-bold text-gray-900 mb-2">${esc(a.title)}</h4><p class="text-gray-500 text-sm">${esc(a.description)}</p></div>`,{show:'achieveSec'});
+        loadSection('testimonials','testGrid',t=>`<div class="bg-gray-50 p-8 rounded-2xl border border-gray-100 relative"><div class="text-yellow-400 text-lg mb-3">${stars(t.rating)}</div><p class="text-gray-700 italic mb-4">&quot;${esc(t.review_text)}&quot;</p><div class="flex items-center gap-3"><div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center font-bold">${esc((t.reviewer_name||'A').charAt(0))}</div><div><p class="font-bold text-gray-900 text-sm">${esc(t.reviewer_name)}</p><p class="text-xs text-gray-500">${esc(t.reviewer_relation)}</p></div></div></div>`,{show:'testSec'});
+        loadSection('galleries','galleryGrid',g=>`<div class="rounded-2xl overflow-hidden group relative"><img src="${imgSrc(g.image_url)}" alt="" class="w-full h-40 md:h-52 object-cover group-hover:scale-110 transition duration-500"><div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-4 opacity-0 group-hover:opacity-100 transition"><p class="text-white text-sm font-medium">${esc(g.caption)}</p></div></div>`,{show:'gallery'});
+        loadSection('downloads','dlGrid',d=>`<a href="${esc(safeUrl(d.file_url) || '#')}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between bg-white p-5 rounded-xl shadow-sm border hover:shadow-md transition group"><div class="flex items-center gap-4"><div class="bg-red-100 p-3 rounded-xl text-red-600"><i class="fa-solid fa-file-pdf text-2xl"></i></div><div><p class="font-bold text-gray-800">${esc(d.document_title)}</p><p class="text-xs text-gray-500">${esc(d.document_category)}</p></div></div><i class="fa-solid fa-download text-gray-300 group-hover:text-blue-600 text-xl"></i></a>`,{show:'downloads'});
 
-    }catch(err){console.error(err)}
+    }catch(err){bootFailed(err)}
 }
 
 function leaderCard(name,qual,photo,msg,role){
-    return `<div class="bg-gray-50 rounded-2xl p-8 border shadow-sm"><div class="flex items-center gap-5 mb-6"><img src="${photo||'https://via.placeholder.com/100'}" class="w-20 h-20 rounded-full object-cover border-4 border-white shadow-lg"><div><p class="text-xs text-blue-600 font-black uppercase tracking-wider">${role}</p><h3 class="text-xl font-black text-gray-900">${name}</h3><p class="text-sm text-gray-500">${qual||''}</p></div></div><p class="text-gray-600 text-sm leading-relaxed italic">"${msg||'Welcome to our institution.'}"</p></div>`}
+    return `<div class="bg-gray-50 rounded-2xl p-8 border shadow-sm"><div class="flex items-center gap-5 mb-6"><img src="${imgSrc(photo)}" alt="" class="w-20 h-20 rounded-full object-cover border-4 border-white shadow-lg"><div><p class="text-xs text-blue-600 font-black uppercase tracking-wider">${esc(role)}</p><h3 class="text-xl font-black text-gray-900">${esc(name)}</h3><p class="text-sm text-gray-500">${esc(qual)}</p></div></div><p class="text-gray-600 text-sm leading-relaxed italic">&quot;${esc(msg||'Welcome to our institution.')}&quot;</p></div>`}
 
 async function loadSection(table,containerId,templateFn,opts={}){
-    const r=await fetch(`${SB}/rest/v1/${table}?school_id=eq.${schoolId}&order=created_at.desc&limit=8`,{headers:H});
-    const d=await r.json();
-    if(d.length>0){
-        if(opts.show)document.getElementById(opts.show).classList.remove('section-hidden');
-        const html=d.map(templateFn).join('');
-        document.getElementById(containerId).innerHTML=opts.double?html+html:html;
-    }
+    try{
+        const r=await fetch(`${SB}/rest/v1/${table}?school_id=eq.${encodeURIComponent(schoolId)}&order=created_at.desc&limit=8`,{headers:H});
+        if(!r.ok){console.warn(`Could not load "${table}" (HTTP ${r.status})`);return;}
+        const d=await r.json();
+        if(Array.isArray(d)&&d.length>0){
+            if(opts.show)document.getElementById(opts.show).classList.remove('section-hidden');
+            const html=d.map(templateFn).join('');
+            document.getElementById(containerId).innerHTML=opts.double?html+html:html;
+        }
+    }catch(e){console.warn(`Could not load "${table}"`,e);}
 }
 
 // ── INQUIRY FORM ──
+const INQUIRY_COOLDOWN_MS=60000;
+const iqStatus=(msg,type)=>{const el=document.getElementById('iqStatus');
+    if(!msg){el.classList.add('hidden');return;}
+    el.className='mb-5 p-3 rounded-lg font-bold text-sm '+(type==='error'?'bg-red-50 text-red-700 border border-red-200':'bg-amber-50 text-amber-700 border border-amber-200');
+    el.textContent=msg;};
+
 document.getElementById('inquiryForm').addEventListener('submit',async e=>{e.preventDefault();
-    const btn=document.getElementById('iqBtn');btn.innerText='Sending...';
-    await fetch(`${SB}/rest/v1/inquiries`,{method:'POST',headers:H,body:JSON.stringify({
-        school_id:schoolId,student_name:document.getElementById('iq_sname').value,parent_name:document.getElementById('iq_pname').value,
-        phone_number:document.getElementById('iq_phone').value,email:document.getElementById('iq_email').value,
-        class_applied_for:document.getElementById('iq_class').value,message:document.getElementById('iq_msg').value,status:'new'
-    })});
-    document.getElementById('inquiryForm').reset();
-    btn.innerText='✓ Inquiry Sent Successfully!';btn.style.backgroundColor='#16a34a';
-    setTimeout(()=>{btn.innerText='Submit Inquiry';btn.style.backgroundColor=S.primary_color||'#1e3a8a'},3000)});
+    const form=e.target,btn=document.getElementById('iqBtn');
+    if(btn.dataset.busy==='1')return;
+    const original=btn.dataset.label||btn.innerText;
+    btn.dataset.label=original;
+    iqStatus('');
+
+    // Honeypot: hidden from people, filled by bots. Accept silently, store nothing.
+    if(document.getElementById('iq_company').value.trim()){form.reset();return;}
+
+    // Light client-side throttle (real protection belongs in Supabase RLS/rate limits)
+    const last=parseInt(localStorage.getItem('lastInquiryTs')||'0',10);
+    if(Date.now()-last<INQUIRY_COOLDOWN_MS){iqStatus('Please wait a moment before sending another inquiry.','warn');return;}
+
+    const val=(id,max)=>document.getElementById(id).value.trim().slice(0,max);
+    const payload={school_id:schoolId,student_name:val('iq_sname',120),parent_name:val('iq_pname',120),
+        phone_number:val('iq_phone',20),email:val('iq_email',160),class_applied_for:val('iq_class',60),
+        message:val('iq_msg',2000),status:'new'};
+    if(!payload.student_name||!payload.parent_name||!payload.phone_number){iqStatus('Please fill in your name and phone number.','error');return;}
+
+    btn.dataset.busy='1';btn.disabled=true;btn.innerText='Sending...';
+    try{
+        const r=await fetch(`${SB}/rest/v1/inquiries`,{method:'POST',headers:{...H,'Prefer':'return=minimal'},body:JSON.stringify(payload)});
+        if(!r.ok)throw new Error('HTTP '+r.status);
+        localStorage.setItem('lastInquiryTs',String(Date.now()));
+        form.reset();
+        btn.innerText='✓ Inquiry Sent Successfully!';btn.style.backgroundColor='#16a34a';
+        iqStatus('Thank you! Our team will contact you within 24 hours.','warn');
+        setTimeout(()=>{btn.innerText=original;btn.style.backgroundColor=(S&&S.primary_color)||'#1e3a8a';iqStatus('');},5000);
+    }catch(err){
+        console.error(err);
+        iqStatus('Sorry — your inquiry could not be sent. Please try again, or call the school directly.','error');
+        btn.innerText=original;
+    }finally{delete btn.dataset.busy;btn.disabled=false;}
+});
 
 boot();
 </script>

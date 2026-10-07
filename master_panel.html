@@ -17,8 +17,66 @@
         .toast-enter-active { transform: translateY(0); opacity: 1; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800 font-sans antialiased overflow-hidden flex h-screen">
+<body class="bg-gray-50 text-gray-800 font-sans antialiased">
 
+    <!-- ═══════════════ LOGIN (required before anything is loaded) ═══════════════ -->
+    <div id="loginScreen" class="min-h-screen w-full bg-gray-900 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-10">
+            <div class="flex items-center gap-3 mb-8">
+                <div class="w-11 h-11 bg-blue-600 rounded-lg flex items-center justify-center shadow-lg">
+                    <i class="fa-solid fa-server text-white text-lg"></i>
+                </div>
+                <div>
+                    <p class="text-xl font-extrabold tracking-wide leading-none">SaaS<span class="text-blue-500">Master</span></p>
+                    <p class="text-xs text-gray-500 font-bold uppercase tracking-widest mt-1">Super Admin Access</p>
+                </div>
+            </div>
+
+            <p id="loginError" class="hidden bg-red-50 text-red-600 border border-red-200 p-3 rounded-lg mb-5 font-bold text-sm"></p>
+
+            <form id="saLoginForm" class="space-y-5">
+                <div>
+                    <label class="text-sm font-bold text-gray-700 block mb-2">Admin Email</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-envelope absolute left-4 top-3.5 text-gray-400"></i>
+                        <input type="email" id="saEmail" required autocomplete="username" class="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition" placeholder="you@company.com">
+                    </div>
+                </div>
+                <div>
+                    <label class="text-sm font-bold text-gray-700 block mb-2">Password</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-lock absolute left-4 top-3.5 text-gray-400"></i>
+                        <input type="password" id="saPassword" required autocomplete="current-password" class="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition" placeholder="••••••••">
+                    </div>
+                </div>
+                <button type="submit" id="saLoginBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition shadow-lg shadow-blue-500/30">
+                    Sign In <i class="fa-solid fa-arrow-right ml-2"></i>
+                </button>
+            </form>
+            <p class="text-xs text-gray-400 mt-6 text-center leading-relaxed">This console can read every tenant and delete schools.<br>Access is limited to accounts listed in <span class="font-mono">platform_admins</span>.</p>
+        </div>
+    </div>
+
+    <!-- ═══════════════ SETUP / NOT-AUTHORISED ═══════════════ -->
+    <div id="setupScreen" class="hidden min-h-screen w-full bg-gray-900 text-white p-6 md:p-12 overflow-y-auto">
+        <div class="max-w-3xl mx-auto">
+            <div class="flex items-center gap-3 mb-8">
+                <div class="w-11 h-11 bg-red-600 rounded-lg flex items-center justify-center"><i class="fa-solid fa-shield-halved"></i></div>
+                <h1 id="setupTitle" class="text-2xl font-extrabold">Access denied</h1>
+            </div>
+            <p id="setupMsg" class="text-gray-300 mb-6 leading-relaxed"></p>
+            <div id="setupIdentity" class="bg-gray-800 border border-gray-700 rounded-xl p-5 mb-6 text-sm font-mono"></div>
+            <h2 class="font-bold text-lg mb-3">Run this once in the Supabase SQL editor</h2>
+            <pre id="setupSql" class="bg-black/60 border border-gray-700 rounded-xl p-5 text-xs overflow-x-auto whitespace-pre text-green-300"></pre>
+            <div class="flex gap-3 mt-8">
+                <button id="setupRetry" class="bg-blue-600 hover:bg-blue-700 font-bold py-3 px-6 rounded-xl"><i class="fa-solid fa-rotate mr-2"></i>I ran it — retry</button>
+                <button id="setupSignOut" class="bg-gray-800 hover:bg-gray-700 font-bold py-3 px-6 rounded-xl">Sign out</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════ CONSOLE (only rendered after a platform-admin check) ═══════════════ -->
+    <div id="appScreen" class="hidden h-screen w-full flex">
     <!-- SIDEBAR -->
     <aside class="w-72 bg-gray-900 text-white flex-col hidden md:flex shadow-2xl z-20">
         <div class="h-20 flex items-center px-8 border-b border-gray-800">
@@ -38,23 +96,26 @@
                 <i class="fa-solid fa-database w-6 text-lg"></i> Client Database
             </a>
         </nav>
-        <div class="p-6 border-t border-gray-800 text-xs text-gray-500 text-center font-medium">
-            Super Admin Portal v2.0 &copy; 2026
+        <div class="p-6 border-t border-gray-800">
+            <p class="text-xs text-gray-400 font-bold truncate mb-3"><i class="fa-solid fa-user-shield mr-2 text-blue-400"></i><span id="whoami">—</span></p>
+            <button id="signOutBtn" class="w-full text-xs bg-gray-800 hover:bg-red-600 text-gray-200 font-bold py-2 rounded-lg transition mb-3"><i class="fa-solid fa-right-from-bracket mr-2"></i>Sign out</button>
+            <p class="text-[10px] text-gray-600 text-center font-medium">Super Admin Portal v2.1 &copy; 2026</p>
         </div>
     </aside>
 
     <!-- MAIN CONTENT -->
     <main class="flex-1 flex flex-col h-screen overflow-y-auto relative bg-gray-50">
-        
+
         <header class="md:hidden bg-gray-900 text-white p-4 flex justify-between items-center shadow-md sticky top-0 z-30">
             <div class="flex items-center">
                 <i class="fa-solid fa-server text-blue-500 text-xl mr-2"></i>
                 <span class="text-lg font-extrabold">SaaS Master</span>
             </div>
+            <button id="signOutBtnMobile" class="text-xs bg-gray-800 hover:bg-red-600 font-bold py-2 px-3 rounded-lg"><i class="fa-solid fa-right-from-bracket"></i></button>
         </header>
 
         <div class="p-4 md:p-10 max-w-7xl mx-auto w-full space-y-8">
-            
+
             <div class="flex justify-between items-end">
                 <div>
                     <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight">Executive Dashboard</h1>
@@ -97,12 +158,12 @@
                         </div>
                         <div>
                             <label class="block text-sm font-bold text-gray-700 mb-2">Supabase Auth UID</label>
-<input type="text" id="owner_id" required placeholder="e.g. e80c170a-..." class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
+                            <input type="text" id="owner_id" required placeholder="e.g. e80c170a-..." class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
                         </div>
-                        
+
                         <div class="md:col-span-3 flex justify-end">
                             <button type="submit" id="submitBtn" class="w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-10 rounded-xl shadow-lg transition-transform transform hover:scale-105">
-                                Create Client Account & Generate Keys
+                                Create Client Account &amp; Generate Keys
                             </button>
                         </div>
                     </form>
@@ -113,11 +174,11 @@
             <section id="list-section" class="bg-white rounded-3xl shadow-lg border border-gray-100 overflow-hidden">
                 <div class="bg-gray-50 px-8 py-5 border-b border-gray-200 flex justify-between items-center">
                     <h2 class="text-xl font-bold text-gray-900"><i class="fa-solid fa-server mr-3 text-blue-600"></i>Client Database</h2>
-                    <button onclick="fetchSchools()" class="bg-white border border-gray-200 text-gray-700 hover:text-blue-600 font-bold py-2 px-4 rounded-lg shadow-sm text-sm transition">
+                    <button id="refreshBtn" class="bg-white border border-gray-200 text-gray-700 hover:text-blue-600 font-bold py-2 px-4 rounded-lg shadow-sm text-sm transition">
                         <i class="fa-solid fa-rotate mr-2"></i>Refresh Data
                     </button>
                 </div>
-                
+
                 <div class="overflow-x-auto">
                     <table class="w-full text-left">
                         <thead>
@@ -137,105 +198,286 @@
 
         </div>
     </main>
+    </div>
 
     <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-3"></div>
 
     <script>
+        // --- Config -------------------------------------------------------------
         const SUPABASE_URL = "https://xlmsgtxyrlovjobwvdom.supabase.co";
-        const SUPABASE_ANON_KEY = "sb_publishable_iLRrB73mPbgH0FtPvMOVbg_eoNyCtd3"; 
-        const headers = { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` };
+        const SUPABASE_ANON_KEY = "sb_publishable_iLRrB73mPbgH0FtPvMOVbg_eoNyCtd3";
+        const PLATFORM_ADMIN_TABLE = "platform_admins";
 
-        document.addEventListener('DOMContentLoaded', fetchSchools);
+        // Optional fallback allow-list, used only when the platform_admins table does not exist yet.
+        // Real enforcement must be the RLS policies in supabase/schema.sql — an allow-list that
+        // ships inside a public HTML file is a convenience, not a security boundary.
+        const SUPER_ADMIN_EMAILS = [];
 
-        async function fetchSchools() {
+        const headers = { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON_KEY };
+        // Every console request now carries the signed-in admin's token instead of the anon key.
+        const authHeaders = () => ({ ...headers, 'Authorization': `Bearer ${sessionStorage.getItem('sa_token') || SUPABASE_ANON_KEY}` });
+
+        // --- Output safety ------------------------------------------------------
+        const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        const maskKey = k => { const s = String(k || ''); return s.length > 12 ? s.slice(0, 8) + '\u2026' + s.slice(-4) : (s || '\u2014'); };
+
+        // --- Screens ------------------------------------------------------------
+        const show = (id) => ['loginScreen', 'setupScreen', 'appScreen'].forEach(s => document.getElementById(s).classList.toggle('hidden', s !== id));
+        function loginError(msg) { const el = document.getElementById('loginError'); el.innerText = msg; el.classList.remove('hidden'); }
+        function signOut(msg) {
+            sessionStorage.removeItem('sa_token');
+            document.getElementById('saPassword').value = '';
+            show('loginScreen');
+            if (msg) loginError(msg);
+        }
+
+        function showSetup(user, msg) {
+            const uid = (user && user.id) || '(unknown)';
+            const email = (user && user.email) || '(unknown)';
+            document.getElementById('setupTitle').innerText = 'Not a platform admin';
+            document.getElementById('setupMsg').innerText = msg;
+            document.getElementById('setupIdentity').textContent = 'signed in as: ' + email + '\nauth uid:      ' + uid;
+            document.getElementById('setupSql').textContent =
+`-- 1. the platform-admin registry (run once, in the Supabase SQL editor)
+create table if not exists public.platform_admins (
+  user_id    uuid primary key references auth.users(id) on delete cascade,
+  email      text,
+  created_at timestamptz not null default now()
+);
+alter table public.platform_admins enable row level security;
+
+-- every admin may read only their own row; nobody can insert via the API
+drop policy if exists "read own admin row" on public.platform_admins;
+create policy "read own admin row" on public.platform_admins
+  for select to authenticated using (user_id = auth.uid());
+
+-- 2. promote this account
+insert into public.platform_admins (user_id, email)
+values ('${uid}', '${email}')
+on conflict (user_id) do nothing;
+
+-- 3. then apply supabase/schema.sql so "being a platform admin" actually grants
+--    the console access to public.schools.`;
+            show('setupScreen');
+        }
+
+        // --- Session / authorisation -------------------------------------------
+        async function fetchUser(token) {
             try {
-                const response = await fetch(`${SUPABASE_URL}/rest/v1/schools?select=id,school_name,username,api_key,created_at&order=created_at.desc`, { headers });
+                const r = await fetch(`${SUPABASE_URL}/auth/v1/user`, { headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${token}` } });
+                if (!r.ok) return null;
+                const u = await r.json();
+                return (u && u.id) ? u : null;
+            } catch (e) { return null; }
+        }
+
+        // Returns { allowed, tableMissing, status }
+        async function checkPlatformAdmin(user) {
+            try {
+                const r = await fetch(`${SUPABASE_URL}/rest/v1/${PLATFORM_ADMIN_TABLE}?user_id=eq.${encodeURIComponent(user.id)}&select=user_id&limit=1`, { headers: authHeaders() });
+                if (r.ok) {
+                    const d = await r.json();
+                    return { allowed: Array.isArray(d) && d.length > 0, tableMissing: false };
+                }
+                // PostgREST answers 404 / PGRST205 when the table has not been created yet
+                return { allowed: false, tableMissing: r.status === 404, status: r.status };
+            } catch (e) {
+                return { allowed: false, tableMissing: false, offline: true };
+            }
+        }
+
+        async function bootMaster() {
+            const token = sessionStorage.getItem('sa_token');
+            if (!token) return show('loginScreen');
+            const user = await fetchUser(token);
+            if (!user) return signOut('Your session expired. Please sign in again.');
+            await authorise(user);
+        }
+
+        async function authorise(user) {
+            const chk = await checkPlatformAdmin(user);
+            if (chk.allowed) { enterConsole(user); return; }
+            if (chk.tableMissing && SUPER_ADMIN_EMAILS.includes((user.email || '').toLowerCase())) { enterConsole(user); return; }
+            if (chk.offline) return signOut('Network error while checking your access. Please retry.');
+            if (chk.tableMissing) return showSetup(user, 'The platform_admins table does not exist yet, so nobody can be verified as a super admin. Create it and promote your account with the SQL below.');
+            if (chk.status === 401 || chk.status === 403) return signOut('Your session is no longer valid. Please sign in again.');
+            return showSetup(user, 'This account is not listed in platform_admins. Add your uid below (or ask another super admin to).');
+        }
+
+        let currentUser = null;
+        function enterConsole(user) {
+            currentUser = user;
+            document.getElementById('whoami').innerText = user.email || user.id;
+            show('appScreen');
+            fetchSchools();
+        }
+
+        document.getElementById('saLoginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('saLoginBtn');
+            const reset = () => btn.innerHTML = 'Sign In <i class="fa-solid fa-arrow-right ml-2"></i>';
+            document.getElementById('loginError').classList.add('hidden');
+            btn.innerHTML = 'Signing in...';
+            try {
+                const r = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+                    method: 'POST',
+                    headers,
+                    body: JSON.stringify({ email: document.getElementById('saEmail').value.trim(), password: document.getElementById('saPassword').value })
+                });
+                if (!r.ok) { reset(); return loginError('Invalid email or password.'); }
+                const d = await r.json();
+                if (!d || !d.access_token) { reset(); return loginError('Sign-in failed. Please retry.'); }
+                sessionStorage.setItem('sa_token', d.access_token);
+                reset();
+                const user = d.user || await fetchUser(d.access_token);
+                if (!user) return signOut('Sign-in failed. Please retry.');
+                await authorise(user);
+            } catch (err) { reset(); loginError('Network error — could not reach Supabase.'); }
+        });
+
+        document.getElementById('signOutBtn').addEventListener('click', () => signOut());
+        document.getElementById('signOutBtnMobile').addEventListener('click', () => signOut());
+        document.getElementById('setupSignOut').addEventListener('click', () => signOut());
+        document.getElementById('setupRetry').addEventListener('click', () => { if (currentUser) authorise(currentUser); else bootMaster(); });
+        document.getElementById('refreshBtn').addEventListener('click', fetchSchools);
+
+        // --- Data ---------------------------------------------------------------
+        async function fetchSchools() {
+            const tbody = document.getElementById('schoolTableBody');
+            try {
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/schools?select=id,school_name,username,api_key,created_at&order=created_at.desc`, { headers: authHeaders() });
+
+                if (response.status === 401 || response.status === 403) return signOut('Your session expired. Please sign in again.');
+                if (!response.ok) {
+                    tbody.innerHTML = `<tr><td colspan="4" class="p-10 text-center text-red-500 font-bold">Could not load clients (HTTP ${response.status}).<br><span class="text-xs font-medium text-gray-500">If the API is refusing you, apply supabase/schema.sql so platform admins can read public.schools.</span></td></tr>`;
+                    return;
+                }
+
                 const data = await response.json();
-                
+                if (!Array.isArray(data)) throw new Error('Unexpected response from Supabase.');
                 document.getElementById('stat-total').innerText = data.length;
-                const tbody = document.getElementById('schoolTableBody');
-                
-                if(data.length === 0) {
+
+                if (data.length === 0) {
                     tbody.innerHTML = `<tr><td colspan="4" class="p-10 text-center text-gray-500 font-bold">No clients registered yet.</td></tr>`;
                     return;
                 }
 
-                tbody.innerHTML = data.map(s => `
+                tbody.innerHTML = data.map(s => {
+                    const name = String(s.school_name || '');
+                    const masked = maskKey(s.api_key);
+                    return `
                     <tr class="hover:bg-gray-50 transition">
                         <td class="px-8 py-5">
                             <div class="flex items-center">
-                                <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-black mr-4 shadow-inner">${s.school_name.charAt(0)}</div>
-                                <span class="font-extrabold text-gray-900 text-base">${s.school_name}</span>
+                                <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-black mr-4 shadow-inner">${esc(name.charAt(0) || '?')}</div>
+                                <span class="font-extrabold text-gray-900 text-base">${esc(name)}</span>
                             </div>
                         </td>
-                        
-                        <td class="px-8 py-5 text-gray-500 font-medium">
-                            ${new Date(s.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+
+                        <td class="px-8 py-5">
+                            <p class="font-bold text-gray-700">${esc(s.username) || '<span class="text-gray-400 font-medium">no username</span>'}</p>
+                            <p class="font-mono text-xs text-gray-500 mt-1" data-key-masked="${esc(masked)}" data-key-full="${esc(s.api_key)}">${esc(masked)}</p>
                         </td>
-                        <td class="px-8 py-5 text-right space-x-2">
-                            <button onclick="copyKey('${s.api_key}')" class="bg-gray-900 hover:bg-black text-white px-4 py-2 rounded-lg font-bold text-xs shadow transition">
+
+                        <td class="px-8 py-5 text-gray-500 font-medium">
+                            ${esc(new Date(s.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }))}
+                        </td>
+
+                        <td class="px-8 py-5 text-right space-x-2 whitespace-nowrap">
+                            <button data-act="reveal" class="bg-white border border-gray-200 hover:border-gray-400 text-gray-600 px-3 py-2 rounded-lg font-bold text-xs shadow transition" title="Show / hide key">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                            <button data-act="copy" data-key="${esc(s.api_key)}" class="bg-gray-900 hover:bg-black text-white px-4 py-2 rounded-lg font-bold text-xs shadow transition">
                                 Copy API Key
                             </button>
-                            <button onclick="deleteSchool('${s.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 px-3 py-2 rounded-lg font-bold text-xs border border-red-200 transition">
+                            <button data-act="delete" data-id="${esc(s.id)}" data-name="${esc(name)}" class="bg-red-50 hover:bg-red-100 text-red-600 px-3 py-2 rounded-lg font-bold text-xs border border-red-200 transition">
                                 <i class="fa-solid fa-trash"></i>
                             </button>
                         </td>
-                    </tr>
-                `).join('');
+                    </tr>`;
+                }).join('');
             } catch (error) { showToast(error.message, 'error'); }
         }
+
+        // Row actions are delegated — no database value is ever interpolated into a JS handler.
+        document.getElementById('schoolTableBody').addEventListener('click', async (e) => {
+            const b = e.target.closest('[data-act]');
+            if (!b) return;
+            if (b.dataset.act === 'copy') {
+                await copyText(b.dataset.key);
+                showToast('API Key copied!', 'success');
+            } else if (b.dataset.act === 'reveal') {
+                const p = b.closest('td').parentElement.querySelector('[data-key-full]');
+                if (!p) return;
+                const hidden = p.textContent.includes('\u2026');
+                p.textContent = hidden ? (p.dataset.keyFull || '') : (p.dataset.keyMasked || '');
+            } else if (b.dataset.act === 'delete') {
+                deleteSchool(b.dataset.id, b.dataset.name);
+            }
+        });
 
         document.getElementById('addSchoolForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
             const originalText = btn.innerText;
             btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Provisioning Database...`;
-            
+
             try {
-                // If API Key is not auto-generated, we create one via uuid() on DB side if default is set.
-                // Assuming it has default uuid generation.
                 const response = await fetch(`${SUPABASE_URL}/rest/v1/schools`, {
                     method: 'POST',
-                    headers: { ...headers, 'Prefer': 'return=representation' },
+                    headers: { ...authHeaders(), 'Prefer': 'return=representation' },
                     body: JSON.stringify({
-                        school_name: document.getElementById('schoolName').value,
-                        owner_id: document.getElementById('owner_id').value
-                        
+                        school_name: document.getElementById('schoolName').value.trim(),
+                        owner_id: document.getElementById('owner_id').value.trim()
                     })
                 });
 
-                if (!response.ok) throw new Error("Failed to create. Check if username is unique.");
-                
+                if (response.status === 401 || response.status === 403) return signOut('Your session expired. Please sign in again.');
+                if (!response.ok) {
+                    let detail = `HTTP ${response.status}`;
+                    try { const j = await response.json(); if (j && j.message) detail = j.message; } catch (err) { }
+                    throw new Error('Could not create the school: ' + detail);
+                }
+
                 showToast('Client provisioned successfully!', 'success');
                 document.getElementById('addSchoolForm').reset();
                 fetchSchools();
-            } catch (error) { showToast(error.message, 'error'); } 
+            } catch (error) { showToast(error.message, 'error'); }
             finally { btn.innerText = originalText; }
         });
 
-        async function deleteSchool(id) {
-            if(!confirm("DANGER: This will permanently delete the school and all its data. Continue?")) return;
+        async function deleteSchool(id, name) {
+            if (!confirm(`DANGER: This will permanently delete "${name}" and all of its data. Continue?`)) return;
             try {
-                await fetch(`${SUPABASE_URL}/rest/v1/schools?id=eq.${id}`, { method: 'DELETE', headers });
-                showToast("School deleted.", "success");
+                const r = await fetch(`${SUPABASE_URL}/rest/v1/schools?id=eq.${encodeURIComponent(id)}`, { method: 'DELETE', headers: authHeaders() });
+                if (r.status === 401 || r.status === 403) return signOut('Your session expired. Please sign in again.');
+                if (!r.ok) { showToast(`Delete failed (HTTP ${r.status}). Nothing was removed.`, 'error'); return; }
+                showToast('School deleted.', 'success');
                 fetchSchools();
-            } catch(e) { showToast("Delete failed", "error"); }
+            } catch (e) { showToast('Delete failed — nothing was removed.', 'error'); }
         }
 
-        function copyKey(key) {
-            navigator.clipboard.writeText(key);
-            showToast("API Key Copied!", "success");
+        async function copyText(text) {
+            try {
+                if (navigator.clipboard && window.isSecureContext) return await navigator.clipboard.writeText(text);
+                const ta = document.createElement('textarea');
+                ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+                document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
+            } catch (e) { showToast('Copy failed — select the key manually.', 'error'); }
         }
 
-        function showToast(msg, type='success') {
+        function showToast(msg, type = 'success') {
             const container = document.getElementById('toastContainer');
             const toast = document.createElement('div');
-            const bg = type==='success' ? 'bg-green-600' : 'bg-red-600';
+            const bg = type === 'success' ? 'bg-green-600' : 'bg-red-600';
             toast.className = `${bg} text-white px-6 py-3 rounded-xl shadow-2xl font-bold flex items-center text-sm`;
-            toast.innerHTML = `<i class="fa-solid ${type==='success'?'fa-check-circle':'fa-triangle-exclamation'} mr-3 text-lg"></i> ${msg}`;
+            toast.innerHTML = `<i class="fa-solid ${type === 'success' ? 'fa-check-circle' : 'fa-triangle-exclamation'} mr-3 text-lg"></i> `;
+            toast.appendChild(document.createTextNode(String(msg)));
             container.appendChild(toast);
             setTimeout(() => toast.remove(), 3000);
         }
+
+        document.addEventListener('DOMContentLoaded', bootMaster);
     </script>
 </body>
 </html>

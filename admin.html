@@ -63,19 +63,19 @@
         
         <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-1 custom-scrollbar">
             <p class="px-3 text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 mt-2">Content</p>
-            <button onclick="sw('notices')" class="tab-btn active w-full text-left px-4 py-2.5 rounded-lg font-semibold text-gray-600 hover:bg-gray-50 transition flex items-center gap-3"><i class="fa-solid fa-bullhorn w-5"></i> Notices</button>
-            <button onclick="sw('toppers')" class="tab-btn w-full text-left px-4 py-2.5 rounded-lg font-semibold text-gray-600 hover:bg-gray-50 transition flex items-center gap-3"><i class="fa-solid fa-medal w-5"></i> Toppers</button>
-            <button onclick="sw('galleries')" class="tab-btn w-full text-left px-4 py-2.5 rounded-lg font-semibold text-gray-600 hover:bg-gray-50 transition flex items-center gap-3"><i class="fa-solid fa-images w-5"></i> Gallery</button>
-            <button onclick="sw('facilities')" class="tab-btn w-full text-left px-4 py-2.5 rounded-lg font-semibold text-gray-600 hover:bg-gray-50 transition flex items-center gap-3"><i class="fa-solid fa-building w-5"></i> Facilities</button>
-            <button onclick="sw('downloads')" class="tab-btn w-full text-left px-4 py-2.5 rounded-lg font-semibold text-gray-600 hover:bg-gray-50 transition flex items-center gap-3"><i class="fa-solid fa-download w-5"></i> Downloads</button>
-            <button onclick="sw('fee_structures')" class="tab-btn w-full text-left px-4 py-2.5 rounded-lg font-semibold text-gray-600 hover:bg-gray-50 transition flex items-center gap-3"><i class="fa-solid fa-indian-rupee-sign w-5"></i> Fees</button>
-            <button onclick="sw('staff_members')" class="tab-btn w-full text-left px-4 py-2.5 rounded-lg font-semibold text-gray-600 hover:bg-gray-50 transition flex items-center gap-3"><i class="fa-solid fa-users w-5"></i> Faculty</button>
-            <button onclick="sw('achievements')" class="tab-btn w-full text-left px-4 py-2.5 rounded-lg font-semibold text-gray-600 hover:bg-gray-50 transition flex items-center gap-3"><i class="fa-solid fa-trophy w-5"></i> Achievements</button>
-            <button onclick="sw('testimonials')" class="tab-btn w-full text-left px-4 py-2.5 rounded-lg font-semibold text-gray-600 hover:bg-gray-50 transition flex items-center gap-3"><i class="fa-solid fa-star w-5"></i> Testimonials</button>
+            <button onclick=\"sw('notices', this)\" class="tab-btn active w-full text-left px-4 py-2.5 rounded-lg font-semibold text-gray-600 hover:bg-gray-50 transition flex items-center gap-3"><i class="fa-solid fa-bullhorn w-5"></i> Notices</button>
+            <button onclick=\"sw('toppers', this)\" class="tab-btn w-full text-left px-4 py-2.5 rounded-lg font-semibold text-gray-600 hover:bg-gray-50 transition flex items-center gap-3"><i class="fa-solid fa-medal w-5"></i> Toppers</button>
+            <button onclick=\"sw('galleries', this)\" class="tab-btn w-full text-left px-4 py-2.5 rounded-lg font-semibold text-gray-600 hover:bg-gray-50 transition flex items-center gap-3"><i class="fa-solid fa-images w-5"></i> Gallery</button>
+            <button onclick=\"sw('facilities', this)\" class="tab-btn w-full text-left px-4 py-2.5 rounded-lg font-semibold text-gray-600 hover:bg-gray-50 transition flex items-center gap-3"><i class="fa-solid fa-building w-5"></i> Facilities</button>
+            <button onclick=\"sw('downloads', this)\" class="tab-btn w-full text-left px-4 py-2.5 rounded-lg font-semibold text-gray-600 hover:bg-gray-50 transition flex items-center gap-3"><i class="fa-solid fa-download w-5"></i> Downloads</button>
+            <button onclick=\"sw('fee_structures', this)\" class="tab-btn w-full text-left px-4 py-2.5 rounded-lg font-semibold text-gray-600 hover:bg-gray-50 transition flex items-center gap-3"><i class="fa-solid fa-indian-rupee-sign w-5"></i> Fees</button>
+            <button onclick=\"sw('staff_members', this)\" class="tab-btn w-full text-left px-4 py-2.5 rounded-lg font-semibold text-gray-600 hover:bg-gray-50 transition flex items-center gap-3"><i class="fa-solid fa-users w-5"></i> Faculty</button>
+            <button onclick=\"sw('achievements', this)\" class="tab-btn w-full text-left px-4 py-2.5 rounded-lg font-semibold text-gray-600 hover:bg-gray-50 transition flex items-center gap-3"><i class="fa-solid fa-trophy w-5"></i> Achievements</button>
+            <button onclick=\"sw('testimonials', this)\" class="tab-btn w-full text-left px-4 py-2.5 rounded-lg font-semibold text-gray-600 hover:bg-gray-50 transition flex items-center gap-3"><i class="fa-solid fa-star w-5"></i> Testimonials</button>
             
             <p class="px-3 text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 mt-6">System</p>
-            <button onclick="sw('inquiries')" class="tab-btn w-full text-left px-4 py-2.5 rounded-lg font-semibold text-blue-600 bg-blue-50 hover:bg-blue-100 transition flex items-center gap-3"><i class="fa-solid fa-envelope w-5"></i> Inquiries</button>
-            <button onclick="sw('profile')" class="tab-btn w-full text-left px-4 py-2.5 rounded-lg font-semibold text-gray-600 hover:bg-gray-50 transition flex items-center gap-3"><i class="fa-solid fa-gear w-5"></i> School Profile</button>
+            <button onclick=\"sw('inquiries', this)\" class="tab-btn w-full text-left px-4 py-2.5 rounded-lg font-semibold text-blue-600 bg-blue-50 hover:bg-blue-100 transition flex items-center gap-3"><i class="fa-solid fa-envelope w-5"></i> Inquiries</button>
+            <button onclick=\"sw('profile', this)\" class="tab-btn w-full text-left px-4 py-2.5 rounded-lg font-semibold text-gray-600 hover:bg-gray-50 transition flex items-center gap-3"><i class="fa-solid fa-gear w-5"></i> School Profile</button>
         </nav>
 
         <div class="p-4 border-t">
@@ -262,58 +262,105 @@ const AK = "sb_publishable_iLRrB73mPbgH0FtPvMOVbg_eoNyCtd3";
 const getH = () => ({ 'Content-Type': 'application/json', apikey: AK, Authorization: `Bearer ${localStorage.getItem('sb_token') || AK}` });
 const sid = () => localStorage.getItem('sid');
 
+// --- Output-safety helpers -------------------------------------------------
+// Every value that comes out of the database is escaped before it reaches innerHTML,
+// and every database URL is protocol-checked. This closes the stored-XSS hole where a
+// public inquiry (or any stored field) could run script inside the admin session.
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+const safeUrl = u => { const s = String(u ?? '').trim(); if (!s) return ''; try { const x = new URL(s, location.href); return (x.protocol === 'http:' || x.protocol === 'https:') ? x.href : ''; } catch { return ''; } };
+const IMG_FALLBACK = 'data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="200" height="200" fill="#e2e8f0"/><text x="100" y="105" font-family="sans-serif" font-size="16" fill="#94a3b8" text-anchor="middle">No photo</text></svg>');
+const imgSrc = (u, fb = IMG_FALLBACK) => esc(safeUrl(u) || fb);
+const stars = r => { const n = (r === null || r === undefined || r === '') ? 5 : parseInt(r, 10); return '\u2605'.repeat(Number.isFinite(n) ? Math.min(5, Math.max(0, n)) : 5); };
+// Row actions carry data-* attributes, never string-interpolated onclick handlers.
+const actBtns = (t, i, c = {}) =>
+    `<button data-act="edit" data-t="${t}" data-id="${esc(i.id)}" class="${c.edit || 'text-blue-500 hover:text-blue-700 p-2'}"><i class="fa-solid fa-pen"></i></button>` +
+    `<button data-act="del" data-t="${t}" data-id="${esc(i.id)}" class="${c.del || 'text-red-400 hover:text-red-600 p-2'}"><i class="fa-solid ${c.delIcon || 'fa-trash'}"></i></button>`;
+
+// Broken images fall back to the placeholder (error events do not bubble, so capture them)
+document.addEventListener('error', e => {
+    const el = e.target;
+    if (el && el.tagName === 'IMG' && !el.dataset.fb) { el.dataset.fb = '1'; el.src = IMG_FALLBACK; }
+}, true);
+
+// Single delegated click handler for every edit/delete button
+document.addEventListener('click', e => {
+    const b = e.target.closest('[data-act]');
+    if (!b) return;
+    if (b.dataset.act === 'edit') editItem(b.dataset.t, b.dataset.id);
+    else if (b.dataset.act === 'del') delItem(b.dataset.t, b.dataset.id);
+});
+
+
 // --- Global State ---
 let editingState = { table: null, id: null };
 
 // --- DOM Ready ---
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     const dInput = document.getElementById('n_date');
     if (dInput) dInput.valueAsDate = new Date();
-    if (sid()) showDash(localStorage.getItem('sname'));
+    const token = localStorage.getItem('sb_token');
+    if (!token || !sid()) { clearSession(); return; }
+    try {
+        // Confirm the stored token is still valid before showing the dashboard,
+        // so an expired session shows the login screen rather than empty lists.
+        const r = await fetch(`${SB}/auth/v1/user`, { headers: { 'apikey': AK, Authorization: `Bearer ${token}` } });
+        if (!r.ok) return forceLogin('Your session expired. Please sign in again.');
+    } catch (err) { /* offline: fall through, the lists surface their own errors */ }
+    showDash(localStorage.getItem('sname'));
 });
 
 // --- Login Flow ---
+function loginErr(msg) {
+    const el = document.getElementById('loginError');
+    el.innerText = msg;
+    el.classList.remove('hidden');
+}
+function clearSession() { ['sb_token', 'sid', 'sname'].forEach(k => localStorage.removeItem(k)); }
+// Called whenever the API answers 401/403: drop the dead token and go back to the login screen
+// instead of silently rendering an empty dashboard.
+function forceLogin(msg) {
+    clearSession();
+    document.getElementById('dashboardScreen').classList.add('hidden');
+    document.getElementById('loginScreen').classList.remove('hidden');
+    const pw = document.getElementById('loginPass');
+    if (pw) pw.value = '';
+    if (msg) loginErr(msg);
+}
+
 document.getElementById('loginForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const btn = e.target.querySelector('button');
+    const reset = () => btn.innerHTML = `Sign In <i class="fa-solid fa-arrow-right ml-2"></i>`;
+    document.getElementById('loginError').classList.add('hidden');
     btn.innerHTML = 'Signing in...';
     try {
-        const u = document.getElementById('loginUser').value;
+        const u = document.getElementById('loginUser').value.trim();
         const p = document.getElementById('loginPass').value;
-        
+
         const authRes = await fetch(`${SB}/auth/v1/token?grant_type=password`, {
             method: 'POST',
             headers: { 'apikey': AK, 'Content-Type': 'application/json' },
             body: JSON.stringify({ email: u, password: p })
         });
-        
-        if (!authRes.ok) {
-            document.getElementById('loginError').innerText = "Invalid email or password";
-            document.getElementById('loginError').classList.remove('hidden');
-            btn.innerHTML = `Sign In <i class="fa-solid fa-arrow-right ml-2"></i>`;
-            return;
-        }
+
+        if (!authRes.ok) { clearSession(); loginErr("Invalid email or password"); reset(); return; }
         const authData = await authRes.json();
         localStorage.setItem('sb_token', authData.access_token);
-        
+
         const r = await fetch(`${SB}/rest/v1/schools?owner_id=eq.${authData.user.id}&select=*`, { headers: getH() });
+        if (!r.ok) { clearSession(); loginErr(`Could not load your school (HTTP ${r.status}).`); reset(); return; }
         const d = await r.json();
-        
-        if (!d.length) {
-            document.getElementById('loginError').innerText = "No school found for this account.";
-            document.getElementById('loginError').classList.remove('hidden');
-            btn.innerHTML = `Sign In <i class="fa-solid fa-arrow-right ml-2"></i>`;
-            return;
-        }
-        
+
+        if (!Array.isArray(d) || !d.length) { clearSession(); loginErr("No school found for this account."); reset(); return; }
+
         localStorage.setItem('sid', d[0].id);
         localStorage.setItem('sname', d[0].school_name);
         showDash(d[0].school_name);
     } catch (err) {
-        document.getElementById('loginError').innerText = "Network Error!";
-        document.getElementById('loginError').classList.remove('hidden');
+        clearSession();
+        loginErr("Network Error!");
     }
-    btn.innerHTML = `Sign In <i class="fa-solid fa-arrow-right ml-2"></i>`;
+    reset();
 });
 
 function logout() {
@@ -332,45 +379,62 @@ function showDash(n) {
     loadProfile();
 }
 
-function sw(id) {
+function sw(id, btn) {
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-    event.currentTarget.classList.add('active');
+    const active = btn || (typeof event !== 'undefined' && event && event.currentTarget);
+    if (active) active.classList.add('active');
     document.getElementById(`tab-${id}`).classList.add('active');
+
+    // leaving a tab cancels any half-finished edit and restores that form's labels
+    if (editingState.table && editingState.table !== id) {
+        const form = document.getElementById(`f-${editingState.table}`);
+        const btn = form && form.querySelector('button');
+        if (btn) {
+            btn.innerHTML = btn.dataset.defaultLabel || btn.innerHTML;
+            btn.classList.remove('ring-4', 'ring-purple-300', 'bg-purple-600');
+        }
+    }
+    editingState = { table: null, id: null };
 }
 
 // --- Data Fetching & Rendering ---
 async function loadList(t) {
+    const el = document.getElementById(`l-${t}`);
+    if (!el) return;
     try {
         const r = await fetch(`${SB}/rest/v1/${t}?school_id=eq.${sid()}&order=created_at.desc`, { headers: getH() });
+
+        if (r.status === 401 || r.status === 403) return forceLogin('Your session has expired. Please sign in again.');
+        if (!r.ok) { el.innerHTML = `<p class="p-6 text-sm text-red-500 text-center font-bold">Could not load this list (HTTP ${r.status}).</p>`; return; }
+
         const d = await r.json();
-        const el = document.getElementById(`l-${t}`);
-        if (!el) return;
-        
         window[`data_${t}`] = d; // Cache for editing
-        
-        if (!d.length) {
+
+        if (!Array.isArray(d) || !d.length) {
             el.innerHTML = '<p class="p-6 text-sm text-gray-400 text-center italic">No records yet.</p>';
             return;
         }
-        
-        const fallbackImg = "onerror=\"this.src='https://via.placeholder.com/200?text=No+Photo'\"";
-        
+
         const renders = {
-            notices: i => `<div class="p-4 border-b hover:bg-gray-50 flex justify-between items-center"><div class="flex items-center gap-3"><div class="bg-blue-100 text-blue-800 px-3 py-1 rounded text-xs font-bold">${i.notice_date}</div><p class="font-bold text-gray-800">${i.title}</p></div><div class="flex gap-2"><button onclick="editItem('${t}','${i.id}')" class="text-blue-500 hover:text-blue-700 p-2"><i class="fa-solid fa-pen"></i></button><button onclick="delItem('${t}','${i.id}')" class="text-red-400 hover:text-red-600 p-2"><i class="fa-solid fa-trash"></i></button></div></div>`,
-            toppers: i => `<div class="bg-yellow-50 border border-yellow-200 rounded-xl p-4 text-center relative"><div class="absolute top-2 right-2 flex gap-1"><button onclick="editItem('${t}','${i.id}')" class="text-blue-500 bg-white rounded-full w-6 h-6 shadow"><i class="fa-solid fa-pen text-xs"></i></button><button onclick="delItem('${t}','${i.id}')" class="text-red-400 bg-white rounded-full w-6 h-6 shadow"><i class="fa-solid fa-times text-xs"></i></button></div><img src="${i.photo_url||'https://via.placeholder.com/100'}" ${fallbackImg} class="w-16 h-16 mx-auto rounded-full object-cover border-2 border-yellow-400 mb-2"><h4 class="font-bold text-gray-800">${i.student_name}</h4><p class="text-xs text-gray-500">${i.exam_name} (${i.passing_year})</p><div class="mt-2 bg-yellow-100 text-yellow-800 font-black text-lg py-1 rounded">${i.percentage_or_grade}</div></div>`,
-            galleries: i => `<div class="relative group rounded-xl overflow-hidden shadow-sm border"><img src="${i.image_url}" ${fallbackImg} class="w-full h-32 object-cover"><div class="absolute bottom-0 w-full bg-black/70 text-white text-[10px] p-2 truncate">${i.caption||''}</div><div class="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition"><button onclick="editItem('${t}','${i.id}')" class="bg-blue-600 text-white w-7 h-7 rounded-full shadow"><i class="fa-solid fa-pen text-xs"></i></button><button onclick="delItem('${t}','${i.id}')" class="bg-red-600 text-white w-7 h-7 rounded-full shadow"><i class="fa-solid fa-trash text-xs"></i></button></div></div>`,
-            facilities: i => `<div class="p-4 border-b flex justify-between items-center"><div class="flex items-center gap-3"><i class="fa-solid fa-check-circle text-green-500"></i><div><p class="font-bold">${i.facility_name}</p><p class="text-xs text-gray-500">${i.description||''}</p></div></div><div class="flex gap-2"><button onclick="editItem('${t}','${i.id}')" class="text-blue-500 p-2"><i class="fa-solid fa-pen"></i></button><button onclick="delItem('${t}','${i.id}')" class="text-red-400 p-2"><i class="fa-solid fa-trash"></i></button></div></div>`,
-            downloads: i => `<div class="p-4 border-b flex justify-between items-center"><div class="flex items-center gap-3"><i class="fa-solid fa-file-pdf text-red-500 text-xl"></i><div><p class="font-bold">${i.document_title}</p><p class="text-xs text-gray-500">${i.document_category} · <a href="${i.file_url}" target="_blank" class="text-blue-600">View</a></p></div></div><div class="flex gap-2"><button onclick="editItem('${t}','${i.id}')" class="text-blue-500 p-2"><i class="fa-solid fa-pen"></i></button><button onclick="delItem('${t}','${i.id}')" class="text-red-400 p-2"><i class="fa-solid fa-trash"></i></button></div></div>`,
-            fee_structures: i => `<div class="p-4 border-b flex justify-between items-center"><div class="flex items-center gap-3"><div class="bg-green-100 text-green-800 px-3 py-1 rounded font-bold text-sm">${i.class_name}</div><span class="text-xs text-gray-500">${i.academic_session||''}</span></div><div class="flex items-center gap-3"><span class="font-black text-gray-800 text-lg">₹${i.total_fee}</span><button onclick="editItem('${t}','${i.id}')" class="text-blue-500 p-2"><i class="fa-solid fa-pen"></i></button><button onclick="delItem('${t}','${i.id}')" class="text-red-400 p-2"><i class="fa-solid fa-trash"></i></button></div></div>`,
-            staff_members: i => `<div class="flex items-center gap-4 bg-white border p-4 rounded-xl shadow-sm"><img src="${i.photo_url||'https://via.placeholder.com/60'}" ${fallbackImg} class="w-12 h-12 rounded-full object-cover border"><div><p class="font-bold">${i.name}</p><p class="text-xs text-indigo-600 font-medium">${i.designation}</p><p class="text-xs text-gray-500">${i.qualification||''}</p></div><div class="ml-auto flex gap-2"><button onclick="editItem('${t}','${i.id}')" class="text-blue-500"><i class="fa-solid fa-pen"></i></button><button onclick="delItem('${t}','${i.id}')" class="text-red-400"><i class="fa-solid fa-trash"></i></button></div></div>`,
-            achievements: i => `<div class="p-4 border-b flex justify-between items-center"><div class="flex items-center gap-3"><i class="fa-solid fa-trophy text-yellow-500"></i><div><p class="font-bold">${i.title}</p><p class="text-xs text-gray-500">${i.description||''}</p></div></div><div class="flex gap-2"><button onclick="editItem('${t}','${i.id}')" class="text-blue-500 p-2"><i class="fa-solid fa-pen"></i></button><button onclick="delItem('${t}','${i.id}')" class="text-red-400 p-2"><i class="fa-solid fa-trash"></i></button></div></div>`,
-            testimonials: i => `<div class="p-4 border-b"><div class="flex justify-between"><div><p class="font-bold">${i.reviewer_name} <span class="text-xs text-gray-500 font-normal">${i.reviewer_relation||''}</span></p><p class="text-yellow-500 text-sm">${'★'.repeat(i.rating||5)}</p></div><div class="flex gap-2"><button onclick="editItem('${t}','${i.id}')" class="text-blue-500"><i class="fa-solid fa-pen"></i></button><button onclick="delItem('${t}','${i.id}')" class="text-red-400"><i class="fa-solid fa-trash"></i></button></div></div><p class="text-sm text-gray-600 mt-2 italic">"${i.review_text}"</p></div>`,
-            inquiries: i => `<div class="bg-white p-5 rounded-xl border-l-4 border-l-blue-500 shadow-sm"><div class="flex justify-between"><div><p class="font-bold">${i.student_name||i.parent_name||'Inquiry'}</p><p class="text-xs text-gray-500">${i.phone_number||''} · ${i.email||''} · Class: ${i.class_applied_for||'N/A'}</p></div><span class="text-xs text-gray-400">${new Date(i.created_at).toLocaleDateString()}</span></div><p class="text-sm mt-2 p-2 bg-gray-50 rounded italic">"${i.message}"</p><button onclick="delItem('${t}','${i.id}')" class="mt-3 text-red-500 text-xs font-bold hover:underline"><i class="fa-solid fa-trash mr-1"></i>Delete Inquiry</button></div>`
+            notices: i => `<div class="p-4 border-b hover:bg-gray-50 flex justify-between items-center"><div class="flex items-center gap-3"><div class="bg-blue-100 text-blue-800 px-3 py-1 rounded text-xs font-bold">${esc(i.notice_date)}</div><p class="font-bold text-gray-800">${esc(i.title)}</p></div><div class="flex gap-2">${actBtns(t, i)}</div></div>`,
+            toppers: i => `<div class="bg-yellow-50 border border-yellow-200 rounded-xl p-4 text-center relative"><div class="absolute top-2 right-2 flex gap-1">${actBtns(t, i, { edit: 'text-blue-500 bg-white rounded-full w-6 h-6 shadow', del: 'text-red-400 bg-white rounded-full w-6 h-6 shadow', delIcon: 'fa-times' })}</div><img src="${imgSrc(i.photo_url)}" class="w-16 h-16 mx-auto rounded-full object-cover border-2 border-yellow-400 mb-2"><h4 class="font-bold text-gray-800">${esc(i.student_name)}</h4><p class="text-xs text-gray-500">${esc(i.exam_name)} (${esc(i.passing_year)})</p><div class="mt-2 bg-yellow-100 text-yellow-800 font-black text-lg py-1 rounded">${esc(i.percentage_or_grade)}</div></div>`,
+            galleries: i => `<div class="relative group rounded-xl overflow-hidden shadow-sm border"><img src="${imgSrc(i.image_url)}" class="w-full h-32 object-cover"><div class="absolute bottom-0 w-full bg-black/70 text-white text-[10px] p-2 truncate">${esc(i.caption)}</div><div class="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition">${actBtns(t, i, { edit: 'bg-blue-600 text-white w-7 h-7 rounded-full shadow', del: 'bg-red-600 text-white w-7 h-7 rounded-full shadow' })}</div></div>`,
+            facilities: i => `<div class="p-4 border-b flex justify-between items-center"><div class="flex items-center gap-3"><i class="fa-solid fa-check-circle text-green-500"></i><div><p class="font-bold">${esc(i.facility_name)}</p><p class="text-xs text-gray-500">${esc(i.description)}</p></div></div><div class="flex gap-2">${actBtns(t, i)}</div></div>`,
+            downloads: i => `<div class="p-4 border-b flex justify-between items-center"><div class="flex items-center gap-3"><i class="fa-solid fa-file-pdf text-red-500 text-xl"></i><div><p class="font-bold">${esc(i.document_title)}</p><p class="text-xs text-gray-500">${esc(i.document_category)} &middot; <a href="${esc(safeUrl(i.file_url) || '#')}" target="_blank" rel="noopener noreferrer" class="text-blue-600">View</a></p></div></div><div class="flex gap-2">${actBtns(t, i)}</div></div>`,
+            fee_structures: i => `<div class="p-4 border-b flex justify-between items-center"><div class="flex items-center gap-3"><div class="bg-green-100 text-green-800 px-3 py-1 rounded font-bold text-sm">${esc(i.class_name)}</div><span class="text-xs text-gray-500">${esc(i.academic_session)}</span></div><div class="flex items-center gap-3"><span class="font-black text-gray-800 text-lg">&#8377;${esc(i.total_fee)}</span>${actBtns(t, i)}</div></div>`,
+            staff_members: i => `<div class="flex items-center gap-4 bg-white border p-4 rounded-xl shadow-sm"><img src="${imgSrc(i.photo_url)}" class="w-12 h-12 rounded-full object-cover border"><div><p class="font-bold">${esc(i.name)}</p><p class="text-xs text-indigo-600 font-medium">${esc(i.designation)}</p><p class="text-xs text-gray-500">${esc(i.qualification)}</p></div><div class="ml-auto flex gap-2">${actBtns(t, i, { edit: 'text-blue-500', del: 'text-red-400' })}</div></div>`,
+            achievements: i => `<div class="p-4 border-b flex justify-between items-center"><div class="flex items-center gap-3"><i class="fa-solid fa-trophy text-yellow-500"></i><div><p class="font-bold">${esc(i.title)}</p><p class="text-xs text-gray-500">${esc(i.description)}</p></div></div><div class="flex gap-2">${actBtns(t, i)}</div></div>`,
+            testimonials: i => `<div class="p-4 border-b"><div class="flex justify-between"><div><p class="font-bold">${esc(i.reviewer_name)} <span class="text-xs text-gray-500 font-normal">${esc(i.reviewer_relation)}</span></p><p class="text-yellow-500 text-sm">${stars(i.rating)}</p></div><div class="flex gap-2">${actBtns(t, i, { edit: 'text-blue-500', del: 'text-red-400' })}</div></div><p class="text-sm text-gray-600 mt-2 italic">&quot;${esc(i.review_text)}&quot;</p></div>`,
+            inquiries: i => `<div class="bg-white p-5 rounded-xl border-l-4 border-l-blue-500 shadow-sm"><div class="flex justify-between"><div><p class="font-bold">${esc(i.student_name || i.parent_name || 'Inquiry')}</p><p class="text-xs text-gray-500">${esc(i.phone_number)} &middot; ${esc(i.email)} &middot; Class: ${esc(i.class_applied_for) || 'N/A'}</p></div><span class="text-xs text-gray-400">${esc(new Date(i.created_at).toLocaleDateString())}</span></div><p class="text-sm mt-2 p-2 bg-gray-50 rounded italic">&quot;${esc(i.message)}&quot;</p><button data-act="del" data-t="${t}" data-id="${esc(i.id)}" class="mt-3 text-red-500 text-xs font-bold hover:underline"><i class="fa-solid fa-trash mr-1"></i>Delete Inquiry</button></div>`
         };
-        
+
+        if (!renders[t]) return;
         el.innerHTML = d.map(renders[t]).join('');
-    } catch(e) { console.error("Error loading "+t, e); }
+    } catch (e) {
+        console.error('Error loading ' + t, e);
+        el.innerHTML = '<p class="p-6 text-sm text-red-500 text-center font-bold">Network error while loading this list.</p>';
+    }
 }
 
 // --- Editing Flow ---
@@ -416,8 +480,14 @@ function editItem(t, id) {
 
 async function delItem(t, id) {
     if (!confirm('Are you sure you want to delete this record?')) return;
-    await fetch(`${SB}/rest/v1/${t}?id=eq.${id}`, { method: 'DELETE', headers: getH() });
-    loadList(t);
+    try {
+        // Scoped by school_id as well as id, so a loosened RLS policy can never let this
+        // reach another school's row.
+        const r = await fetch(`${SB}/rest/v1/${t}?id=eq.${id}&school_id=eq.${sid()}`, { method: 'DELETE', headers: getH() });
+        if (r.status === 401 || r.status === 403) return forceLogin('Your session has expired. Please sign in again.');
+        if (!r.ok) { alert(`Delete failed (HTTP ${r.status}). Nothing was removed.`); return; }
+        loadList(t);
+    } catch (e) { alert('Network error: the record was not deleted.'); }
 }
 
 // --- Form Submissions ---
@@ -437,23 +507,40 @@ const forms = [
 forms.forEach(([fid, table, payloadFn]) => {
     const fEl = document.getElementById(fid);
     if (!fEl) return;
-    
+
+    // remember each button's own label ("Add Topper", "Add Fee Record", ...) so it can be
+    // restored after an edit/save instead of degrading to a generic "Add"
+    const submitBtn = fEl.querySelector('button');
+    if (submitBtn) submitBtn.dataset.defaultLabel = submitBtn.innerHTML;
+
     fEl.addEventListener('submit', async (e) => {
         e.preventDefault();
         const btn = e.target.querySelector('button');
-        const origText = btn.innerHTML;
+        const origText = btn.dataset.defaultLabel || btn.innerHTML;
         btn.innerText = 'Saving...';
         
         try {
+            let res;
             if (editingState.table === table && editingState.id) {
-                // UPDATE
-                await fetch(`${SB}/rest/v1/${table}?id=eq.${editingState.id}`, { method: 'PATCH', headers: getH(), body: JSON.stringify(payloadFn()) });
-                editingState = { table: null, id: null };
-                btn.innerHTML = 'Updated!';
-                setTimeout(() => { btn.innerHTML = 'Add'; btn.classList.remove('ring-4', 'ring-purple-300', 'bg-purple-600'); }, 1500);
+                // UPDATE (scoped by school_id as well as id)
+                res = await fetch(`${SB}/rest/v1/${table}?id=eq.${editingState.id}&school_id=eq.${sid()}`, { method: 'PATCH', headers: getH(), body: JSON.stringify(payloadFn()) });
             } else {
                 // INSERT
-                await fetch(`${SB}/rest/v1/${table}`, { method: 'POST', headers: getH(), body: JSON.stringify({school_id: sid(), ...payloadFn()}) });
+                res = await fetch(`${SB}/rest/v1/${table}`, { method: 'POST', headers: getH(), body: JSON.stringify({ school_id: sid(), ...payloadFn() }) });
+            }
+            if (res.status === 401 || res.status === 403) return forceLogin('Your session has expired. Please sign in again.');
+            if (!res.ok) {
+                editingState = { table: null, id: null };
+                btn.innerHTML = `Failed (HTTP ${res.status})`;
+                setTimeout(() => { btn.innerHTML = origText; btn.classList.remove('ring-4', 'ring-purple-300', 'bg-purple-600'); }, 2500);
+                return;
+            }
+            if (editingState.table === table && editingState.id) {
+                editingState = { table: null, id: null };
+                btn.innerHTML = 'Updated!';
+                // Restore the button's own label rather than a hard-coded 'Add'
+                setTimeout(() => { btn.innerHTML = origText; btn.classList.remove('ring-4', 'ring-purple-300', 'bg-purple-600'); }, 1500);
+            } else {
                 btn.innerHTML = 'Saved!';
                 setTimeout(() => btn.innerHTML = origText, 1500);
             }
