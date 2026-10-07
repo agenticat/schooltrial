@@ -63,23 +63,23 @@
         
         <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-1 custom-scrollbar">
             <p class="px-3 text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 mt-2">Content</p>
-            <button onclick=\"sw('notices', this)\" class="tab-btn active w-full text-left px-4 py-2.5 rounded-lg font-semibold text-gray-600 hover:bg-gray-50 transition flex items-center gap-3"><i class="fa-solid fa-bullhorn w-5"></i> Notices</button>
-            <button onclick=\"sw('toppers', this)\" class="tab-btn w-full text-left px-4 py-2.5 rounded-lg font-semibold text-gray-600 hover:bg-gray-50 transition flex items-center gap-3"><i class="fa-solid fa-medal w-5"></i> Toppers</button>
-            <button onclick=\"sw('galleries', this)\" class="tab-btn w-full text-left px-4 py-2.5 rounded-lg font-semibold text-gray-600 hover:bg-gray-50 transition flex items-center gap-3"><i class="fa-solid fa-images w-5"></i> Gallery</button>
-            <button onclick=\"sw('facilities', this)\" class="tab-btn w-full text-left px-4 py-2.5 rounded-lg font-semibold text-gray-600 hover:bg-gray-50 transition flex items-center gap-3"><i class="fa-solid fa-building w-5"></i> Facilities</button>
-            <button onclick=\"sw('downloads', this)\" class="tab-btn w-full text-left px-4 py-2.5 rounded-lg font-semibold text-gray-600 hover:bg-gray-50 transition flex items-center gap-3"><i class="fa-solid fa-download w-5"></i> Downloads</button>
-            <button onclick=\"sw('fee_structures', this)\" class="tab-btn w-full text-left px-4 py-2.5 rounded-lg font-semibold text-gray-600 hover:bg-gray-50 transition flex items-center gap-3"><i class="fa-solid fa-indian-rupee-sign w-5"></i> Fees</button>
-            <button onclick=\"sw('staff_members', this)\" class="tab-btn w-full text-left px-4 py-2.5 rounded-lg font-semibold text-gray-600 hover:bg-gray-50 transition flex items-center gap-3"><i class="fa-solid fa-users w-5"></i> Faculty</button>
-            <button onclick=\"sw('achievements', this)\" class="tab-btn w-full text-left px-4 py-2.5 rounded-lg font-semibold text-gray-600 hover:bg-gray-50 transition flex items-center gap-3"><i class="fa-solid fa-trophy w-5"></i> Achievements</button>
-            <button onclick=\"sw('testimonials', this)\" class="tab-btn w-full text-left px-4 py-2.5 rounded-lg font-semibold text-gray-600 hover:bg-gray-50 transition flex items-center gap-3"><i class="fa-solid fa-star w-5"></i> Testimonials</button>
+            <button data-tab="notices" class="tab-btn active w-full text-left px-4 py-2.5 rounded-lg font-semibold text-gray-600 hover:bg-gray-50 transition flex items-center gap-3"><i class="fa-solid fa-bullhorn w-5"></i> Notices</button>
+            <button data-tab="toppers" class="tab-btn w-full text-left px-4 py-2.5 rounded-lg font-semibold text-gray-600 hover:bg-gray-50 transition flex items-center gap-3"><i class="fa-solid fa-medal w-5"></i> Toppers</button>
+            <button data-tab="galleries" class="tab-btn w-full text-left px-4 py-2.5 rounded-lg font-semibold text-gray-600 hover:bg-gray-50 transition flex items-center gap-3"><i class="fa-solid fa-images w-5"></i> Gallery</button>
+            <button data-tab="facilities" class="tab-btn w-full text-left px-4 py-2.5 rounded-lg font-semibold text-gray-600 hover:bg-gray-50 transition flex items-center gap-3"><i class="fa-solid fa-building w-5"></i> Facilities</button>
+            <button data-tab="downloads" class="tab-btn w-full text-left px-4 py-2.5 rounded-lg font-semibold text-gray-600 hover:bg-gray-50 transition flex items-center gap-3"><i class="fa-solid fa-download w-5"></i> Downloads</button>
+            <button data-tab="fee_structures" class="tab-btn w-full text-left px-4 py-2.5 rounded-lg font-semibold text-gray-600 hover:bg-gray-50 transition flex items-center gap-3"><i class="fa-solid fa-indian-rupee-sign w-5"></i> Fees</button>
+            <button data-tab="staff_members" class="tab-btn w-full text-left px-4 py-2.5 rounded-lg font-semibold text-gray-600 hover:bg-gray-50 transition flex items-center gap-3"><i class="fa-solid fa-users w-5"></i> Faculty</button>
+            <button data-tab="achievements" class="tab-btn w-full text-left px-4 py-2.5 rounded-lg font-semibold text-gray-600 hover:bg-gray-50 transition flex items-center gap-3"><i class="fa-solid fa-trophy w-5"></i> Achievements</button>
+            <button data-tab="testimonials" class="tab-btn w-full text-left px-4 py-2.5 rounded-lg font-semibold text-gray-600 hover:bg-gray-50 transition flex items-center gap-3"><i class="fa-solid fa-star w-5"></i> Testimonials</button>
             
             <p class="px-3 text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 mt-6">System</p>
-            <button onclick=\"sw('inquiries', this)\" class="tab-btn w-full text-left px-4 py-2.5 rounded-lg font-semibold text-blue-600 bg-blue-50 hover:bg-blue-100 transition flex items-center gap-3"><i class="fa-solid fa-envelope w-5"></i> Inquiries</button>
-            <button onclick=\"sw('profile', this)\" class="tab-btn w-full text-left px-4 py-2.5 rounded-lg font-semibold text-gray-600 hover:bg-gray-50 transition flex items-center gap-3"><i class="fa-solid fa-gear w-5"></i> School Profile</button>
+            <button data-tab="inquiries" class="tab-btn w-full text-left px-4 py-2.5 rounded-lg font-semibold text-blue-600 bg-blue-50 hover:bg-blue-100 transition flex items-center gap-3"><i class="fa-solid fa-envelope w-5"></i> Inquiries</button>
+            <button data-tab="profile" class="tab-btn w-full text-left px-4 py-2.5 rounded-lg font-semibold text-gray-600 hover:bg-gray-50 transition flex items-center gap-3"><i class="fa-solid fa-gear w-5"></i> School Profile</button>
         </nav>
 
         <div class="p-4 border-t">
-            <button onclick="logout()" class="w-full py-2 bg-gray-100 hover:bg-red-50 hover:text-red-600 text-gray-600 font-bold rounded-lg transition"><i class="fa-solid fa-right-from-bracket mr-2"></i>Logout</button>
+            <button id="logoutBtn" class="w-full py-2 bg-gray-100 hover:bg-red-50 hover:text-red-600 text-gray-600 font-bold rounded-lg transition"><i class="fa-solid fa-right-from-bracket mr-2"></i>Logout</button>
         </div>
     </aside>
 
@@ -261,6 +261,9 @@ const SB = "https://xlmsgtxyrlovjobwvdom.supabase.co";
 const AK = "sb_publishable_iLRrB73mPbgH0FtPvMOVbg_eoNyCtd3";
 const getH = () => ({ 'Content-Type': 'application/json', apikey: AK, Authorization: `Bearer ${localStorage.getItem('sb_token') || AK}` });
 const sid = () => localStorage.getItem('sid');
+// Percent-encode every value that goes into a PostgREST query string, so a filter value
+// can never smuggle in extra parameters (`&`, `#`) or break out of `eq.` parsing.
+const q = s => encodeURIComponent(String(s ?? ''));
 
 // --- Output-safety helpers -------------------------------------------------
 // Every value that comes out of the database is escaped before it reaches innerHTML,
@@ -281,6 +284,13 @@ document.addEventListener('error', e => {
     const el = e.target;
     if (el && el.tagName === 'IMG' && !el.dataset.fb) { el.dataset.fb = '1'; el.src = IMG_FALLBACK; }
 }, true);
+
+// Single delegated click handler for tab switching and logout (no inline handlers in the page)
+document.addEventListener('click', e => {
+    const tab = e.target.closest('[data-tab]');
+    if (tab) { sw(tab.dataset.tab, tab); return; }
+    if (e.target.closest('#logoutBtn')) logout();
+});
 
 // Single delegated click handler for every edit/delete button
 document.addEventListener('click', e => {
@@ -347,7 +357,7 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
         const authData = await authRes.json();
         localStorage.setItem('sb_token', authData.access_token);
 
-        const r = await fetch(`${SB}/rest/v1/schools?owner_id=eq.${authData.user.id}&select=*`, { headers: getH() });
+        const r = await fetch(`${SB}/rest/v1/schools?owner_id=eq.${q(authData.user.id)}&select=*`, { headers: getH() });
         if (!r.ok) { clearSession(); loginErr(`Could not load your school (HTTP ${r.status}).`); reset(); return; }
         const d = await r.json();
 
@@ -403,7 +413,7 @@ async function loadList(t) {
     const el = document.getElementById(`l-${t}`);
     if (!el) return;
     try {
-        const r = await fetch(`${SB}/rest/v1/${t}?school_id=eq.${sid()}&order=created_at.desc`, { headers: getH() });
+        const r = await fetch(`${SB}/rest/v1/${t}?school_id=eq.${q(sid())}&order=created_at.desc`, { headers: getH() });
 
         if (r.status === 401 || r.status === 403) return forceLogin('Your session has expired. Please sign in again.');
         if (!r.ok) { el.innerHTML = `<p class="p-6 text-sm text-red-500 text-center font-bold">Could not load this list (HTTP ${r.status}).</p>`; return; }
@@ -483,7 +493,7 @@ async function delItem(t, id) {
     try {
         // Scoped by school_id as well as id, so a loosened RLS policy can never let this
         // reach another school's row.
-        const r = await fetch(`${SB}/rest/v1/${t}?id=eq.${id}&school_id=eq.${sid()}`, { method: 'DELETE', headers: getH() });
+        const r = await fetch(`${SB}/rest/v1/${t}?id=eq.${q(id)}&school_id=eq.${q(sid())}`, { method: 'DELETE', headers: getH() });
         if (r.status === 401 || r.status === 403) return forceLogin('Your session has expired. Please sign in again.');
         if (!r.ok) { alert(`Delete failed (HTTP ${r.status}). Nothing was removed.`); return; }
         loadList(t);
@@ -523,7 +533,7 @@ forms.forEach(([fid, table, payloadFn]) => {
             let res;
             if (editingState.table === table && editingState.id) {
                 // UPDATE (scoped by school_id as well as id)
-                res = await fetch(`${SB}/rest/v1/${table}?id=eq.${editingState.id}&school_id=eq.${sid()}`, { method: 'PATCH', headers: getH(), body: JSON.stringify(payloadFn()) });
+                res = await fetch(`${SB}/rest/v1/${table}?id=eq.${q(editingState.id)}&school_id=eq.${q(sid())}`, { method: 'PATCH', headers: getH(), body: JSON.stringify(payloadFn()) });
             } else {
                 // INSERT
                 res = await fetch(`${SB}/rest/v1/${table}`, { method: 'POST', headers: getH(), body: JSON.stringify({ school_id: sid(), ...payloadFn() }) });
@@ -566,9 +576,11 @@ const profileFields = [
 
 async function loadProfile() {
     try {
-        const r = await fetch(`${SB}/rest/v1/schools?id=eq.${sid()}`, { headers: getH() });
+        const r = await fetch(`${SB}/rest/v1/schools?id=eq.${q(sid())}`, { headers: getH() });
+        if (r.status === 401 || r.status === 403) return forceLogin('Your session has expired. Please sign in again.');
+        if (!r.ok) return;
         const d = await r.json();
-        if (!d.length) return;
+        if (!Array.isArray(d) || !d.length) return;
         const s = d[0];
         
         profileFields.forEach(f => {
@@ -593,13 +605,14 @@ document.getElementById('profileForm').addEventListener('submit', async (e) => {
             if (el) body[f] = el.value;
         });
         body.admission_status = document.getElementById('p_admission_status').checked;
-        
-        await fetch(`${SB}/rest/v1/schools?id=eq.${sid()}`, { method: 'PATCH', headers: getH(), body: JSON.stringify(body) });
-        btn.innerText = 'Profile Saved!';
+
+        const res = await fetch(`${SB}/rest/v1/schools?id=eq.${q(sid())}`, { method: 'PATCH', headers: getH(), body: JSON.stringify(body) });
+        if (res.status === 401 || res.status === 403) { forceLogin('Your session has expired. Please sign in again.'); return; }
+        btn.innerText = res.ok ? 'Profile Saved!' : `Save failed (HTTP ${res.status})`;
     } catch(err) {
         btn.innerText = 'Error Saving!';
     }
-    setTimeout(() => btn.innerText = 'Save Entire School Profile', 2000);
+    setTimeout(() => btn.innerText = 'Save Entire School Profile', 2500);
 });
 </script>
 </body>

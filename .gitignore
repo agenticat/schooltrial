@@ -1,0 +1,22 @@
+# dependencies
+node_modules/
+security-tests/node_modules/
+
+# test output
+security-tests/sec-results.json
+
+# local environment / secrets
+.env
+.env.*
+!.env.example
+
+# editors & OS noise
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# logs
+*.log
+npm-debug.log*

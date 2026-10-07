@@ -1,0 +1,13 @@
+{
+  "name": "schooltrial-security-tests",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Adversarial test suite for the three schooltrial portals: XSS injection, URL smuggling, query-filter injection, auth/session handling, tenant scoping and static analysis.",
+  "scripts": {
+    "test": "node run-all.js",
+    "test:quiet": "node run-all.js --quiet"
+  },
+  "dependencies": {
+    "jsdom": "^26.0.0"
+  }
+}
